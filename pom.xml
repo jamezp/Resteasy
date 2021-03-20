@@ -105,6 +105,7 @@
                 <module>resteasy-client-jetty</module>
                 <module>resteasy-client-vertx</module>
                 <module>resteasy-client-reactor-netty</module>
+                <module>resteasy-client-utils</module>
                 <module>providers</module>
                 <module>resteasy-bom</module>
                 <module>resteasy-cache</module>
