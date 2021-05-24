@@ -191,10 +191,18 @@ public class TestUtil {
       return war;
    }
 
+   public static String getManagementHost() {
+      return System.getProperty("wildfly.management.host", PortProviderUtil.getHost());
+   }
+
+   public static int getManagementPort() {
+      return Integer.parseInt(System.getProperty("wildfly.management.port", "9990"));
+   }
+
    public static OnlineManagementClient clientInit() throws IOException {
       OnlineOptions onlineOptions = OnlineOptions
                .standalone()
-               .hostAndPort(PortProviderUtil.getHost(), 9990) // 9990 is default port for EAP 7
+               .hostAndPort(PortProviderUtil.getHost(), getManagementPort())
                .connectionTimeout(120000)
                .build();
       return ManagementClient.online(onlineOptions);
@@ -203,7 +211,7 @@ public class TestUtil {
    public static OnlineManagementClient clientInit(int portOffset) throws IOException {
       OnlineOptions onlineOptions = OnlineOptions
             .standalone()
-            .hostAndPort("localhost", 9990 + portOffset) // 9990 is default port for EAP 7
+            .hostAndPort("localhost", getManagementPort() + portOffset)
             .connectionTimeout(120000)
             .build();
       return ManagementClient.online(onlineOptions);
