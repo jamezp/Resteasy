@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -190,11 +191,14 @@ public abstract class ResteasyViolationException extends ConstraintViolationExce
       convertViolations();
       StringBuffer sb = new StringBuffer();
 
-      violationLists.stream().forEach(violations -> {
-         violations.stream().forEach(violation -> {
+      CopyOnWriteArrayList<List<ResteasyConstraintViolation>> imutableViolations =
+              new CopyOnWriteArrayList<>(violationLists);
+
+      for (List<ResteasyConstraintViolation> violations : imutableViolations) {
+         for (ResteasyConstraintViolation violation: violations ) {
             sb.append(violation.toString()).append('\r');
-         });
-      });
+         }
+      }
 
       return sb.toString();
    }
