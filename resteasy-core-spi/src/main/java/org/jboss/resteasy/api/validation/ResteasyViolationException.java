@@ -189,14 +189,13 @@ public abstract class ResteasyViolationException extends ConstraintViolationExce
    {
       convertViolations();
       StringBuffer sb = new StringBuffer();
-      for (Iterator<List<ResteasyConstraintViolation>> it = violationLists.iterator(); it.hasNext();)
-      {
-         List<ResteasyConstraintViolation> violations = it.next();
-         for (Iterator<ResteasyConstraintViolation> it2 = violations.iterator(); it2.hasNext();)
-         {
-            sb.append(it2.next().toString()).append('\r');
-         }
-      }
+
+      violationLists.stream().forEach(violations -> {
+         violations.stream().forEach(violation -> {
+            sb.append(violation.toString()).append('\r');
+         });
+      });
+
       return sb.toString();
    }
 
