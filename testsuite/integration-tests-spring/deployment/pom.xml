@@ -13,6 +13,9 @@
 
     <artifactId>resteasy-integration-tests-spring-deployment</artifactId>
     <name>RESTEasy Main testsuite: Spring integration tests - Deployment</name>
+    <properties>
+        <additionalJvmArgs>${wildfly.jvm.args}</additionalJvmArgs>
+    </properties>
 
     <profiles>
         <!--

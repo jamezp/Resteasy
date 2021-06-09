@@ -12,6 +12,7 @@
     </parent>
 
     <properties>
+        <additionalJvmArgs>${wildfly.jvm.args}</additionalJvmArgs>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <container.base.dir.managed>${project.build.directory}${file.separator}${container.qualifier.managed}</container.base.dir.managed>
         <container.base.dir.managed.encoding>${project.build.directory}${file.separator}${container.qualifier.managed.encoding}</container.base.dir.managed.encoding>

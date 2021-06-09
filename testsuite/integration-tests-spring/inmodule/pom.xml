@@ -15,6 +15,7 @@
     <name>RESTEasy Main testsuite: Spring integration tests - In module</name>
 
     <properties>
+        <additionalJvmArgs>${wildfly.jvm.args}</additionalJvmArgs>
         <module.spring.version>3.2.x</module.spring.version>
         <module.spring.slot>main</module.spring.slot><!-- beware jbossws spring integration preinstalled in default distribution expects main slot -->
         <module.spring.path>${jboss.home}/modules/system/add-ons/spring/org/springframework/spring/${module.spring.slot}</module.spring.path>

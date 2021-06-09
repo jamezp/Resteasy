@@ -19,6 +19,7 @@
         <!-- default value required for cmd-line -->
         <securityManagerArg>-DSECMGR="false"</securityManagerArg>
         <jacoco.agent/>
+        <wildfly.jvm.args/>
         <additionalJvmArgs/>
         <ipv6ArquillianSettings/>
         <debugJvmArgs/>
@@ -481,6 +482,27 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <!-- Java 17 profile, this can be deleted once WildFly fully supports Java 17 -->
+        <profile>
+            <id>jdk-17</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
+            <properties>
+                <server.version>24.0.0.Beta1</server.version>
+                <wildfly.jvm.args>
+                    --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+                    --add-opens=java.base/java.io=ALL-UNNAMED
+                    --add-opens=java.base/java.lang=ALL-UNNAMED
+                    --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+                    --add-opens=java.base/java.security=ALL-UNNAMED
+                    --add-opens=java.base/java.util=ALL-UNNAMED
+                    --add-opens=java.management/javax.management=ALL-UNNAMED
+                    --add-opens=java.naming/javax.naming=ALL-UNNAMED
+                </wildfly.jvm.args>
+            </properties>
         </profile>
 
         <profile>
