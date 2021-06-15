@@ -31,14 +31,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class RestClientProviderPriorityTest
-{
+public class RestClientProviderPriorityTest {
     @ArquillianResource
     URL url;
 
     @Deployment
-    public static Archive<?> deploy()
-    {
+    public static Archive<?> deploy() {
         WebArchive war = TestUtil.prepareArchive(RestClientProviderPriorityTest.class.getSimpleName());
         war.addClass(HelloResource.class);
         war.addClass(HelloClient.class);
@@ -47,15 +45,14 @@ public class RestClientProviderPriorityTest
         return TestUtil.finishContainerPrepare(war, null);
     }
 
-    private String generateURL(String path)
-    {
+    private String generateURL(String path) {
         return PortProviderUtil.generateURL(path, RestClientProviderPriorityTest.class.getSimpleName());
     }
 
     @Test
     public void helloNaruto() throws Exception {
         HelloClient helloClient =
-            RestClientBuilder.newBuilder().baseUrl(new URL(generateURL(""))).build(HelloClient.class);
+                RestClientBuilder.newBuilder().baseUrl(new URL(generateURL(""))).build(HelloClient.class);
 
         assertEquals("Hello Naruto", helloClient.hello("Naruto"));
     }
@@ -63,7 +60,7 @@ public class RestClientProviderPriorityTest
     @Test
     public void helloBar() throws Exception {
         HelloClient helloClient =
-            RestClientBuilder.newBuilder().baseUrl(new URL(generateURL(""))).build(HelloClient.class);
+                RestClientBuilder.newBuilder().baseUrl(new URL(generateURL(""))).build(HelloClient.class);
 
         assertEquals("Hello Bar", helloClient.hello(null));
     }

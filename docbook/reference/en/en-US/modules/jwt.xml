@@ -1,18 +1,21 @@
 <chapter>
-  <title>JSON Web Signature and Encryption (JOSE-JWT)</title>
+    <title>JSON Web Signature and Encryption (JOSE-JWT)</title>
 
-  <para>JSON Web Signature and Encryption (JOSE JWT) is a new specification that can be used to
+    <para>JSON Web Signature and Encryption (JOSE JWT) is a new specification that can be used to
         encode content as a string and either digitally sign or encrypt it. I won't go over the spec
-        here Do a Google search on it if you're interested</para>
+        here Do a Google search on it if you're interested
+    </para>
 
-  <section>
-      <title>JSON Web Signature (JWS)</title>
-      <para>To digitally sign content using JWS, use the <literal>org.jboss.resteasy.jose.jws.JWSBuilder</literal> class.
-          To unpack and verify a JWS, use the <literal>org.jboss.resteasy.jose.jws.JWSInput</literal> class. (TODO, write
-          more doco here!)
-      Here's an example:</para>
-      <programlisting>
-          <![CDATA[
+    <section>
+        <title>JSON Web Signature (JWS)</title>
+        <para>To digitally sign content using JWS, use the <literal>org.jboss.resteasy.jose.jws.JWSBuilder</literal> class.
+            To unpack and verify a JWS, use the <literal>org.jboss.resteasy.jose.jws.JWSInput</literal> class. (TODO,
+            write
+            more doco here!)
+            Here's an example:
+        </para>
+        <programlisting>
+            <![CDATA[
    @Test
    public void testRSAWithContentType() throws Exception
    {
@@ -33,14 +36,16 @@
 
    }
 ]]>
-      </programlisting>
-  </section>
+        </programlisting>
+    </section>
     <section>
         <title>JSON Web Encryption (JWE)</title>
         <para>To encrypt content using JWE, use the <literal>org.jboss.resteasy.jose.jwe.JWEBuilder</literal> class.
-            To decrypt content using JWE, use the <literal>org.jboss.resteasy.jose.jwe.JWEInput</literal> class. (TODO, write
+            To decrypt content using JWE, use the <literal>org.jboss.resteasy.jose.jwe.JWEInput</literal> class. (TODO,
+            write
             more doco here!)
-            Here's an example:</para>
+            Here's an example:
+        </para>
         <programlisting>
             <![CDATA[
    @Test

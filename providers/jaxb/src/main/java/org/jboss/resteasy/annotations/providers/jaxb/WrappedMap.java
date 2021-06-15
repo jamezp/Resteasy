@@ -13,31 +13,33 @@ import java.lang.annotation.Target;
  * {@literal @}PUT
  * {@literal @}Consumes("application/xml") public void put({@literal @}WrappedMap Map{@literal <}String, User{@literal >} users);
  * </pre>
+ *
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WrappedMap
-{
-   /**
-    * map element name
-    */
-   String map() default "map";
+public @interface WrappedMap {
+    /**
+     * map element name
+     */
+    String map() default "map";
 
-   /**
-    * entry element name
-    * @return entry
-    */
-   String entry() default "entry";
+    /**
+     * entry element name
+     *
+     * @return entry
+     */
+    String entry() default "entry";
 
-   /**
-    * entry's key attribute name
-    * @return key
-    */
-   String key() default "key";
+    /**
+     * entry's key attribute name
+     *
+     * @return key
+     */
+    String key() default "key";
 
-   String namespace() default "";
+    String namespace() default "";
 
-   String prefix() default "";
+    String prefix() default "";
 }

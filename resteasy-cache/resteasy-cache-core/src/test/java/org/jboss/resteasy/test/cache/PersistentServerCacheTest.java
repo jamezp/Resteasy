@@ -40,399 +40,381 @@ import org.junit.Test;
  * @author <a href="ron.sigal@jboss.com">Ron Sigal</a>
  * @version $Revision: 1 $
  *
- *  * Copyright Mar 25, 2015
+ * * Copyright Mar 25, 2015
  */
-public class PersistentServerCacheTest
-{
-   private static int count = 0;
-   private static int plainCount = 0;
-   private static int htmlCount = 0;
+public class PersistentServerCacheTest {
+    private static int count = 0;
+    private static int plainCount = 0;
+    private static int htmlCount = 0;
 
-   private static NettyJaxrsServer server;
-   protected static ResteasyDeployment deployment;
-   protected static Dispatcher dispatcher;
-   protected static Client client;
+    private static NettyJaxrsServer server;
+    protected static ResteasyDeployment deployment;
+    protected static Dispatcher dispatcher;
+    protected static Client client;
 
-   @Path("/cache")
-   public static class TestResource
-   {
-      @GET
-      @Produces("text/plain")
-      @Cache(maxAge = 2)
-      public String get()
-      {
-         count++;
-         return "hello world" + count;
-      }
+    @Path("/cache")
+    public static class TestResource {
+        @GET
+        @Produces("text/plain")
+        @Cache(maxAge = 2)
+        public String get() {
+            count++;
+            return "hello world" + count;
+        }
 
-      @PUT
-      @Consumes("text/plain")
-      public void put(String val)
-      {
-      }
+        @PUT
+        @Consumes("text/plain")
+        public void put(String val) {
+        }
 
-      @GET
-      @Produces("text/plain")
-      @Path("accepts")
-      @Cache(maxAge = 2)
-      public String getPlain()
-      {
-         plainCount++;
-         return "plain" + plainCount;
-      }
+        @GET
+        @Produces("text/plain")
+        @Path("accepts")
+        @Cache(maxAge = 2)
+        public String getPlain() {
+            plainCount++;
+            return "plain" + plainCount;
+        }
 
-      @GET
-      @Produces("text/html")
-      @Path("accepts")
-      @Cache(maxAge = 2)
-      public String getHtml()
-      {
-         htmlCount++;
-         return "html" + htmlCount;
-      }
+        @GET
+        @Produces("text/html")
+        @Path("accepts")
+        @Cache(maxAge = 2)
+        public String getHtml() {
+            htmlCount++;
+            return "html" + htmlCount;
+        }
 
-      @GET
-      @Produces("text/plain")
-      @Path("stuff")
-      @Cache(maxAge = 2)
-      public String getStuff()
-      {
-         count++;
-         return "stuff";
-      }
+        @GET
+        @Produces("text/plain")
+        @Path("stuff")
+        @Cache(maxAge = 2)
+        public String getStuff() {
+            count++;
+            return "stuff";
+        }
 
-      @GET
-      @Produces("text/plain")
-      @Path("vary")
-      @Cache(maxAge = 2)
-      public Response getVary(@HeaderParam("X-Test-Vary") @DefaultValue("default") String testVary)
-      {
-         count++;
-         return Response.ok(testVary).header(HttpHeaders.VARY, "X-Test-Vary").header("X-Count", count).build();
-      }
-   }
+        @GET
+        @Produces("text/plain")
+        @Path("vary")
+        @Cache(maxAge = 2)
+        public Response getVary(@HeaderParam("X-Test-Vary") @DefaultValue("default") String testVary) {
+            count++;
+            return Response.ok(testVary).header(HttpHeaders.VARY, "X-Test-Vary").header("X-Count", count).build();
+        }
+    }
 
-   @Path("/cache")
-   public interface MyProxy
-   {
-      @GET
-      @Produces("text/plain")
-      String get();
+    @Path("/cache")
+    public interface MyProxy {
+        @GET
+        @Produces("text/plain")
+        String get();
 
-   }
+    }
 
-   @BeforeClass
-   public static void beforeClass()
-   {
-      client = ClientBuilder.newClient();
-   }
+    @BeforeClass
+    public static void beforeClass() {
+        client = ClientBuilder.newClient();
+    }
 
-   @AfterClass
-   public static void afterClass()
-   {
-      client.close();
-   }
+    @AfterClass
+    public static void afterClass() {
+        client.close();
+    }
 
-   @Before
-   public void before() throws Exception
-   {
-      FileUtils.deleteDirectory(new File("target/TestCache"));
-      Hashtable<String,String> initParams = new Hashtable<String,String>();
-      Hashtable<String,String> contextParams = new Hashtable<String,String>();
-      contextParams.put("server.request.cache.infinispan.config.file", "infinispan.xml");
-      contextParams.put("server.request.cache.infinispan.cache.name", "TestCache");
+    @Before
+    public void before() throws Exception {
+        FileUtils.deleteDirectory(new File("target/TestCache"));
+        Hashtable<String, String> initParams = new Hashtable<String, String>();
+        Hashtable<String, String> contextParams = new Hashtable<String, String>();
+        contextParams.put("server.request.cache.infinispan.config.file", "infinispan.xml");
+        contextParams.put("server.request.cache.infinispan.cache.name", "TestCache");
 
-      server = new NettyJaxrsServer();
-      server.setPort(TestPortProvider.getPort());
-      server.setRootResourcePath("/");
-      deployment = server.getDeployment();
-      deployment.start();
+        server = new NettyJaxrsServer();
+        server.setPort(TestPortProvider.getPort());
+        server.setRootResourcePath("/");
+        deployment = server.getDeployment();
+        deployment.start();
 
-      dispatcher = deployment.getDispatcher();
-      deployment.getProviderFactory().property("server.request.cache.infinispan.config.file", "infinispan.xml");
-      deployment.getProviderFactory().property("server.request.cache.infinispan.cache.name", "TestCache");
-      deployment.getProviderFactory().register(ServerCacheFeature.class);
-      deployment.getRegistry().addPerRequestResource(TestResource.class);
-      server.start();
-   }
+        dispatcher = deployment.getDispatcher();
+        deployment.getProviderFactory().property("server.request.cache.infinispan.config.file", "infinispan.xml");
+        deployment.getProviderFactory().property("server.request.cache.infinispan.cache.name", "TestCache");
+        deployment.getProviderFactory().register(ServerCacheFeature.class);
+        deployment.getRegistry().addPerRequestResource(TestResource.class);
+        server.start();
+    }
 
-   @After
-   public void after() throws Exception
-   {
-      FileUtils.deleteDirectory(new File("target/TestCache"));
-      server.stop();
-      server = null;
-      dispatcher = null;
-      deployment = null;
-   }
+    @After
+    public void after() throws Exception {
+        FileUtils.deleteDirectory(new File("target/TestCache"));
+        server.stop();
+        server = null;
+        dispatcher = null;
+        deployment = null;
+    }
 
-   @Test
-   public void testNoCacheHitValidation() throws Exception
-   {
-      // test that after a cache expiration NOT MODIFIED is still returned if matching etags
+    @Test
+    public void testNoCacheHitValidation() throws Exception {
+        // test that after a cache expiration NOT MODIFIED is still returned if matching etags
 
-      count = 0;
-      String etag = null;
-      {
-         Builder request = client.target(generateURL("/cache/stuff")).request();
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "stuff");
-      }
+        count = 0;
+        String etag = null;
+        {
+            Builder request = client.target(generateURL("/cache/stuff")).request();
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "stuff");
+        }
 
 
-      Thread.sleep(2000);
+        Thread.sleep(2000);
 
-      {
-         Builder request = client.target(generateURL("/cache/stuff")).request();
-         request.header(HttpHeaders.IF_NONE_MATCH, etag);
-         Response response = request.get();
-         Assert.assertEquals(Response.Status.NOT_MODIFIED.getStatusCode(), response.getStatus());
-         Assert.assertEquals(2, count);
-         response.close();
-      }
-   }
-
-
-   @Test
-   public void testCache() throws Exception
-   {
-      count = 0;
-      String etag = null;
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "hello world" + 1);
-      }
+        {
+            Builder request = client.target(generateURL("/cache/stuff")).request();
+            request.header(HttpHeaders.IF_NONE_MATCH, etag);
+            Response response = request.get();
+            Assert.assertEquals(Response.Status.NOT_MODIFIED.getStatusCode(), response.getStatus());
+            Assert.assertEquals(2, count);
+            response.close();
+        }
+    }
 
 
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "hello world" + 1);
-      }
-      // test if-not-match
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         request.header(HttpHeaders.IF_NONE_MATCH, etag);
-         Response response = request.get();
-         Assert.assertEquals(Response.Status.NOT_MODIFIED.getStatusCode(), response.getStatus());
-         response.close();
-      }
+    @Test
+    public void testCache() throws Exception {
+        count = 0;
+        String etag = null;
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "hello world" + 1);
+        }
 
 
-      Thread.sleep(2000);
-
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "hello world" + 2);
-      }
-
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "hello world" + 2);
-      }
-
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         Response response = request.put(Entity.entity("yo", "text/plain"));
-         response.close();
-      }
-      {
-         Builder request = client.target(generateURL("/cache")).request();
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "hello world" + 3);
-      }
-   }
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "hello world" + 1);
+        }
+        // test if-not-match
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            request.header(HttpHeaders.IF_NONE_MATCH, etag);
+            Response response = request.get();
+            Assert.assertEquals(Response.Status.NOT_MODIFIED.getStatusCode(), response.getStatus());
+            response.close();
+        }
 
 
-   @Test
-   public void testAccepts() throws Exception
-   {
-      count = 0;
-      plainCount = 0;
-      htmlCount = 0;
-      String etag = null;
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
-      }
+        Thread.sleep(2000);
 
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
-      }
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "hello world" + 2);
+        }
 
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/html");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "html" + 1);
-      }
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/html");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "html" + 1);
-      }
-   }
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "hello world" + 2);
+        }
 
-   @Test
-   public void testPreferredAccepts() throws Exception
-   {
-      count = 0;
-      plainCount = 0;
-      htmlCount = 0;
-      String etag = null;
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
-      }
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            Response response = request.put(Entity.entity("yo", "text/plain"));
+            response.close();
+        }
+        {
+            Builder request = client.target(generateURL("/cache")).request();
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "hello world" + 3);
+        }
+    }
 
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/html");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "html" + 1);
-      }
 
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request();
-         request.header(HttpHeaders.ACCEPT, "text/html;q=0.5, text/plain");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
-      }
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request();
-         request.header(HttpHeaders.ACCEPT, "text/plain;q=0.5, text/html");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "html" + 1);
-      }
-   }
+    @Test
+    public void testAccepts() throws Exception {
+        count = 0;
+        plainCount = 0;
+        htmlCount = 0;
+        String etag = null;
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
+        }
 
-   @Test
-   public void testPreferredButNotCachedAccepts() throws Exception
-   {
-      count = 0;
-      plainCount = 0;
-      htmlCount = 0;
-      String etag = null;
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
-      }
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
+        }
 
-      // we test that the preferred can be handled
-      {
-         Builder request = client.target(generateURL("/cache/accepts")).request();
-         request.header(HttpHeaders.ACCEPT, "text/plain;q=0.5, text/html");
-         Response response = request.get();
-         Assert.assertEquals(200, response.getStatus());
-         String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
-         Assert.assertNotNull(cc);
-         etag = response.getHeaderString(HttpHeaders.ETAG);
-         Assert.assertNotNull(etag);
-         Assert.assertEquals(response.readEntity(String.class), "html" + 1);
-      }
-   }
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/html");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "html" + 1);
+        }
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/html");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "html" + 1);
+        }
+    }
 
-   @Test
-   public void testVary() throws Exception {
-      int cachedCount;
-      {
-         Builder request = client.target(generateURL("/cache/vary")).request();
-         Response foo = request.accept("text/plain").header("X-Test-Vary", "foo").get();
-         Assert.assertEquals("foo", foo.readEntity(String.class));
-         cachedCount = Integer.parseInt(foo.getHeaderString("X-Count"));
-      }
-      {
-         Builder request = client.target(generateURL("/cache/vary")).request();
-         Response bar = request.accept("text/plain").header("X-Test-Vary", "bar").get();
-         Assert.assertEquals("bar", bar.readEntity(String.class));
-      }
-      {
-         Builder request = client.target(generateURL("/cache/vary")).request();
-         Response foo = request.accept("text/plain").header("X-Test-Vary", "foo").get();
-         Assert.assertEquals("foo", foo.readEntity(String.class));
-         int currentCount = Integer.parseInt(foo.getHeaderString("X-Count"));
-         Assert.assertEquals(cachedCount, currentCount);
-      }
-   }
+    @Test
+    public void testPreferredAccepts() throws Exception {
+        count = 0;
+        plainCount = 0;
+        htmlCount = 0;
+        String etag = null;
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
+        }
+
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/html");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "html" + 1);
+        }
+
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request();
+            request.header(HttpHeaders.ACCEPT, "text/html;q=0.5, text/plain");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
+        }
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request();
+            request.header(HttpHeaders.ACCEPT, "text/plain;q=0.5, text/html");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "html" + 1);
+        }
+    }
+
+    @Test
+    public void testPreferredButNotCachedAccepts() throws Exception {
+        count = 0;
+        plainCount = 0;
+        htmlCount = 0;
+        String etag = null;
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request().accept("text/plain");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "plain" + 1);
+        }
+
+        // we test that the preferred can be handled
+        {
+            Builder request = client.target(generateURL("/cache/accepts")).request();
+            request.header(HttpHeaders.ACCEPT, "text/plain;q=0.5, text/html");
+            Response response = request.get();
+            Assert.assertEquals(200, response.getStatus());
+            String cc = response.getHeaderString(HttpHeaders.CACHE_CONTROL);
+            Assert.assertNotNull(cc);
+            etag = response.getHeaderString(HttpHeaders.ETAG);
+            Assert.assertNotNull(etag);
+            Assert.assertEquals(response.readEntity(String.class), "html" + 1);
+        }
+    }
+
+    @Test
+    public void testVary() throws Exception {
+        int cachedCount;
+        {
+            Builder request = client.target(generateURL("/cache/vary")).request();
+            Response foo = request.accept("text/plain").header("X-Test-Vary", "foo").get();
+            Assert.assertEquals("foo", foo.readEntity(String.class));
+            cachedCount = Integer.parseInt(foo.getHeaderString("X-Count"));
+        }
+        {
+            Builder request = client.target(generateURL("/cache/vary")).request();
+            Response bar = request.accept("text/plain").header("X-Test-Vary", "bar").get();
+            Assert.assertEquals("bar", bar.readEntity(String.class));
+        }
+        {
+            Builder request = client.target(generateURL("/cache/vary")).request();
+            Response foo = request.accept("text/plain").header("X-Test-Vary", "foo").get();
+            Assert.assertEquals("foo", foo.readEntity(String.class));
+            int currentCount = Integer.parseInt(foo.getHeaderString("X-Count"));
+            Assert.assertEquals(cachedCount, currentCount);
+        }
+    }
 }

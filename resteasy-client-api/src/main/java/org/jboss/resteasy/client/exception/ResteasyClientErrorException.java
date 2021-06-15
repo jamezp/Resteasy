@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyClientErrorException extends ClientErrorException implements WebApplicationExceptionWrapper<ClientErrorException> {
 
-   private static final long serialVersionUID = 6839671465938091898L;
-   private final ClientErrorException wrapped;
+    private static final long serialVersionUID = 6839671465938091898L;
+    private final ClientErrorException wrapped;
 
     ResteasyClientErrorException(final ClientErrorException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

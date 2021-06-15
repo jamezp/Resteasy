@@ -19,51 +19,44 @@ import java.net.Socket;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class HeadersLowerCasedTest
-{
+public class HeadersLowerCasedTest {
     private static final String RESPONSE_PREFIX = "headerNames: ";
 
     @Path("/headers")
-    public static class Resource
-    {
+    public static class Resource {
         @Context
         private HttpHeaders httpHeaders;
 
         @GET
         @Path("/lowercased")
-        public String lowercased()
-        {
+        public String lowercased() {
             return RESPONSE_PREFIX +
-                httpHeaders.getRequestHeaders()
-                    .keySet()
-                    .stream()
-                    .collect(Collectors.joining(","));
+                    httpHeaders.getRequestHeaders()
+                            .keySet()
+                            .stream()
+                            .collect(Collectors.joining(","));
         }
 
         @GET
         @Path("/lookup")
-        public String lookup()
-        {
+        public String lookup() {
             return RESPONSE_PREFIX +
-                httpHeaders.getHeaderString("dUmMy-KeY");
+                    httpHeaders.getHeaderString("dUmMy-KeY");
         }
     }
 
     @BeforeClass
-    public static void setup() throws Exception
-    {
+    public static void setup() throws Exception {
         ReactorNettyContainer.start().getRegistry().addPerRequestResource(Resource.class);
     }
 
     @AfterClass
-    public static void end() throws Exception
-    {
+    public static void end() throws Exception {
         ReactorNettyContainer.stop();
     }
 
     @Test
-    public void testHeadersLowerCased() throws Exception
-    {
+    public void testHeadersLowerCased() throws Exception {
         final Optional<String> maybeResp = mkCall("/headers/lowercased");
 
         Assert.assertTrue(maybeResp.isPresent());
@@ -83,9 +76,9 @@ public class HeadersLowerCasedTest
     }
 
     private Optional<String> mkCall(final String path) throws IOException {
-        try(Socket client=new Socket(TestPortProvider.getHost(),TestPortProvider.getPort())){
-            try(PrintWriter out=new PrintWriter(client.getOutputStream(),true)){
-                BufferedReader in=new BufferedReader(new InputStreamReader(client.getInputStream()));
+        try (Socket client = new Socket(TestPortProvider.getHost(), TestPortProvider.getPort())) {
+            try (PrintWriter out = new PrintWriter(client.getOutputStream(), true)) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 out.printf("GET %s HTTP/1.1\r\n", path);
                 out.print("Host: \r\n");
                 out.print("Connection: close\r\n");
@@ -93,10 +86,10 @@ public class HeadersLowerCasedTest
                 out.print("\r\n");
                 out.flush();
 
-                final String statusLine=in.readLine();
-                Assert.assertEquals("HTTP/1.1 200 OK",statusLine);
+                final String statusLine = in.readLine();
+                Assert.assertEquals("HTTP/1.1 200 OK", statusLine);
 
-                final Optional<String> maybeResp=in.lines().filter(line->line.startsWith(RESPONSE_PREFIX)).findAny();
+                final Optional<String> maybeResp = in.lines().filter(line -> line.startsWith(RESPONSE_PREFIX)).findAny();
                 client.close();
                 return maybeResp;
             }

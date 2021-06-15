@@ -54,7 +54,7 @@ public class ClientHeaderFillingTest {
     }
 
     @Path("/")
-    @RegisterRestClient(baseUri="http://localhost:8081")
+    @RegisterRestClient(baseUri = "http://localhost:8081")
     public interface HeaderSendingClient {
         @GET
         @ClientHeaderParam(name = HEADER_NAME, value = "{someMethod}")

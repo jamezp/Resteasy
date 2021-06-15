@@ -15,48 +15,40 @@ import javax.servlet.ServletContext;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class SpringBeanProcessorServletAware extends SpringBeanProcessor implements ServletContextAware
-{
-   protected ServletContext servletContext;
+public class SpringBeanProcessorServletAware extends SpringBeanProcessor implements ServletContextAware {
+    protected ServletContext servletContext;
 
-   public void setServletContext(ServletContext servletContext)
-   {
-      this.servletContext = servletContext;
-   }
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 
-   @Override
-   public Registry getRegistry()
-   {
-      if (registry != null) return registry;
-      ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
-      if (deployment != null)
-      {
-         registry = deployment.getRegistry();
-      }
-      return registry;
-   }
+    @Override
+    public Registry getRegistry() {
+        if (registry != null) return registry;
+        ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
+        if (deployment != null) {
+            registry = deployment.getRegistry();
+        }
+        return registry;
+    }
 
-   @Override
-   public ResteasyProviderFactory getProviderFactory()
-   {
-      if (providerFactory != null) return providerFactory;
-      ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
-      if (deployment != null)
-      {
-         providerFactory = deployment.getProviderFactory();
-      }
-      return providerFactory;
-   }
+    @Override
+    public ResteasyProviderFactory getProviderFactory() {
+        if (providerFactory != null) return providerFactory;
+        ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
+        if (deployment != null) {
+            providerFactory = deployment.getProviderFactory();
+        }
+        return providerFactory;
+    }
 
-   @Override
-   public Dispatcher getDispatcher()
-   {
-      if (dispatcher != null) return dispatcher;
-      ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
-      if (deployment != null)
-      {
-         dispatcher = deployment.getDispatcher();
-      }
-      return dispatcher;
-   }
+    @Override
+    public Dispatcher getDispatcher() {
+        if (dispatcher != null) return dispatcher;
+        ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
+        if (deployment != null) {
+            dispatcher = deployment.getDispatcher();
+        }
+        return dispatcher;
+    }
 }

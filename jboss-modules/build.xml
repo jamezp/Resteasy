@@ -62,7 +62,7 @@
         <module-def name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider">
             <maven-resource group="com.fasterxml.jackson.jaxrs" artifact="jackson-jaxrs-json-provider"/>
             <maven-resource group="com.fasterxml.jackson.jaxrs" artifact="jackson-jaxrs-base"/>
-            <maven-resource group="com.fasterxml.jackson.module" artifact="jackson-module-jaxb-annotations" />
+            <maven-resource group="com.fasterxml.jackson.module" artifact="jackson-module-jaxb-annotations"/>
         </module-def>
 
         <!-- todo this is temporary and should be removed when wildfly makes the needed update
@@ -93,18 +93,19 @@
         <module-def name="org.jboss.resteasy.resteasy-jackson2-provider">
             <maven-resource group="org.jboss.resteasy" artifact="resteasy-jackson2-provider"/>
         </module-def>
-    	
+
         <module-def name="org.jboss.resteasy.resteasy-context-propagation">
             <maven-resource group="org.jboss.resteasy" artifact="resteasy-context-propagation"/>
             <maven-resource group="io.smallrye" artifact="smallrye-context-propagation"/>
             <maven-resource group="io.smallrye" artifact="smallrye-context-propagation-api"/>
             <maven-resource group="jakarta.enterprise" artifact="jakarta.enterprise.cdi-api"/>
-            <maven-resource group="org.eclipse.microprofile.context-propagation" artifact="microprofile-context-propagation-api"/>
+            <maven-resource group="org.eclipse.microprofile.context-propagation"
+                            artifact="microprofile-context-propagation-api"/>
         </module-def>
 
         <module-def name="org.jboss.resteasy.resteasy-rxjava2">
             <maven-resource group="org.jboss.resteasy" artifact="resteasy-rxjava2"/>
-         	<maven-resource group="io.reactivex.rxjava2" artifact="rxjava"/>
+            <maven-resource group="io.reactivex.rxjava2" artifact="rxjava"/>
             <maven-resource group="io.smallrye" artifact="smallrye-context-propagation-propagators-rxjava2"/>
         </module-def>
 
@@ -156,7 +157,8 @@
         </module-def>
 
         <module-def name="org.jboss.resteasy.resteasy-spring">
-            <maven-resource-bundle group="org.jboss.resteasy" artifact="resteasy-spring" subdir="bundled/resteasy-spring-jar"/>
+            <maven-resource-bundle group="org.jboss.resteasy" artifact="resteasy-spring"
+                                   subdir="bundled/resteasy-spring-jar"/>
         </module-def>
 
         <module-def name="org.jboss.resteasy.resteasy-spring-web">

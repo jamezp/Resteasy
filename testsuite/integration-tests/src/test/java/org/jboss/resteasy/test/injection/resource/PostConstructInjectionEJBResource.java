@@ -11,16 +11,16 @@ import javax.ws.rs.Path;
 @Interceptors({PostConstructInjectionEJBInterceptor.class})
 public class PostConstructInjectionEJBResource {
 
-   @Size(max=3)
-   private String t = "ab";
+    @Size(max = 3)
+    private String t = "ab";
 
-   @Path("get")
-   @GET
-   public String get() {
-      return t;
-   }
+    @Path("get")
+    @GET
+    public String get() {
+        return t;
+    }
 
-   public void setT(String t) {
-      this.t = t;
-   }
+    public void setT(String t) {
+        this.t = t;
+    }
 }

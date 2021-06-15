@@ -184,8 +184,11 @@ public class OptionalInjectionTest {
      * Builds an instance of {@code MockHttpRequest} for {@code GET} calls, properly configured to make
      * sure that all the {@code FormParam} are properly injected in all test cases otherwise we
      * end up with a {@code NullPointerException}.
+     *
      * @param uri the uri of the endpoint to test.
+     *
      * @return an instance of {@code MockHttpRequest} properly configured.
+     *
      * @throws Exception in case the provided uri is not properly formed.
      */
     private static MockHttpRequest createMockHttpRequest(String uri) throws Exception {
@@ -196,10 +199,13 @@ public class OptionalInjectionTest {
      * Builds an instance of {@code MockHttpRequest} properly configured to make sure that all
      * the {@code FormParam} are properly injected in all test cases otherwise we end up with
      * a {@code NullPointerException}.
-     * @param uri the uri of the endpoint to test.
+     *
+     * @param uri   the uri of the endpoint to test.
      * @param isGet the flag indicating whether a GET call is expected otherwise a POST call will be
      *              performed.
+     *
      * @return an instance of {@code MockHttpRequest} properly configured.
+     *
      * @throws Exception in case the provided uri is not properly formed.
      */
     private static MockHttpRequest createMockHttpRequest(String uri, boolean isGet) throws Exception {

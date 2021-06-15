@@ -12,37 +12,32 @@ import java.util.Map;
  * @author <a href="ryan@damnhandy.com">Ryan J. McDonough</a>
  * @version $Revision:$
  */
-public class XmlNamespacePrefixMapper extends NamespacePrefixMapper
-{
+public class XmlNamespacePrefixMapper extends NamespacePrefixMapper {
 
-   private final Map<String, String> namespaceMap = new HashMap<String, String>();
+    private final Map<String, String> namespaceMap = new HashMap<String, String>();
 
-   /**
-    * Create a new XmlNamespecePrefixMapper.
-    *
-    * @param namespaces xml namespaces
-    */
-   public XmlNamespacePrefixMapper(final XmlNs... namespaces)
-   {
-      for (XmlNs namespace : namespaces)
-      {
-         namespaceMap.put(namespace.namespaceURI(), namespace.prefix());
-      }
-   }
+    /**
+     * Create a new XmlNamespecePrefixMapper.
+     *
+     * @param namespaces xml namespaces
+     */
+    public XmlNamespacePrefixMapper(final XmlNs... namespaces) {
+        for (XmlNs namespace : namespaces) {
+            namespaceMap.put(namespace.namespaceURI(), namespace.prefix());
+        }
+    }
 
 
-   /**
-    *
-    */
-   @Override
-   public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix)
-   {
-      String prefix = namespaceMap.get(namespaceUri);
-      if (prefix != null)
-      {
-         return prefix;
-      }
-      return suggestion;
-   }
+    /**
+     *
+     */
+    @Override
+    public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
+        String prefix = namespaceMap.get(namespaceUri);
+        if (prefix != null) {
+            return prefix;
+        }
+        return suggestion;
+    }
 
 }

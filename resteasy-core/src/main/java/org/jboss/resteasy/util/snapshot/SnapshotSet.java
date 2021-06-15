@@ -20,10 +20,10 @@ public class SnapshotSet<T> implements Set<T> {
         this.lockSnapshots = lockSnapshots;
     }
 
-   @SuppressWarnings({"rawtypes", "unchecked"})
-   public SnapshotSet(final Set<T> set, final boolean shallow, final boolean lockSnapshots, final boolean snapFirst) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public SnapshotSet(final Set<T> set, final boolean shallow, final boolean lockSnapshots, final boolean snapFirst) {
         if (delegate instanceof SnapshotSet) {
-            this.delegate = ((SnapshotSet)set).delegate;
+            this.delegate = ((SnapshotSet) set).delegate;
         } else if (shallow) {
             this.delegate = set;
         } else {

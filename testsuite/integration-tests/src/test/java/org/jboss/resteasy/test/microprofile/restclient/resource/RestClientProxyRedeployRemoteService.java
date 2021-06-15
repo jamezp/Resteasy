@@ -6,7 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 @Path("todos")
-@RegisterRestClient(baseUri="https://jsonplaceholder.typicode.com")
+@RegisterRestClient(baseUri = "https://jsonplaceholder.typicode.com")
 public interface RestClientProxyRedeployRemoteService {
 
     @GET

@@ -16,9 +16,9 @@ import javax.ws.rs.client.CompletionStageRxInvoker;
 
 public class MpClientInvocationBuilder extends ClientInvocationBuilder {
 
-   private List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories;
+    private List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories;
 
-   public MpClientInvocationBuilder(final ResteasyClient client, final URI uri, final ClientConfiguration configuration,
+    public MpClientInvocationBuilder(final ResteasyClient client, final URI uri, final ClientConfiguration configuration,
                                      final List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories) {
         super(client, uri, configuration);
         this.asyncInterceptorFactories = asyncInterceptorFactories;

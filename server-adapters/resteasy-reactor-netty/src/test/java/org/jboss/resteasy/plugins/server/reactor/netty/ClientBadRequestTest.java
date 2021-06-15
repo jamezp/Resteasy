@@ -49,8 +49,8 @@ public class ClientBadRequestTest {
         @Produces("text/plain")
         public Response badRequest() {
             return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Everything you do is bad!")
-                .build();
+                    .entity("Everything you do is bad!")
+                    .build();
         }
     }
 }

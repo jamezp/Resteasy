@@ -24,39 +24,39 @@ import org.junit.runner.RunWith;
 @RunAsClient
 public class ClassLevelMediaTypeTest {
 
-   private static Client client;
+    private static Client client;
 
-   @Deployment
-   public static Archive<?> deploy() {
-      WebArchive war = TestUtil.prepareArchive(ClassLevelMediaTypeTest.class.getSimpleName());
-      return TestUtil.finishContainerPrepare(war, null, ClassLevelMediaTypeResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(ClassLevelMediaTypeTest.class.getSimpleName());
+        return TestUtil.finishContainerPrepare(war, null, ClassLevelMediaTypeResource.class);
+    }
 
-   @BeforeClass
-   public static void init() {
-      client = ClientBuilder.newClient();
-   }
+    @BeforeClass
+    public static void init() {
+        client = ClientBuilder.newClient();
+    }
 
-   @AfterClass
-   public static void after() throws Exception {
-      client.close();
-      client = null;
-   }
+    @AfterClass
+    public static void after() throws Exception {
+        client.close();
+        client = null;
+    }
 
-   @Test
-   public void testApplicationJsonMediaType() {
-      WebTarget base = client.target(generateURL("/test"));
-      try {
-         Response response = base.request().get();
-         Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
-         String body = response.readEntity(String.class);
-         Assert.assertEquals("application/json", response.getHeaderString("Content-Type"));
-      } catch (Exception e) {
-         throw new RuntimeException(e);
-      }
-   }
+    @Test
+    public void testApplicationJsonMediaType() {
+        WebTarget base = client.target(generateURL("/test"));
+        try {
+            Response response = base.request().get();
+            Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
+            String body = response.readEntity(String.class);
+            Assert.assertEquals("application/json", response.getHeaderString("Content-Type"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, ClassLevelMediaTypeTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, ClassLevelMediaTypeTest.class.getSimpleName());
+    }
 }

@@ -18,35 +18,29 @@ import java.util.List;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class FormParamInjector extends StringParameterInjector implements ValueInjector
-{
-   private boolean encode;
+public class FormParamInjector extends StringParameterInjector implements ValueInjector {
+    private boolean encode;
 
-   public FormParamInjector(final Class type, final Type genericType, final AccessibleObject target, final String header, final String defaultValue, final boolean encode, final Annotation[] annotations, final ResteasyProviderFactory factory)
-   {
-      super(type, genericType, header, FormParam.class, defaultValue, target, annotations, factory);
-      this.encode = encode;
-   }
+    public FormParamInjector(final Class type, final Type genericType, final AccessibleObject target, final String header, final String defaultValue, final boolean encode, final Annotation[] annotations, final ResteasyProviderFactory factory) {
+        super(type, genericType, header, FormParam.class, defaultValue, target, annotations, factory);
+        this.encode = encode;
+    }
 
-   @Override
-   public Object inject(HttpRequest request, HttpResponse response, boolean unwrapAsync)
-   {
-      List<String> list = request.getDecodedFormParameters().get(paramName);
-      if (list != null && encode)
-      {
-         List<String> encodedList = new ArrayList<String>();
-         for (String s : list)
-         {
-            encodedList.add(Encode.encodeString(s));
-         }
-         list = encodedList;
-      }
-      return extractValues(list);
-   }
+    @Override
+    public Object inject(HttpRequest request, HttpResponse response, boolean unwrapAsync) {
+        List<String> list = request.getDecodedFormParameters().get(paramName);
+        if (list != null && encode) {
+            List<String> encodedList = new ArrayList<String>();
+            for (String s : list) {
+                encodedList.add(Encode.encodeString(s));
+            }
+            list = encodedList;
+        }
+        return extractValues(list);
+    }
 
-   @Override
-   public Object inject(boolean unwrapAsync)
-   {
-      throw new RuntimeException(Messages.MESSAGES.illegalToInjectFormParam());
-   }
+    @Override
+    public Object inject(boolean unwrapAsync) {
+        throw new RuntimeException(Messages.MESSAGES.illegalToInjectFormParam());
+    }
 }

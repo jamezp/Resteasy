@@ -11,13 +11,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class SingleProviderTest
-{
+public class SingleProviderTest {
     private final SingleProvider provider = new SingleProvider();
 
     @Test
-    public void testFromCompletionStage()
-    {
+    public void testFromCompletionStage() {
         final CompletableFuture<Integer> cs = new CompletableFuture<>();
         cs.complete(1);
         final Single<?> single = provider.fromCompletionStage(cs);
@@ -50,8 +48,7 @@ public class SingleProviderTest
     }
 
     @Test
-    public void testToCompletionStageCase() throws Exception
-    {
+    public void testToCompletionStageCase() throws Exception {
         final Object actual = provider.toCompletionStage(Single.just(1)).toCompletableFuture().get();
         assertEquals(1, actual);
     }

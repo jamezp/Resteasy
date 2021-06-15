@@ -12,6 +12,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @ContentEncoding("gzip")
-public @interface GZIP
-{
+public @interface GZIP {
 }

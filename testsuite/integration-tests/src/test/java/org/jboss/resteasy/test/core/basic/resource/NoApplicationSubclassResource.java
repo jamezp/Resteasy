@@ -8,10 +8,10 @@ import javax.ws.rs.Produces;
 @Path("/")
 public class NoApplicationSubclassResource {
 
-   @GET
-   @Produces("application/json")
-   @Path("/hello")
-   public String getJson() {
-      return "hello world";
-   }
+    @GET
+    @Produces("application/json")
+    @Path("/hello")
+    public String getJson() {
+        return "hello world";
+    }
 }

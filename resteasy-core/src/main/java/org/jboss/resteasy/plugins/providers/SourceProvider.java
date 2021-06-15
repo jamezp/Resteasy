@@ -35,67 +35,53 @@ import java.lang.reflect.Type;
 @Provider
 @Produces({MediaType.TEXT_XML, "application/xml", "application/*+xml"})
 @Consumes({MediaType.TEXT_XML, "application/xml", "application/*+xml"})
-public class SourceProvider implements MessageBodyReader<Source>, AsyncBufferedMessageBodyWriter<Source>
-{
-   public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return type.equals(Source.class);
-   }
+public class SourceProvider implements MessageBodyReader<Source>, AsyncBufferedMessageBodyWriter<Source> {
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type.equals(Source.class);
+    }
 
-   public Source readFrom(Class<Source> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
-      if (NoContent.isContentLengthZero(httpHeaders)) return new StreamSource(new ByteArrayInputStream(new byte[0]));
-      return new StreamSource(entityStream);
-   }
+    public Source readFrom(Class<Source> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
+        if (NoContent.isContentLengthZero(httpHeaders)) return new StreamSource(new ByteArrayInputStream(new byte[0]));
+        return new StreamSource(entityStream);
+    }
 
-   public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return Source.class.isAssignableFrom(type);
-   }
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return Source.class.isAssignableFrom(type);
+    }
 
-   public long getSize(Source inputStream, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return -1;
-   }
+    public long getSize(Source inputStream, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1;
+    }
 
-   public void writeTo(Source source, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
-      try
-      {
-         if (source instanceof StreamSource)
-         {
-            StreamSource stream = (StreamSource) source;
-            InputSource inputStream;
+    public void writeTo(Source source, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
+        try {
+            if (source instanceof StreamSource) {
+                StreamSource stream = (StreamSource) source;
+                InputSource inputStream;
 
-            if (stream.getInputStream() == null && stream.getReader() != null) {
-               inputStream = new InputSource(stream.getReader());
-            } else {
-               inputStream = new InputSource(stream.getInputStream());
+                if (stream.getInputStream() == null && stream.getReader() != null) {
+                    inputStream = new InputSource(stream.getReader());
+                } else {
+                    inputStream = new InputSource(stream.getInputStream());
+                }
+
+                inputStream.setCharacterStream(inputStream.getCharacterStream());
+                inputStream.setPublicId(stream.getPublicId());
+                inputStream.setSystemId(source.getSystemId());
+                source = new SAXSource(SAXParserFactory.newInstance().newSAXParser().getXMLReader(), inputStream);
             }
 
-            inputStream.setCharacterStream(inputStream.getCharacterStream());
-            inputStream.setPublicId(stream.getPublicId());
-            inputStream.setSystemId(source.getSystemId());
-            source = new SAXSource(SAXParserFactory.newInstance().newSAXParser().getXMLReader(), inputStream);
-         }
+            StreamResult sr = new StreamResult(entityStream);
+            TransformerFactory.newInstance().newTransformer().transform(source, sr);
 
-         StreamResult sr = new StreamResult(entityStream);
-         TransformerFactory.newInstance().newTransformer().transform(source, sr);
-
-      }
-      catch (SAXException ex)
-      {
-         throw new InternalServerErrorException(ex);
-      }
-      catch (ParserConfigurationException ex)
-      {
-         throw new InternalServerErrorException(ex);
-      }
-      catch (TransformerException ex)
-      {
-         throw new InternalServerErrorException(ex);
-      }
-   }
+        } catch (SAXException ex) {
+            throw new InternalServerErrorException(ex);
+        } catch (ParserConfigurationException ex) {
+            throw new InternalServerErrorException(ex);
+        } catch (TransformerException ex) {
+            throw new InternalServerErrorException(ex);
+        }
+    }
 }

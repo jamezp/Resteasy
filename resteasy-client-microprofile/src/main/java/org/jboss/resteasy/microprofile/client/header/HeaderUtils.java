@@ -17,8 +17,10 @@ public class HeaderUtils {
 
     /**
      * Create method handle to call a default method
-     * @param method method to create the handle for
+     *
+     * @param method      method to create the handle for
      * @param clientProxy proxy of the rest client
+     *
      * @return method handle
      */
     public static MethodHandle createMethodHandle(final Method method, final Object clientProxy) {
@@ -27,14 +29,16 @@ public class HeaderUtils {
 
     /**
      * resolve method of a given name in a given interface class
+     *
      * @param methodSpecifier [fully.quallified.ClassName.]methodName
-     * @param interfaceClass class of the interface, on which the method was defined
-     * @param headerName name of the header for which the method should be called
+     * @param interfaceClass  class of the interface, on which the method was defined
+     * @param headerName      name of the header for which the method should be called
+     *
      * @return method to be called
      */
     public static Method resolveMethod(String methodSpecifier,
-                                Class<?> interfaceClass,
-                                String headerName) {
+                                       Class<?> interfaceClass,
+                                       String headerName) {
         int lastDot = methodSpecifier.lastIndexOf('.');
         if (lastDot == methodSpecifier.length()) {
             throw new RestClientDefinitionException("Invalid string to specify method: " + methodSpecifier +
@@ -83,7 +87,9 @@ public class HeaderUtils {
 
     /**
      * casts List&lt;?&gt; to List of Strings
+     *
      * @param result list of unknown type
+     *
      * @return list of strings
      */
     public static List<String> castListToListOfStrings(List<?> result) {

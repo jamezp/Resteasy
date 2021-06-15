@@ -22,35 +22,29 @@ import java.io.IOException;
  */
 @Provider
 @ConstrainedTo(RuntimeType.CLIENT)
-public class ClientDigitalVerificationHeaderDecoratorFeature implements DynamicFeature
-{
-   @Override
-   public void configure(ResourceInfo resourceInfo, FeatureContext configurable)
-   {
-      Verify verify = resourceInfo.getResourceMethod().getAnnotation(Verify.class);
-      Verifications verifications = resourceInfo.getResourceClass().getAnnotation(Verifications.class);
+public class ClientDigitalVerificationHeaderDecoratorFeature implements DynamicFeature {
+    @Override
+    public void configure(ResourceInfo resourceInfo, FeatureContext configurable) {
+        Verify verify = resourceInfo.getResourceMethod().getAnnotation(Verify.class);
+        Verifications verifications = resourceInfo.getResourceClass().getAnnotation(Verifications.class);
 
-      if (verify != null || verifications != null)
-      {
-         configurable.register(new DigitalVerificationHeaderDecorator(verify, verifications));
-      }
+        if (verify != null || verifications != null) {
+            configurable.register(new DigitalVerificationHeaderDecorator(verify, verifications));
+        }
 
-   }
+    }
 
-   @Priority(Priorities.HEADER_DECORATOR)
-   public static class DigitalVerificationHeaderDecorator extends AbstractDigitalVerificationHeaderDecorator implements ClientResponseFilter
-   {
-      public DigitalVerificationHeaderDecorator(final Verify verify, final Verifications verifications)
-      {
-         this.verify = verify;
-         this.verifications = verifications;
-      }
+    @Priority(Priorities.HEADER_DECORATOR)
+    public static class DigitalVerificationHeaderDecorator extends AbstractDigitalVerificationHeaderDecorator implements ClientResponseFilter {
+        public DigitalVerificationHeaderDecorator(final Verify verify, final Verifications verifications) {
+            this.verify = verify;
+            this.verifications = verifications;
+        }
 
-      @Override
-      public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException
-      {
-         requestContext.setProperty(Verifier.class.getName(), create());
-      }
+        @Override
+        public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
+            requestContext.setProperty(Verifier.class.getName(), create());
+        }
 
-   }
+    }
 }

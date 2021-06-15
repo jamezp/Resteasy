@@ -20,6 +20,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Decorator(processor = PrettyProcessor.class, target = Marshaller.class)
-public @interface Formatted
-{
+public @interface Formatted {
 }

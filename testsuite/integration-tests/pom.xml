@@ -13,14 +13,27 @@
 
     <properties>
         <maven.compiler.parameters>true</maven.compiler.parameters>
-        <container.base.dir.managed>${project.build.directory}${file.separator}${container.qualifier.managed}</container.base.dir.managed>
-        <container.base.dir.managed.encoding>${project.build.directory}${file.separator}${container.qualifier.managed.encoding}</container.base.dir.managed.encoding>
-        <container.base.dir.manual.gzip>${project.build.directory}${file.separator}${container.qualifier.manual.gzip}</container.base.dir.manual.gzip>
-        <container.base.dir.manual.tracing>${project.build.directory}${file.separator}${container.qualifier.manual.tracing}</container.base.dir.manual.tracing>
-        <container.base.dir.manual.ssl>${project.build.directory}${file.separator}${container.qualifier.manual.ssl}</container.base.dir.manual.ssl>
-        <container.base.dir.manual.ssl.wrong>${project.build.directory}${file.separator}${container.qualifier.manual.ssl.wrong}</container.base.dir.manual.ssl.wrong>
-        <container.base.dir.manual.ssl.wildcard>${project.build.directory}${file.separator}${container.qualifier.manual.ssl.wildcard}</container.base.dir.manual.ssl.wildcard>
-        <container.base.dir.manual.ssl.sni>${project.build.directory}${file.separator}${container.qualifier.manual.ssl.sni}</container.base.dir.manual.ssl.sni>
+        <container.base.dir.managed>${project.build.directory}${file.separator}${container.qualifier.managed}
+        </container.base.dir.managed>
+        <container.base.dir.managed.encoding>
+            ${project.build.directory}${file.separator}${container.qualifier.managed.encoding}
+        </container.base.dir.managed.encoding>
+        <container.base.dir.manual.gzip>${project.build.directory}${file.separator}${container.qualifier.manual.gzip}
+        </container.base.dir.manual.gzip>
+        <container.base.dir.manual.tracing>
+            ${project.build.directory}${file.separator}${container.qualifier.manual.tracing}
+        </container.base.dir.manual.tracing>
+        <container.base.dir.manual.ssl>${project.build.directory}${file.separator}${container.qualifier.manual.ssl}
+        </container.base.dir.manual.ssl>
+        <container.base.dir.manual.ssl.wrong>
+            ${project.build.directory}${file.separator}${container.qualifier.manual.ssl.wrong}
+        </container.base.dir.manual.ssl.wrong>
+        <container.base.dir.manual.ssl.wildcard>
+            ${project.build.directory}${file.separator}${container.qualifier.manual.ssl.wildcard}
+        </container.base.dir.manual.ssl.wildcard>
+        <container.base.dir.manual.ssl.sni>
+            ${project.build.directory}${file.separator}${container.qualifier.manual.ssl.sni}
+        </container.base.dir.manual.ssl.sni>
         <container.offset.managed>0</container.offset.managed>
         <container.offset.manual.gzip>1000</container.offset.manual.gzip>
         <container.offset.manual.tracing>2000</container.offset.manual.tracing>
@@ -29,14 +42,22 @@
         <container.offset.manual.ssl.wildcard>5000</container.offset.manual.ssl.wildcard>
         <container.offset.manual.ssl.sni>6000</container.offset.manual.ssl.sni>
         <container.offset.managed.encoding>7000</container.offset.managed.encoding>
-        <container.management.port.managed>9990</container.management.port.managed><!-- keep in sync with port offset -->
-        <container.management.port.manual.gzip>10990</container.management.port.manual.gzip><!-- keep in sync with port offset -->
-        <container.management.port.manual.tracing>11990</container.management.port.manual.tracing><!-- keep in sync with port offset -->
-        <container.management.port.manual.ssl>12990</container.management.port.manual.ssl><!-- keep in sync with port offset -->
-        <container.management.port.manual.ssl.wrong>13990</container.management.port.manual.ssl.wrong><!-- keep in sync with port offset -->
-        <container.management.port.manual.ssl.wildcard>14990</container.management.port.manual.ssl.wildcard><!-- keep in sync with port offset -->
-        <container.management.port.manual.ssl.sni>15990</container.management.port.manual.ssl.sni><!-- keep in sync with port offset -->
-        <container.management.port.managed.encoding>16990</container.management.port.managed.encoding><!-- keep in sync with port offset -->
+        <container.management.port.managed>9990
+        </container.management.port.managed><!-- keep in sync with port offset -->
+        <container.management.port.manual.gzip>10990
+        </container.management.port.manual.gzip><!-- keep in sync with port offset -->
+        <container.management.port.manual.tracing>11990
+        </container.management.port.manual.tracing><!-- keep in sync with port offset -->
+        <container.management.port.manual.ssl>12990
+        </container.management.port.manual.ssl><!-- keep in sync with port offset -->
+        <container.management.port.manual.ssl.wrong>13990
+        </container.management.port.manual.ssl.wrong><!-- keep in sync with port offset -->
+        <container.management.port.manual.ssl.wildcard>14990
+        </container.management.port.manual.ssl.wildcard><!-- keep in sync with port offset -->
+        <container.management.port.manual.ssl.sni>15990
+        </container.management.port.manual.ssl.sni><!-- keep in sync with port offset -->
+        <container.management.port.managed.encoding>16990
+        </container.management.port.managed.encoding><!-- keep in sync with port offset -->
         <container.qualifier.managed>jbossas-managed</container.qualifier.managed>
         <container.qualifier.managed.encoding>jbossas-managed-encoding</container.qualifier.managed.encoding>
         <container.qualifier.manual.gzip>jbossas-manual-gzip</container.qualifier.manual.gzip>
@@ -56,72 +77,72 @@
         Descr: Download WildFly
         -->
         <profile>
-          <id>download</id>
-          <activation>
-            <property>
-              <name>!server.home</name>
-            </property>
-          </activation>
-          <build>
-            <plugins>
-              <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-dist</artifactId>
-                                    <version>${server.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}/test-server</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-              </plugin>
-              <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack-resteasy</id>
-                        <phase>generate-test-resources</phase>
-                        <configuration>
-                            <target>
-                                <!-- Explicitly remove resteasy-spring contents as the module.xml does not reference resource jars in this case
-                                     so adding jars without removing old ones basically messes up the classloader -->
-                                <delete>
-                                    <fileset
-                                            dir="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base/org/jboss/resteasy/resteasy-spring/main"
-                                            includes="**/*.jar"/>
-                                </delete>
-                                <unzip src="../../jboss-modules/target/resteasy-jboss-modules-${project.version}.zip"
-                                       dest="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base"
-                                       overwrite="true"/>
-                                <delete dir="target/dependency-maven-plugin-markers"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-              </plugin>
-            </plugins>
-          </build>
-          <properties>
-            <jboss.home>${project.build.directory}/test-server/wildfly-${server.version}</jboss.home>
-          </properties>
+            <id>download</id>
+            <activation>
+                <property>
+                    <name>!server.home</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipTests}</skip>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${server.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${project.build.directory}/test-server</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-resteasy</id>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <!-- Explicitly remove resteasy-spring contents as the module.xml does not reference resource jars in this case
+                                             so adding jars without removing old ones basically messes up the classloader -->
+                                        <delete>
+                                            <fileset
+                                                    dir="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base/org/jboss/resteasy/resteasy-spring/main"
+                                                    includes="**/*.jar"/>
+                                        </delete>
+                                        <unzip src="../../jboss-modules/target/resteasy-jboss-modules-${project.version}.zip"
+                                               dest="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base"
+                                               overwrite="true"/>
+                                        <delete dir="target/dependency-maven-plugin-markers"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <jboss.home>${project.build.directory}/test-server/wildfly-${server.version}</jboss.home>
+            </properties>
         </profile>
     </profiles>
 
@@ -269,7 +290,7 @@
             <artifactId>resteasy-netty4</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-wadl-undertow-connector</artifactId>
@@ -443,41 +464,44 @@
                                      This helps to isolate the multiple running instances.
                                      One copy per each container in arquillian.xml -->
 
-                                <delete quiet="true" dir="${container.base.dir.managed}" />
+                                <delete quiet="true" dir="${container.base.dir.managed}"/>
                                 <copy todir="${container.base.dir.managed}" overwrite="true" failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
 
-                                <delete quiet="true" dir="${container.base.dir.manual.gzip}" />
+                                <delete quiet="true" dir="${container.base.dir.manual.gzip}"/>
                                 <copy todir="${container.base.dir.manual.gzip}" overwrite="true" failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
-                                <delete quiet="true" dir="${container.base.dir.managed.encoding}" />
-                                <copy todir="${container.base.dir.managed.encoding}" overwrite="true" failonerror="true">
+                                <delete quiet="true" dir="${container.base.dir.managed.encoding}"/>
+                                <copy todir="${container.base.dir.managed.encoding}" overwrite="true"
+                                      failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
 
-                                <delete quiet="true" dir="${container.base.dir.manual.tracing}" />
+                                <delete quiet="true" dir="${container.base.dir.manual.tracing}"/>
                                 <copy todir="${container.base.dir.manual.tracing}" overwrite="true" failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
 
-                                <delete quiet="true" dir="${container.base.dir.manual.ssl}" />
+                                <delete quiet="true" dir="${container.base.dir.manual.ssl}"/>
                                 <copy todir="${container.base.dir.manual.ssl}" overwrite="true" failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
 
-                                <delete quiet="true" dir="${container.base.dir.manual.ssl.wrong}" />
-                                <copy todir="${container.base.dir.manual.ssl.wrong}" overwrite="true" failonerror="true">
+                                <delete quiet="true" dir="${container.base.dir.manual.ssl.wrong}"/>
+                                <copy todir="${container.base.dir.manual.ssl.wrong}" overwrite="true"
+                                      failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
 
-                                <delete quiet="true" dir="${container.base.dir.manual.ssl.wildcard}" />
-                                <copy todir="${container.base.dir.manual.ssl.wildcard}" overwrite="true" failonerror="true">
+                                <delete quiet="true" dir="${container.base.dir.manual.ssl.wildcard}"/>
+                                <copy todir="${container.base.dir.manual.ssl.wildcard}" overwrite="true"
+                                      failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
 
-                                <delete quiet="true" dir="${container.base.dir.manual.ssl.sni}" />
+                                <delete quiet="true" dir="${container.base.dir.manual.ssl.sni}"/>
                                 <copy todir="${container.base.dir.manual.ssl.sni}" overwrite="true" failonerror="true">
                                     <fileset dir="${jboss.home}/standalone"/>
                                 </copy>
@@ -527,7 +551,8 @@
                             </scripts>
                             <stdout>${project.build.directory}/elytron-config.out</stdout>
                             <system-properties>
-                                <jboss.server.config.file.name>${jboss.server.config.file.name}</jboss.server.config.file.name>
+                                <jboss.server.config.file.name>${jboss.server.config.file.name}
+                                </jboss.server.config.file.name>
                             </system-properties>
                         </configuration>
                     </execution>
@@ -535,55 +560,58 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                    <executions>
+                <executions>
 
-                        <!-- Re-evaluate https://issues.jboss.org/browse/RESTEASY-1884 in case we find ourselves
-                             in need of adding additional execution. -->
+                    <!-- Re-evaluate https://issues.jboss.org/browse/RESTEASY-1884 in case we find ourselves
+                         in need of adding additional execution. -->
 
-                        <!-- default test execution -->
-                        <execution>
-                            <id>default-test</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <configuration>
-                                <systemPropertyVariables>
-                                    <resteasy.microprofile.sseclient.buffersize>5</resteasy.microprofile.sseclient.buffersize>
-                                </systemPropertyVariables>
-                                <excludes>
-                                    <!-- Tests requires excluding JsonBindingProvider-->
-                                    <exclude>**/JsonBindingAnnotationsJacksonTest.java</exclude>
-                                    <exclude>**/SseJsonEventTest</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
+                    <!-- default test execution -->
+                    <execution>
+                        <id>default-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <resteasy.microprofile.sseclient.buffersize>5
+                                </resteasy.microprofile.sseclient.buffersize>
+                            </systemPropertyVariables>
+                            <excludes>
+                                <!-- Tests requires excluding JsonBindingProvider-->
+                                <exclude>**/JsonBindingAnnotationsJacksonTest.java</exclude>
+                                <exclude>**/SseJsonEventTest</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
 
 
-                        <!-- execution with excluded JSON-B -->
-                        <execution>
-                            <id>disable-jsonb-client</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <configuration>
-                                <systemPropertyVariables>
-                                    <resteasy.microprofile.sseclient.buffersize>5</resteasy.microprofile.sseclient.buffersize>
-                                </systemPropertyVariables>
-                                <includes>
-                                    <include>**/JsonBindingAnnotationsJacksonTest.java</include>
-                                    <include>**/SseJsonEventTest.java</include>
-                                    <include>**/ValidationJaxbTest.java</include>
-                                </includes>
-                                <classpathDependencyExcludes>
-                                    <classpathDependencyExclude>org.jboss.resteasy:resteasy-json-binding-provider</classpathDependencyExclude>
-                                </classpathDependencyExcludes>
+                    <!-- execution with excluded JSON-B -->
+                    <execution>
+                        <id>disable-jsonb-client</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <resteasy.microprofile.sseclient.buffersize>5
+                                </resteasy.microprofile.sseclient.buffersize>
+                            </systemPropertyVariables>
+                            <includes>
+                                <include>**/JsonBindingAnnotationsJacksonTest.java</include>
+                                <include>**/SseJsonEventTest.java</include>
+                                <include>**/ValidationJaxbTest.java</include>
+                            </includes>
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.jboss.resteasy:resteasy-json-binding-provider
+                                </classpathDependencyExclude>
+                            </classpathDependencyExcludes>
 
-                            </configuration>
-                        </execution>
+                        </configuration>
+                    </execution>
 
-                    </executions>
+                </executions>
             </plugin>
 
             <!-- generate archive needed by project resteasy-quarkus-testsuite -->

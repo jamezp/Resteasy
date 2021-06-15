@@ -32,7 +32,7 @@ public class PatchMethodFilter extends AbstractPatchMethodFilter {
     private volatile ObjectMapper objectMapper;
 
     protected boolean isDisabled(ContainerRequestContext requestContext) {
-       return this.readFilterDisabledFlag(requestContext) != FilterFlag.JACKSON;
+        return this.readFilterDisabledFlag(requestContext) != FilterFlag.JACKSON;
     }
 
     protected byte[] applyPatch(ContainerRequestContext requestContext, byte[] targetJsonBytes) throws IOException, Failure {

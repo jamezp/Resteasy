@@ -31,7 +31,9 @@ public final class PemUtils {
      * Decode a X509 Certificate from a PEM string
      *
      * @param cert
+     *
      * @return
+     *
      * @throws Exception
      */
     public static X509Certificate decodeCertificate(String cert) {
@@ -52,7 +54,9 @@ public final class PemUtils {
      * Decode a Public Key from a PEM string
      *
      * @param pem
+     *
      * @return
+     *
      * @throws Exception
      */
     public static PublicKey decodePublicKey(String pem) {
@@ -72,7 +76,9 @@ public final class PemUtils {
      * Decode a Private Key from a PEM string
      *
      * @param pem
+     *
      * @return
+     *
      * @throws Exception
      */
     public static PrivateKey decodePrivateKey(String pem) {
@@ -92,7 +98,9 @@ public final class PemUtils {
      * Encode a Key to a PEM string
      *
      * @param key
+     *
      * @return
+     *
      * @throws Exception
      */
     public static String encodeKey(Key key) {
@@ -103,6 +111,7 @@ public final class PemUtils {
      * Encode a X509 Certificate to a PEM string
      *
      * @param certificate
+     *
      * @return
      */
     public static String encodeCertificate(Certificate certificate) {

@@ -19,12 +19,10 @@ import java.lang.reflect.Type;
  * @version $Revision: $
  */
 public abstract class AbstractEntityProvider<T>
-      implements MessageBodyReader<T>, AsyncMessageBodyWriter<T>
-{
+        implements MessageBodyReader<T>, AsyncMessageBodyWriter<T> {
 
-   public long getSize(T t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return -1;
-   }
+    public long getSize(T t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1;
+    }
 
 }

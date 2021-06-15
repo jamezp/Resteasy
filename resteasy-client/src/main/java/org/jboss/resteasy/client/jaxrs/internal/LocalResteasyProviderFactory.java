@@ -13,25 +13,21 @@ import org.jboss.resteasy.spi.ResteasyProviderFactory;
  * <p>
  * Date April 27, 2016
  */
-public class LocalResteasyProviderFactory extends ResteasyProviderFactoryImpl
-{
+public class LocalResteasyProviderFactory extends ResteasyProviderFactoryImpl {
 
-   public LocalResteasyProviderFactory()
-   {
-      super(RuntimeType.CLIENT);
-   }
+    public LocalResteasyProviderFactory() {
+        super(RuntimeType.CLIENT);
+    }
 
-   public LocalResteasyProviderFactory(final ResteasyProviderFactory factory)
-   {
-      super(RuntimeType.CLIENT, factory);
-      // make sure snapshots are locked after a copy
-      ((ResteasyProviderFactoryImpl)factory).lockSnapshots();
-   }
+    public LocalResteasyProviderFactory(final ResteasyProviderFactory factory) {
+        super(RuntimeType.CLIENT, factory);
+        // make sure snapshots are locked after a copy
+        ((ResteasyProviderFactoryImpl) factory).lockSnapshots();
+    }
 
-   @Override
-   public RuntimeType getRuntimeType()
-   {
-      return RuntimeType.CLIENT;
-   }
+    @Override
+    public RuntimeType getRuntimeType() {
+        return RuntimeType.CLIENT;
+    }
 
 }

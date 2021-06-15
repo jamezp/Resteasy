@@ -152,23 +152,23 @@ public class VertxClientHttpEngine implements AsyncClientHttpEngine {
         final CompletableFuture<ClientResponse> futureResponse = new CompletableFuture<>();
         httpClient.request(options)
                 .map(httpClientRequest -> {
-            final Handler<AsyncResult<HttpClientResponse>> handler = event -> {
-                if (event.succeeded()) {
-                    final HttpClientResponse response = event.result();
-                    response.pause();
-                    futureResponse.complete(toRestEasyResponse(request.getClientConfiguration(), response));
-                    response.resume();
-                } else {
-                    futureResponse.completeExceptionally(event.cause());
-                }
-            };
-            if (body != null) {
-                httpClientRequest.send(body, handler);
-            } else {
-                httpClientRequest.send(handler);
-            }
-            return null;
-        });
+                    final Handler<AsyncResult<HttpClientResponse>> handler = event -> {
+                        if (event.succeeded()) {
+                            final HttpClientResponse response = event.result();
+                            response.pause();
+                            futureResponse.complete(toRestEasyResponse(request.getClientConfiguration(), response));
+                            response.resume();
+                        } else {
+                            futureResponse.completeExceptionally(event.cause());
+                        }
+                    };
+                    if (body != null) {
+                        httpClientRequest.send(body, handler);
+                    } else {
+                        httpClientRequest.send(handler);
+                    }
+                    return null;
+                });
         return futureResponse;
     }
 

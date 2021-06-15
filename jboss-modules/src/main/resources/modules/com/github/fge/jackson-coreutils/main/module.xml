@@ -25,11 +25,11 @@
     <properties>
         <property name="jboss.api" value="private"/>
     </properties>
-     <resources>
+    <resources>
         <!-- Insert resources here -->
     </resources>
 
-    <dependencies>        
+    <dependencies>
         <module name="com.fasterxml.jackson.core.jackson-annotations"/>
         <module name="com.fasterxml.jackson.core.jackson-core"/>
         <module name="com.fasterxml.jackson.core.jackson-databind"/>

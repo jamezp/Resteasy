@@ -17,98 +17,83 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 
-public class ResourceTest
-{
-   private static NettyJaxrsServer server;
-   private static Dispatcher dispatcher;
+public class ResourceTest {
+    private static NettyJaxrsServer server;
+    private static Dispatcher dispatcher;
 
-   @BeforeClass
-   public static void beforeClass() throws Exception
-   {
-      server = new NettyJaxrsServer();
-      server.setPort(TestPortProvider.getPort());
-      server.setRootResourcePath("/");
-      ResteasyDeployment deployment = server.getDeployment();
-      deployment.start();
-      dispatcher = deployment.getDispatcher();
-      server.start();
-   }
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        server = new NettyJaxrsServer();
+        server.setPort(TestPortProvider.getPort());
+        server.setRootResourcePath("/");
+        ResteasyDeployment deployment = server.getDeployment();
+        deployment.start();
+        dispatcher = deployment.getDispatcher();
+        server.start();
+    }
 
-   @AfterClass
-   public static void afterClass() throws Exception
-   {
-      server.stop();
-      server = null;
-      dispatcher = null;
-   }
+    @AfterClass
+    public static void afterClass() throws Exception {
+        server.stop();
+        server = null;
+        dispatcher = null;
+    }
 
-   @Test
-   public void testResourceRegistered()
-   {
-      final Module module = new Module()
-      {
-         @Override
-         public void configure(final Binder binder)
-         {
-            binder.bind(TestResource.class).to(TestResourceSimple.class);
-         }
-      };
-      final ModuleProcessor processor = new ModuleProcessor(dispatcher.getRegistry(), dispatcher.getProviderFactory());
-      processor.processInjector(Guice.createInjector(module));
-      final TestResource resource = TestPortProvider.createProxy(TestResource.class, TestPortProvider.generateBaseUrl());
-      Assert.assertEquals("name", resource.getName());
-      dispatcher.getRegistry().removeRegistrations(TestResource.class);
-   }
+    @Test
+    public void testResourceRegistered() {
+        final Module module = new Module() {
+            @Override
+            public void configure(final Binder binder) {
+                binder.bind(TestResource.class).to(TestResourceSimple.class);
+            }
+        };
+        final ModuleProcessor processor = new ModuleProcessor(dispatcher.getRegistry(), dispatcher.getProviderFactory());
+        processor.processInjector(Guice.createInjector(module));
+        final TestResource resource = TestPortProvider.createProxy(TestResource.class, TestPortProvider.generateBaseUrl());
+        Assert.assertEquals("name", resource.getName());
+        dispatcher.getRegistry().removeRegistrations(TestResource.class);
+    }
 
-   @Test
-   public void testResourceInjected()
-   {
-      final Module module = new Module()
-      {
-         @Override
-         public void configure(final Binder binder)
-         {
-            binder.bind(String.class).toInstance("injected-name");
-            binder.bind(TestResource.class).to(TestResourceInjected.class);
-         }
-      };
-      final ModuleProcessor processor = new ModuleProcessor(dispatcher.getRegistry(), dispatcher.getProviderFactory());
-      processor.processInjector(Guice.createInjector(module));
-      final TestResource resource = TestPortProvider.createProxy(TestResource.class, TestPortProvider.generateBaseUrl());
-      Assert.assertEquals("injected-name", resource.getName());
-      dispatcher.getRegistry().removeRegistrations(TestResource.class);
-   }
+    @Test
+    public void testResourceInjected() {
+        final Module module = new Module() {
+            @Override
+            public void configure(final Binder binder) {
+                binder.bind(String.class).toInstance("injected-name");
+                binder.bind(TestResource.class).to(TestResourceInjected.class);
+            }
+        };
+        final ModuleProcessor processor = new ModuleProcessor(dispatcher.getRegistry(), dispatcher.getProviderFactory());
+        processor.processInjector(Guice.createInjector(module));
+        final TestResource resource = TestPortProvider.createProxy(TestResource.class, TestPortProvider.generateBaseUrl());
+        Assert.assertEquals("injected-name", resource.getName());
+        dispatcher.getRegistry().removeRegistrations(TestResource.class);
+    }
 
-   @Path("test")
-   public interface TestResource
-   {
-      @GET
-      String getName();
-   }
+    @Path("test")
+    public interface TestResource {
+        @GET
+        String getName();
+    }
 
-   public static class TestResourceSimple implements TestResource
-   {
-      @Override
-      public String getName()
-      {
-         return "name";
-      }
-   }
+    public static class TestResourceSimple implements TestResource {
+        @Override
+        public String getName() {
+            return "name";
+        }
+    }
 
-   public static class TestResourceInjected implements TestResource
-   {
-      private final String name;
+    public static class TestResourceInjected implements TestResource {
+        private final String name;
 
-      @Inject
-      public TestResourceInjected(final String name)
-      {
-         this.name = name;
-      }
+        @Inject
+        public TestResourceInjected(final String name) {
+            this.name = name;
+        }
 
-      @Override
-      public String getName()
-      {
-         return name;
-      }
-   }
+        @Override
+        public String getName() {
+            return name;
+        }
+    }
 }

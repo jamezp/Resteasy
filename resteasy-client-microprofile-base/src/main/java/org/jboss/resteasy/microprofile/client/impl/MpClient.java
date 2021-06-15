@@ -17,10 +17,10 @@ import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientImpl;
 
 public class MpClient extends ResteasyClientImpl {
 
-   private List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories;
-   private QueryParamStyle queryParamStyle = null;
+    private List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories;
+    private QueryParamStyle queryParamStyle = null;
 
-   public MpClient(final ClientHttpEngine engine, final ExecutorService executor, final boolean cleanupExecutor,
+    public MpClient(final ClientHttpEngine engine, final ExecutorService executor, final boolean cleanupExecutor,
                     final ScheduledExecutorService scheduledExecutorService, final ClientConfiguration config,
                     final List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories) {
         super(engine, executor, cleanupExecutor, scheduledExecutorService, config);

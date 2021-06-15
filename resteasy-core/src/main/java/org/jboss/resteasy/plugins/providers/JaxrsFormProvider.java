@@ -26,48 +26,41 @@ import org.jboss.resteasy.spi.AsyncOutputStream;
 @Provider
 @Produces("application/x-www-form-urlencoded")
 @Consumes("application/x-www-form-urlencoded")
-public class JaxrsFormProvider implements MessageBodyReader<Form>, AsyncMessageBodyWriter<Form>
-{
-   @Override
-   public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return Form.class.isAssignableFrom(type);
-   }
+public class JaxrsFormProvider implements MessageBodyReader<Form>, AsyncMessageBodyWriter<Form> {
+    @Override
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return Form.class.isAssignableFrom(type);
+    }
 
-   @Override
-   public Form readFrom(Class<Form> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
-      @SuppressWarnings(value = "unchecked")
-      MultivaluedMap<String, String> map = new FormUrlEncodedProvider().readFrom(null, null, annotations, mediaType, httpHeaders, entityStream);
-      return new Form(map);
-   }
+    @Override
+    public Form readFrom(Class<Form> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
+        @SuppressWarnings(value = "unchecked")
+        MultivaluedMap<String, String> map = new FormUrlEncodedProvider().readFrom(null, null, annotations, mediaType, httpHeaders, entityStream);
+        return new Form(map);
+    }
 
-   @Override
-   public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return Form.class.isAssignableFrom(type);
-   }
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return Form.class.isAssignableFrom(type);
+    }
 
-   @Override
-   public long getSize(Form form, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return -1;
-   }
+    @Override
+    public long getSize(Form form, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1;
+    }
 
-   @Override
-   public void writeTo(Form form, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
-      new FormUrlEncodedProvider().writeTo(form.asMap(), null, null, annotations, mediaType, httpHeaders, entityStream);
-   }
+    @Override
+    public void writeTo(Form form, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
+        new FormUrlEncodedProvider().writeTo(form.asMap(), null, null, annotations, mediaType, httpHeaders, entityStream);
+    }
 
-   @Override
-   public CompletionStage<Void> asyncWriteTo(Form form, Class<?> type, Type genericType, Annotation[] annotations,
-                                             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-                                             AsyncOutputStream entityStream)
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
-      return new FormUrlEncodedProvider().asyncWriteTo(form.asMap(), null, null, annotations, mediaType, httpHeaders, entityStream);
-   }
+    @Override
+    public CompletionStage<Void> asyncWriteTo(Form form, Class<?> type, Type genericType, Annotation[] annotations,
+                                              MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+                                              AsyncOutputStream entityStream) {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
+        return new FormUrlEncodedProvider().asyncWriteTo(form.asMap(), null, null, annotations, mediaType, httpHeaders, entityStream);
+    }
 }

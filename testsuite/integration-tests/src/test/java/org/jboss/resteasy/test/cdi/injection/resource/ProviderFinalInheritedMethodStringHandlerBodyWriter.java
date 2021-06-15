@@ -11,22 +11,22 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class ProviderFinalInheritedMethodStringHandlerBodyWriter
-   extends FinalMethodSuperclass
-   implements MessageBodyWriter<ProviderFinalInheritedMethodStringHandler> {
+        extends FinalMethodSuperclass
+        implements MessageBodyWriter<ProviderFinalInheritedMethodStringHandler> {
 
-   public boolean isWriteable(Class<?> type, Type genericType,
-                              Annotation[] annotations,
-                              MediaType mediaType) {
-      return ProviderFinalInheritedMethodStringHandler.class.equals(type);
-   }
+    public boolean isWriteable(Class<?> type, Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
+        return ProviderFinalInheritedMethodStringHandler.class.equals(type);
+    }
 
-   @Override
-   public void writeTo(ProviderFinalInheritedMethodStringHandler t, Class<?> type,
-                       Type genericType, Annotation[] annotations,
-                       MediaType mediaType,
-                       MultivaluedMap<String, Object> httpHeaders,
-                       OutputStream entityStream) throws IOException {
-      write(t, entityStream);
-   }
+    @Override
+    public void writeTo(ProviderFinalInheritedMethodStringHandler t, Class<?> type,
+                        Type genericType, Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException {
+        write(t, entityStream);
+    }
 }
 

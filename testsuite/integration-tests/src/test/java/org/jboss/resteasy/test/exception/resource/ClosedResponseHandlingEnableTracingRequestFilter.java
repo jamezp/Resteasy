@@ -14,10 +14,10 @@ import java.io.IOException;
 @Provider
 @PreMatching
 public class ClosedResponseHandlingEnableTracingRequestFilter implements ContainerRequestFilter {
-   @Override
-   public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-      // force verbose tracing, enabling via finishContainerPrepare()'s contextParams didn't work
-      containerRequestContext.setProperty(RESTEasyTracing.PROPERTY_NAME,
-            RESTEasyTracingLogger.create(this.toString(), RESTEasyTracingLevel.VERBOSE.name(), ClosedResponseHandlingTest.class.getSimpleName()));
-   }
+    @Override
+    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+        // force verbose tracing, enabling via finishContainerPrepare()'s contextParams didn't work
+        containerRequestContext.setProperty(RESTEasyTracing.PROPERTY_NAME,
+                RESTEasyTracingLogger.create(this.toString(), RESTEasyTracingLevel.VERBOSE.name(), ClosedResponseHandlingTest.class.getSimpleName()));
+    }
 }

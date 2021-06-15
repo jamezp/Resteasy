@@ -7,12 +7,12 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class TestApplication extends Application {
-   public TestApplication() {
-   }
+    public TestApplication() {
+    }
 
-   public Set<Class<?>> getClasses() {
-      HashSet<Class<?>> classes = new HashSet<>();
-      classes.add(FooResource.class);
-      return classes;
-   }
+    public Set<Class<?>> getClasses() {
+        HashSet<Class<?>> classes = new HashSet<>();
+        classes.add(FooResource.class);
+        return classes;
+    }
 }

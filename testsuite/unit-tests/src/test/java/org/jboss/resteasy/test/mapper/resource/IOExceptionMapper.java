@@ -8,8 +8,8 @@ import java.io.IOException;
 @Provider
 public class IOExceptionMapper implements ExceptionMapper<IOException> {
 
-   // This mapper forces a 204 status code by ExceptionHandler
-   public Response toResponse(IOException e) {
-      return null;
-   }
+    // This mapper forces a 204 status code by ExceptionHandler
+    public Response toResponse(IOException e) {
+        return null;
+    }
 }

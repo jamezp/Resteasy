@@ -8,15 +8,12 @@ package org.jboss.resteasy.spi;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class UnhandledException extends RuntimeException
-{
-   public UnhandledException(final String s, final Throwable throwable)
-   {
-      super(s, throwable);
-   }
+public class UnhandledException extends RuntimeException {
+    public UnhandledException(final String s, final Throwable throwable) {
+        super(s, throwable);
+    }
 
-   public UnhandledException(final Throwable throwable)
-   {
-      super(throwable);
-   }
+    public UnhandledException(final Throwable throwable) {
+        super(throwable);
+    }
 }

@@ -9,8 +9,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 @Retention(RUNTIME)
-@Target({ FIELD, METHOD, PARAMETER })
-public @interface HeaderParam
-{
-   String value() default "";
+@Target({FIELD, METHOD, PARAMETER})
+public @interface HeaderParam {
+    String value() default "";
 }

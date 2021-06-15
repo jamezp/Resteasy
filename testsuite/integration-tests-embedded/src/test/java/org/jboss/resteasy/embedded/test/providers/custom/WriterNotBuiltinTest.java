@@ -55,7 +55,7 @@ public class WriterNotBuiltinTest extends EmbeddedServerTestBase {
     }
 
     /**
-     * @tpTestDetails  TestReaderWriter has no type parameter,
+     * @tpTestDetails TestReaderWriter has no type parameter,
      * so it comes after DefaultPlainText in the built-in ordering.
      * The fact that TestReaderWriter gets called verifies that
      * DefaultPlainText gets passed over.

@@ -15,19 +15,14 @@ import java.lang.annotation.Annotation;
  * @version $Revision: 1 $
  */
 @DecorateTypes({"text/*+xml", "application/*+xml"})
-public class XmlHeaderProcessor implements DecoratorProcessor<Marshaller, XmlHeader>
-{
-   public Marshaller decorate(Marshaller target, XmlHeader annotation, Class type, Annotation[] annotations, MediaType mediaType)
-   {
-      String h = StringContextReplacement.replace(annotation.value());
-      try
-      {
-         target.setProperty("com.sun.xml.bind.xmlHeaders", h);
-      }
-      catch (PropertyException e)
-      {
-         throw new RuntimeException(e);
-      }
-      return target;
-   }
+public class XmlHeaderProcessor implements DecoratorProcessor<Marshaller, XmlHeader> {
+    public Marshaller decorate(Marshaller target, XmlHeader annotation, Class type, Annotation[] annotations, MediaType mediaType) {
+        String h = StringContextReplacement.replace(annotation.value());
+        try {
+            target.setProperty("com.sun.xml.bind.xmlHeaders", h);
+        } catch (PropertyException e) {
+            throw new RuntimeException(e);
+        }
+        return target;
+    }
 }

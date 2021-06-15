@@ -64,9 +64,9 @@ public class RestClientExtension implements Extension {
     }
 
     /**
+     * @return {@code true} if CDI is believed to be activated, otherwise {@code false}
      *
      * @deprecated this method is not supported and will eventually be deleted
-     * @return {@code true} if CDI is believed to be activated, otherwise {@code false}
      */
     @Deprecated
     public static boolean isCDIActive() {
@@ -115,10 +115,11 @@ public class RestClientExtension implements Extension {
 
     /**
      * Lifted from CdiConstructorInjector in resteasy-cdi
+     *
      * @deprecated this method is not supported and will eventually be deleted
      */
     @Deprecated
-    public static Object construct(Class<?> clazz){
+    public static Object construct(Class<?> clazz) {
         BeanManager manager;
         try {
             manager = CDI.current().getBeanManager();
@@ -136,9 +137,9 @@ public class RestClientExtension implements Extension {
                 modifiableBeans.addAll(beans);
                 // Ambiguous dependency may occur if a resource has subclasses
                 // Therefore we remove those beans
-                for (Iterator<Bean<?>> iterator = modifiableBeans.iterator(); iterator.hasNext();){
+                for (Iterator<Bean<?>> iterator = modifiableBeans.iterator(); iterator.hasNext(); ) {
                     Bean<?> bean = iterator.next();
-                    if (!bean.getBeanClass().equals(clazz) && !bean.isAlternative()){
+                    if (!bean.getBeanClass().equals(clazz) && !bean.isAlternative()) {
                         // remove Beans that have clazz in their type closure but not as a base class
                         iterator.remove();
                     }
@@ -154,7 +155,7 @@ public class RestClientExtension implements Extension {
                 return null;
             }
             return manager.getReference(bean, clazz, context);
-        }else {
+        } else {
             // CDI is not active.
             return null;
         }

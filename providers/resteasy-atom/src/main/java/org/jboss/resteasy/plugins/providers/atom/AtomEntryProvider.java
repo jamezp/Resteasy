@@ -37,94 +37,76 @@ import java.util.HashSet;
 @Provider
 @Produces("application/atom+*")
 @Consumes("application/atom+*")
-public class AtomEntryProvider implements MessageBodyReader<Entry>, AsyncBufferedMessageBodyWriter<Entry>
-{
-   @Context
-   protected Providers providers;
+public class AtomEntryProvider implements MessageBodyReader<Entry>, AsyncBufferedMessageBodyWriter<Entry> {
+    @Context
+    protected Providers providers;
 
-   protected JAXBContextFinder getFinder(MediaType type)
-   {
-      ContextResolver<JAXBContextFinder> resolver = providers.getContextResolver(JAXBContextFinder.class, type);
-      if (resolver == null) return null;
-      return resolver.getContext(null);
-   }
+    protected JAXBContextFinder getFinder(MediaType type) {
+        ContextResolver<JAXBContextFinder> resolver = providers.getContextResolver(JAXBContextFinder.class, type);
+        if (resolver == null) return null;
+        return resolver.getContext(null);
+    }
 
-   public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return Entry.class.isAssignableFrom(type);
-   }
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return Entry.class.isAssignableFrom(type);
+    }
 
-   public Entry readFrom(Class<Entry> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
-      JAXBContextFinder finder = getFinder(mediaType);
-      if (finder == null)
-      {
-         throw new JAXBUnmarshalException(Messages.MESSAGES.unableToFindJAXBContext(mediaType));
-      }
+    public Entry readFrom(Class<Entry> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
+        JAXBContextFinder finder = getFinder(mediaType);
+        if (finder == null) {
+            throw new JAXBUnmarshalException(Messages.MESSAGES.unableToFindJAXBContext(mediaType));
+        }
 
-      try
-      {
-         JAXBContext ctx = finder.findCachedContext(Entry.class, mediaType, annotations);
-         Entry entry = (Entry) ctx.createUnmarshaller().unmarshal(entityStream);
-         if (entry.getContent() != null) entry.getContent().setFinder(finder);
-         entry.setFinder(finder);
-         return entry;
-      }
-      catch (JAXBException e)
-      {
-         throw new JAXBUnmarshalException(Messages.MESSAGES.unableToUnmarshal(mediaType), e);
-      }
-   }
+        try {
+            JAXBContext ctx = finder.findCachedContext(Entry.class, mediaType, annotations);
+            Entry entry = (Entry) ctx.createUnmarshaller().unmarshal(entityStream);
+            if (entry.getContent() != null) entry.getContent().setFinder(finder);
+            entry.setFinder(finder);
+            return entry;
+        } catch (JAXBException e) {
+            throw new JAXBUnmarshalException(Messages.MESSAGES.unableToUnmarshal(mediaType), e);
+        }
+    }
 
-   public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return Entry.class.isAssignableFrom(type);
-   }
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return Entry.class.isAssignableFrom(type);
+    }
 
-   public long getSize(Entry entry, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return -1;
-   }
+    public long getSize(Entry entry, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1;
+    }
 
-   public void writeTo(Entry entry, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
-      JAXBContextFinder finder = getFinder(mediaType);
-      if (finder == null)
-      {
-         throw new JAXBUnmarshalException(Messages.MESSAGES.unableToFindJAXBContext(mediaType));
-      }
-      HashSet<Class> set = new HashSet<Class>();
-      set.add(Entry.class);
+    public void writeTo(Entry entry, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
+        JAXBContextFinder finder = getFinder(mediaType);
+        if (finder == null) {
+            throw new JAXBUnmarshalException(Messages.MESSAGES.unableToFindJAXBContext(mediaType));
+        }
+        HashSet<Class> set = new HashSet<Class>();
+        set.add(Entry.class);
 
-      if (entry.getAnyOtherJAXBObject() != null) {
-         set.add(entry.getAnyOtherJAXBObject().getClass());
-      }
-      if (entry.getContent() != null && entry.getContent().getJAXBObject() != null)
-      {
-         set.add(entry.getContent().getJAXBObject().getClass());
-      }
-      try
-      {
-         JAXBContext ctx = finder.findCacheContext(mediaType, annotations, set.toArray(new Class[set.size()]));
-         Marshaller marshaller = ctx.createMarshaller();
-         NamespacePrefixMapper mapper = new NamespacePrefixMapper()
-         {
-            public String getPreferredPrefix(String namespace, String s1, boolean b)
-            {
-               if (namespace.equals("http://www.w3.org/2005/Atom")) return "atom";
-               else return s1;
-            }
-         };
+        if (entry.getAnyOtherJAXBObject() != null) {
+            set.add(entry.getAnyOtherJAXBObject().getClass());
+        }
+        if (entry.getContent() != null && entry.getContent().getJAXBObject() != null) {
+            set.add(entry.getContent().getJAXBObject().getClass());
+        }
+        try {
+            JAXBContext ctx = finder.findCacheContext(mediaType, annotations, set.toArray(new Class[set.size()]));
+            Marshaller marshaller = ctx.createMarshaller();
+            NamespacePrefixMapper mapper = new NamespacePrefixMapper() {
+                public String getPreferredPrefix(String namespace, String s1, boolean b) {
+                    if (namespace.equals("http://www.w3.org/2005/Atom")) return "atom";
+                    else return s1;
+                }
+            };
 
-         marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", mapper);
+            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", mapper);
 
-         marshaller.marshal(entry, entityStream);
-      }
-      catch (JAXBException e)
-      {
-         throw new JAXBMarshalException(Messages.MESSAGES.unableToMarshal(mediaType), e);
-      }
-   }
+            marshaller.marshal(entry, entityStream);
+        } catch (JAXBException e) {
+            throw new JAXBMarshalException(Messages.MESSAGES.unableToMarshal(mediaType), e);
+        }
+    }
 }

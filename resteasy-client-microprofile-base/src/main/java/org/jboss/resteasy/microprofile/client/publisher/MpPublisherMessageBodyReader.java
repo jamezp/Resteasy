@@ -28,12 +28,15 @@ public class MpPublisherMessageBodyReader implements MessageBodyReader<Publisher
     @Context
     protected Providers providers;
     private ExecutorService executor;
-    public MpPublisherMessageBodyReader(final ExecutorService  ex) {
-       executor = ex;
+
+    public MpPublisherMessageBodyReader(final ExecutorService ex) {
+        executor = ex;
     }
+
     public MpPublisherMessageBodyReader() {
         executor = Executors.newCachedThreadPool();
-     }
+    }
+
     @Override
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return Publisher.class.isAssignableFrom(type) && MediaType.SERVER_SENT_EVENTS_TYPE.isCompatible(mediaType);
@@ -41,7 +44,7 @@ public class MpPublisherMessageBodyReader implements MessageBodyReader<Publisher
 
     @Override
     public Publisher<?> readFrom(Class<Publisher<?>> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
+                                 MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
         MediaType streamType = mediaType;
         if (mediaType.getParameters() != null) {
             Map<String, String> map = mediaType.getParameters();

@@ -90,9 +90,9 @@
             </plugin>
 -->
             <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-help-plugin</artifactId>
-                    <version>3.2.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+                <version>3.2.0</version>
             </plugin>
 
             <plugin>
@@ -112,7 +112,8 @@
                         <version.resteasy.testsuite>${version.resteasy.testsuite}</version.resteasy.testsuite>
                         <jboss.server.config.file.name>${jboss.server.config.file.name}</jboss.server.config.file.name>
                     </systemPropertyVariables>
-                    <excludedGroups>org.jboss.resteasy.category.ExpectedFailing${additional.surefire.excluded.groups}</excludedGroups>
+                    <excludedGroups>org.jboss.resteasy.category.ExpectedFailing${additional.surefire.excluded.groups}
+                    </excludedGroups>
                 </configuration>
             </plugin>
             <plugin>
@@ -161,7 +162,7 @@
             <id>home</id>
             <activation>
                 <property>
-                  <name>!jboss.home</name>
+                    <name>!jboss.home</name>
                 </property>
             </activation>
             <properties>
@@ -171,9 +172,9 @@
         <profile>
             <id>server-version</id>
             <activation>
-              <property>
-                <name>!server.version</name>
-              </property>
+                <property>
+                    <name>!server.version</name>
+                </property>
             </activation>
             <properties>
                 <server.version>23.0.2.Final</server.version>
@@ -188,7 +189,8 @@
                 </property>
             </activation>
             <properties>
-                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly21</additional.surefire.excluded.groups>
+                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly21
+                </additional.surefire.excluded.groups>
             </properties>
         </profile>
         <profile>
@@ -200,7 +202,8 @@
                 </property>
             </activation>
             <properties>
-                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly20</additional.surefire.excluded.groups>
+                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly20
+                </additional.surefire.excluded.groups>
             </properties>
         </profile>
         <profile>
@@ -212,7 +215,8 @@
                 </property>
             </activation>
             <properties>
-                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly19</additional.surefire.excluded.groups>
+                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly19
+                </additional.surefire.excluded.groups>
             </properties>
         </profile>
         <profile>
@@ -224,7 +228,8 @@
                 </property>
             </activation>
             <properties>
-                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly18</additional.surefire.excluded.groups>
+                <additional.surefire.excluded.groups>,org.jboss.resteasy.category.ExpectedFailingOnWildFly18
+                </additional.surefire.excluded.groups>
             </properties>
         </profile>
         <!-- If resteasy.version is specified, it will be used for tests instead of the project.version -->
@@ -285,7 +290,9 @@
                                 <securityManagerArg>${securityManagerArg}</securityManagerArg>
                                 <additionalJvmArgs>${additionalJvmArgs}</additionalJvmArgs>
                                 <ipv6>true</ipv6>
-                                <ipv6ArquillianSettings>-Djava.net.preferIPv4Stack=false -Djava.net.preferIPv6Addresses=true</ipv6ArquillianSettings>
+                                <ipv6ArquillianSettings>-Djava.net.preferIPv4Stack=false
+                                    -Djava.net.preferIPv6Addresses=true
+                                </ipv6ArquillianSettings>
                                 <node>::1</node>
                                 <project.version>${project.version}</project.version>
                                 <version.resteasy.testsuite>${version.resteasy.testsuite}</version.resteasy.testsuite>
@@ -344,37 +351,37 @@
             </dependencies>
             <build>
                 <plugins>
-                     <plugin>
-                         <groupId>org.jacoco</groupId>
-                         <artifactId>jacoco-maven-plugin</artifactId>
-                         <executions>
-                             <execution>
-                                 <id>jacoco-prepare</id>
-                                 <phase>validate</phase>
-                                 <goals>
-                                     <goal>prepare-agent</goal>
-                                 </goals>
-                                 <configuration>
-                                     <destFile>${project.build.directory}/jacoco.exec</destFile>
-                                     <!-- Jacoco sets this property with agent configuration.
-                                     This property is passed to maven-surefire-plugin -->
-                                     <propertyName>surefireArgLine</propertyName>
-                                 </configuration>
-                             </execution>
-                             <execution>
-                                 <id>jacoco-prepare-it</id>
-                                 <phase>validate</phase>
-                                 <goals>
-                                     <goal>prepare-agent-integration</goal>
-                                 </goals>
-                                 <configuration>
-                                     <destFile>${project.build.directory}/jacoco.exec</destFile>
-                                     <!-- Jacoco sets this property with agent configuration.
-                                     This property is passed to maven-surefire-plugin as system property variable jacoco.agent.
-                                     jacoco.agent property is passed to arquillian.xml -->
-                                     <propertyName>jacoco.agent</propertyName>
-                                 </configuration>
-                             </execution>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>jacoco-prepare</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <destFile>${project.build.directory}/jacoco.exec</destFile>
+                                    <!-- Jacoco sets this property with agent configuration.
+                                    This property is passed to maven-surefire-plugin -->
+                                    <propertyName>surefireArgLine</propertyName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>jacoco-prepare-it</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>prepare-agent-integration</goal>
+                                </goals>
+                                <configuration>
+                                    <destFile>${project.build.directory}/jacoco.exec</destFile>
+                                    <!-- Jacoco sets this property with agent configuration.
+                                    This property is passed to maven-surefire-plugin as system property variable jacoco.agent.
+                                    jacoco.agent property is passed to arquillian.xml -->
+                                    <propertyName>jacoco.agent</propertyName>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                     <plugin>
@@ -416,7 +423,8 @@
                                         <artifactItem>
                                             <groupId>org.jacoco</groupId>
                                             <artifactId>org.jacoco.ant</artifactId>
-                                            <version>${version.org.jacoco.plugin}</version></artifactItem>
+                                            <version>${version.org.jacoco.plugin}</version>
+                                        </artifactItem>
                                     </artifactItems>
                                     <stripVersion>true</stripVersion>
                                     <outputDirectory>${project.build.directory}/jacoco-jars</outputDirectory>
@@ -430,14 +438,17 @@
                         <executions>
                             <execution>
                                 <phase>post-integration-test</phase>
-                                <goals><goal>run</goal></goals>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
                                 <inherited>false</inherited>
                                 <configuration>
                                     <skip>${skipTests}</skip>
                                     <target>
                                         <property name="result.report.dir" location="target/jacoco-report"/>
                                         <taskdef name="report" classname="org.jacoco.ant.ReportTask">
-                                            <classpath path="${project.build.directory}/jacoco-jars/org.jacoco.ant.jar"/>
+                                            <classpath
+                                                    path="${project.build.directory}/jacoco-jars/org.jacoco.ant.jar"/>
                                         </taskdef>
                                         <echo>Creating JaCoCo RESTEasy test coverage reports...</echo>
                                         <report>
@@ -492,7 +503,8 @@
             </activation>
             <properties>
                 <debug.port>8787</debug.port>
-                <debugJvmArgs>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:${debug.port}</debugJvmArgs>
+                <debugJvmArgs>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:${debug.port}
+                </debugJvmArgs>
             </properties>
         </profile>
 

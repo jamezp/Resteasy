@@ -36,14 +36,15 @@ public class JsonpMPTest {
     protected static final Logger LOG = Logger.getLogger(JsonpMPTest.class.getName());
     private static final String WAR_SERVICE = "jsonP_service";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(JsonpMPService.class);
-      return TestUtil.finishContainerPrepare(war, null, null);
+        return TestUtil.finishContainerPrepare(war, null, null);
     }
 
     static JsonpMPServiceIntf jsonpMPServiceIntf;
+
     @Before
     public void before() throws Exception {
         RestClientBuilderImpl builder = new RestClientBuilderImpl();
@@ -120,7 +121,7 @@ public class JsonpMPTest {
     public void testJsonString() throws Exception {
 
         JsonString jsonString = Json.createValue("Resteasy");
-        JsonString  response = jsonpMPServiceIntf.testString(jsonString);
+        JsonString response = jsonpMPServiceIntf.testString(jsonString);
 
         Assert.assertTrue("JsonString object with Hello Resteasy value is expected",
                 response.getString().equals("Hello Resteasy"));

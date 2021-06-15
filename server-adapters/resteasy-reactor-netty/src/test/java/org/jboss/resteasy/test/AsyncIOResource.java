@@ -60,8 +60,8 @@ public class AsyncIOResource {
      * on the thread that calls them.
      */
     private static CompletableFuture<AsyncWriterData> hopefullySlowEnoughAsyncWriterData(
-        final boolean isMaybeOnIoThread,
-        final boolean isSimulateSlowIo
+            final boolean isMaybeOnIoThread,
+            final boolean isSimulateSlowIo
     ) {
         return CompletableFuture.supplyAsync(() -> {
             try {

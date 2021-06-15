@@ -20,71 +20,73 @@
         Descr: Download WildFly
         -->
         <profile>
-          <id>download</id>
-          <activation>
-            <property>
-              <name>!server.home</name>
-            </property>
-          </activation>
-          <build>
-            <plugins>
-              <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-dist</artifactId>
-                                    <version>${server.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}/test-server</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-              </plugin>
-              <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack-resteasy</id>
-                        <phase>generate-test-resources</phase>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                            <target>
-                                <!-- Explicitly remove resteasy-spring contents as the module.xml does not reference resource jars in this case
-                                     so adding jars without removing old ones basically messes up the classloader -->
-                                <delete>
-                                    <fileset dir="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base/org/jboss/resteasy/resteasy-spring/main" includes="**/*.jar"/>
-                                </delete>
-                                <unzip src="../../../jboss-modules/target/resteasy-jboss-modules-${project.version}.zip"
-                                       dest="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base"
-                                       overwrite="true"/>
-                                <delete dir="target/dependency-maven-plugin-markers"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-              </plugin>
-            </plugins>
-          </build>
-          <properties>
-            <jboss.home>${project.build.directory}/test-server/wildfly-${server.version}</jboss.home>
-          </properties>
+            <id>download</id>
+            <activation>
+                <property>
+                    <name>!server.home</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipTests}</skip>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${server.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${project.build.directory}/test-server</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-resteasy</id>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <skip>${skipTests}</skip>
+                                    <target>
+                                        <!-- Explicitly remove resteasy-spring contents as the module.xml does not reference resource jars in this case
+                                             so adding jars without removing old ones basically messes up the classloader -->
+                                        <delete>
+                                            <fileset
+                                                    dir="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base/org/jboss/resteasy/resteasy-spring/main"
+                                                    includes="**/*.jar"/>
+                                        </delete>
+                                        <unzip src="../../../jboss-modules/target/resteasy-jboss-modules-${project.version}.zip"
+                                               dest="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base"
+                                               overwrite="true"/>
+                                        <delete dir="target/dependency-maven-plugin-markers"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <jboss.home>${project.build.directory}/test-server/wildfly-${server.version}</jboss.home>
+            </properties>
         </profile>
     </profiles>
 
@@ -133,7 +135,8 @@
                             </scripts>
                             <stdout>${project.build.directory}/elytron-config.out</stdout>
                             <system-properties>
-                                <jboss.server.config.file.name>${jboss.server.config.file.name}</jboss.server.config.file.name>
+                                <jboss.server.config.file.name>${jboss.server.config.file.name}
+                                </jboss.server.config.file.name>
                             </system-properties>
                         </configuration>
                     </execution>

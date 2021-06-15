@@ -26,35 +26,34 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Signed
-{
-   String algorithm() default "";
+public @interface Signed {
+    String algorithm() default "";
 
-   /**
-    * If there is no domain, then abort.
-    * <p>
-    * If not set, the runtime may set a default domain.  See documentation for details.
-    *
-    * @return domain
-    */
-   String domain() default "";
+    /**
+     * If there is no domain, then abort.
+     * <p>
+     * If not set, the runtime may set a default domain.  See documentation for details.
+     *
+     * @return domain
+     */
+    String domain() default "";
 
-   /**
-    * A default may be used if not set.  See documentation for more details.
-    *
-    * @return selector
-    */
-   String selector() default "";
+    /**
+     * A default may be used if not set.  See documentation for more details.
+     *
+     * @return selector
+     */
+    String selector() default "";
 
-   /**
-    * Will calculate and add a timestamp
-    *
-    * @return calculate and add a timestamp
-    */
-   boolean timestamped() default false;
+    /**
+     * Will calculate and add a timestamp
+     *
+     * @return calculate and add a timestamp
+     */
+    boolean timestamped() default false;
 
 
-   After expires() default @After;
+    After expires() default @After;
 
 
 }

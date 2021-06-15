@@ -27,64 +27,53 @@ import javax.ws.rs.core.Response;
  * @tpChapter Integration tests
  * @tpTestCaseDetails Test for cookie management support in Resteasy client.
  * @tpSince RESTEasy
- *
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ClientCookieTest extends ClientTestBase
-{
+public class ClientCookieTest extends ClientTestBase {
 
-   @Path("/")
-   @Produces(MediaType.TEXT_PLAIN)
-   public static class ClienCookieResource
-   {
+    @Path("/")
+    @Produces(MediaType.TEXT_PLAIN)
+    public static class ClienCookieResource {
 
-      @GET
-      @Path("createCookie")
-      public Response createCookie()
-      {
-         return Response.ok().cookie(new NewCookie("Cookie", "CookieValue")).build();
-      }
+        @GET
+        @Path("createCookie")
+        public Response createCookie() {
+            return Response.ok().cookie(new NewCookie("Cookie", "CookieValue")).build();
+        }
 
-      @GET
-      @Path("getCookiesCount")
-      public Response getCookiesCount(@Context HttpHeaders httpHeaders)
-      {
-         return Response.ok(httpHeaders.getCookies().size()).build();
-      }
+        @GET
+        @Path("getCookiesCount")
+        public Response getCookiesCount(@Context HttpHeaders httpHeaders) {
+            return Response.ok(httpHeaders.getCookies().size()).build();
+        }
 
-   }
+    }
 
-   @Deployment
-   public static Archive<?> deploy()
-   {
-      WebArchive war = TestUtil.prepareArchive(ClientCookieTest.class.getSimpleName());
-      war.addClass(ClientTestBase.class);
-      return TestUtil.finishContainerPrepare(war, null, ClienCookieResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(ClientCookieTest.class.getSimpleName());
+        war.addClass(ClientTestBase.class);
+        return TestUtil.finishContainerPrepare(war, null, ClienCookieResource.class);
+    }
 
-   @Test
-   public void client_Should_NotStoreCookie_When_NotConfigured()
-   {
-      Client client = ClientBuilder.newClient();
-      try
-      {
+    @Test
+    public void client_Should_NotStoreCookie_When_NotConfigured() {
+        Client client = ClientBuilder.newClient();
+        try {
 
-         try (Response response = client.target(generateURL("/createCookie")).request(MediaType.TEXT_PLAIN_TYPE).get())
-         {
-            NewCookie cookie = response.getCookies().get("Cookie");
-            Assert.assertNotNull(cookie);
-         }
+            try (Response response = client.target(generateURL("/createCookie")).request(MediaType.TEXT_PLAIN_TYPE).get()) {
+                NewCookie cookie = response.getCookies().get("Cookie");
+                Assert.assertNotNull(cookie);
+            }
 
-         int cookiesCount = client.target(generateURL("/getCookiesCount")).request(MediaType.TEXT_PLAIN_TYPE)
-               .get(Integer.class);
-         Assert.assertEquals(0, cookiesCount);
+            int cookiesCount = client.target(generateURL("/getCookiesCount")).request(MediaType.TEXT_PLAIN_TYPE)
+                    .get(Integer.class);
+            Assert.assertEquals(0, cookiesCount);
 
-      }
-      finally
-      {
-         client.close();
-      }
-   }
+        } finally {
+            client.close();
+        }
+    }
 
 }

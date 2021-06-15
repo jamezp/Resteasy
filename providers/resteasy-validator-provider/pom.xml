@@ -1,21 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
         <groupId>org.jboss.resteasy</groupId>
         <artifactId>providers-pom</artifactId>
         <version>4.7.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
-  </parent>
-  <artifactId>resteasy-validator-provider</artifactId>
-  <packaging>jar</packaging>
-  <name>RESTEasy Validator Provider</name>
+    </parent>
+    <artifactId>resteasy-validator-provider</artifactId>
+    <packaging>jar</packaging>
+    <name>RESTEasy Validator Provider</name>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <dependencies>
+    <dependencies>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-core-spi</artifactId>
@@ -78,15 +78,15 @@
             <optional>true</optional>
         </dependency>
 
-      <!-- Test dependencies -->
-      <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <scope>test</scope>
-      </dependency>
-  </dependencies>
-  
-     <profiles>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
         <profile>
             <id>i18n</id>
             <activation>
@@ -107,7 +107,9 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${basedir}/src/main/resources/org/jboss/resteasy/plugins/validation/i18n</outputDirectory>
+                                    <outputDirectory>
+                                        ${basedir}/src/main/resources/org/jboss/resteasy/plugins/validation/i18n
+                                    </outputDirectory>
                                     <resources>
                                         <resource>
                                             <directory>${basedir}/src/test/resources/i18n</directory>
@@ -123,24 +125,24 @@
                     </plugin>
 
                     <plugin>
-                       <groupId>org.apache.maven.plugins</groupId>
-                       <artifactId>maven-surefire-plugin</artifactId>
-                       <executions>
-                           <execution>
-                               <id>i18</id>
-                               <phase>test</phase>
-                               <goals>
-                                   <goal>test</goal>
-                               </goals>
-                               <configuration>
-                                   <skip>false</skip>
-                                   <reuseForks>false</reuseForks>
-                                   <includes>
-                                       <include>**/I18nTestMessages_*.java</include>
-                                   </includes>
-                               </configuration>
-                           </execution>
-                       </executions>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>i18</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>false</skip>
+                                    <reuseForks>false</reuseForks>
+                                    <includes>
+                                        <include>**/I18nTestMessages_*.java</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

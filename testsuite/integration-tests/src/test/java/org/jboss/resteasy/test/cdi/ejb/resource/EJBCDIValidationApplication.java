@@ -9,11 +9,11 @@ import java.util.Set;
 
 @ApplicationPath("/rest")
 public class EJBCDIValidationApplication extends Application {
-   public Set<Class<?>> getClasses() {
-      return new HashSet<>( Arrays.asList(
-         EJBCDIValidationStatelessResource.class,
-         EJBCDIValidationStatefulResource.class,
-         EJBCDIValidationSingletonResource.class
-     ) );
-   }
+    public Set<Class<?>> getClasses() {
+        return new HashSet<>(Arrays.asList(
+                EJBCDIValidationStatelessResource.class,
+                EJBCDIValidationStatefulResource.class,
+                EJBCDIValidationSingletonResource.class
+        ));
+    }
 }

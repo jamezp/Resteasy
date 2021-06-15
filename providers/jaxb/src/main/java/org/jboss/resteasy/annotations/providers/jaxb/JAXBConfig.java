@@ -11,18 +11,17 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(
-      {ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
-public @interface JAXBConfig
-{
+        {ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
+public @interface JAXBConfig {
 
-   boolean useNameSpacePrefix() default false;
+    boolean useNameSpacePrefix() default false;
 
-   XmlNs[] namespaces() default {};
+    XmlNs[] namespaces() default {};
 
-   boolean validate() default false;
+    boolean validate() default false;
 
-   String schema() default "";
+    String schema() default "";
 
-   String schemaType() default XMLConstants.W3C_XML_SCHEMA_NS_URI;
+    String schemaType() default XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 }

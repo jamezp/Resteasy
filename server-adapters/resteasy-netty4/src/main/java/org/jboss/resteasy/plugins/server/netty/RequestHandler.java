@@ -26,47 +26,45 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  * @version $Rev: 2368 $, $Date: 2010-10-18 17:19:03 +0900 (Mon, 18 Oct 2010) $
  */
 @Sharable
-public class RequestHandler extends SimpleChannelInboundHandler
-{
-   protected final RequestDispatcher dispatcher;
+public class RequestHandler extends SimpleChannelInboundHandler {
+    protected final RequestDispatcher dispatcher;
 
-   public RequestHandler(final RequestDispatcher dispatcher)
-   {
-      this.dispatcher = dispatcher;
-   }
+    public RequestHandler(final RequestDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
 
-   @Override
-   protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-      if (msg instanceof NettyHttpRequest) {
-         NettyHttpRequest request = (NettyHttpRequest) msg;
-         try {
-
-            // Not necessary, since io.netty.handler.codec.MessageAggregator has already done it.
-            //                if (request.is100ContinueExpected()) {
-            //                    send100Continue(ctx);
-            //                }
-
-            NettyHttpResponse response = request.getResponse();
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof NettyHttpRequest) {
+            NettyHttpRequest request = (NettyHttpRequest) msg;
             try {
-               dispatcher.service(ctx, request, response, true);
-            } catch (Failure e1) {
-               response.reset();
-               response.setStatus(e1.getErrorCode());
-            } catch (Exception ex) {
-               response.reset();
-               response.setStatus(500);
-               LogMessages.LOGGER.error(Messages.MESSAGES.unexpected(), ex);
+
+                // Not necessary, since io.netty.handler.codec.MessageAggregator has already done it.
+                //                if (request.is100ContinueExpected()) {
+                //                    send100Continue(ctx);
+                //                }
+
+                NettyHttpResponse response = request.getResponse();
+                try {
+                    dispatcher.service(ctx, request, response, true);
+                } catch (Failure e1) {
+                    response.reset();
+                    response.setStatus(e1.getErrorCode());
+                } catch (Exception ex) {
+                    response.reset();
+                    response.setStatus(500);
+                    LogMessages.LOGGER.error(Messages.MESSAGES.unexpected(), ex);
+                }
+
+                if (!request.getAsyncContext().isSuspended()) {
+                    response.finish();
+                }
+            } finally {
+                request.releaseContentBuffer();
             }
 
-            if (!request.getAsyncContext().isSuspended()) {
-               response.finish();
-            }
-         } finally {
-            request.releaseContentBuffer();
-         }
-
-      }
-   }
+        }
+    }
 
 // No longer called. However, note that if it is called, it should write a
 // io.netty.handler.codec.http.DefaultFullHttpResponse rather
@@ -80,27 +78,23 @@ public class RequestHandler extends SimpleChannelInboundHandler
 //      ctx.writeAndFlush(response);
 //   }
 
-   @Override
-   public void exceptionCaught(ChannelHandlerContext ctx, Throwable e)
-         throws Exception
-   {
-      // handle the case of to big requests.
-      if (e.getCause() instanceof TooLongFrameException)
-      {
-         DefaultHttpResponse response = new DefaultHttpResponse(HTTP_1_1, REQUEST_ENTITY_TOO_LARGE);
-         ctx.write(response).addListener(ChannelFutureListener.CLOSE);
-      }
-      else
-      {
-         LogMessages.LOGGER.info(Messages.MESSAGES.exceptionCaught(), e);
-         ctx.close();
-      }
-   }
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable e)
+            throws Exception {
+        // handle the case of to big requests.
+        if (e.getCause() instanceof TooLongFrameException) {
+            DefaultHttpResponse response = new DefaultHttpResponse(HTTP_1_1, REQUEST_ENTITY_TOO_LARGE);
+            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+        } else {
+            LogMessages.LOGGER.info(Messages.MESSAGES.exceptionCaught(), e);
+            ctx.close();
+        }
+    }
 
-   @Override
-   public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-      if (evt instanceof IdleStateEvent) {
-         ctx.close();
-      }
-   }
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            ctx.close();
+        }
+    }
 }

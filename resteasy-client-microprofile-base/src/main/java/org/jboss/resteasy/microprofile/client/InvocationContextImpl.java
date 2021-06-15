@@ -66,7 +66,7 @@ public class InvocationContextImpl implements InvocationContext {
                 cause = cause.getCause();
             }
             if (cause instanceof ExceptionMapping.HandlerException) {
-                ((ExceptionMapping.HandlerException)cause).mapException(method);
+                ((ExceptionMapping.HandlerException) cause).mapException(method);
             }
             if (cause instanceof ResponseProcessingException) {
                 ResponseProcessingException rpe = (ResponseProcessingException) cause;

@@ -10,15 +10,12 @@ package org.jboss.resteasy.spi;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public final class ApplicationException extends RuntimeException
-{
-   public ApplicationException(final String s, final Throwable throwable)
-   {
-      super(s, throwable);
-   }
+public final class ApplicationException extends RuntimeException {
+    public ApplicationException(final String s, final Throwable throwable) {
+        super(s, throwable);
+    }
 
-   public ApplicationException(final Throwable throwable)
-   {
-      super(throwable);
-   }
+    public ApplicationException(final Throwable throwable) {
+        super(throwable);
+    }
 }

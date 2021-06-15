@@ -25,57 +25,47 @@ import java.util.Map;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class FilterDispatcher implements Filter, HttpRequestFactory, HttpResponseFactory
-{
-   protected ServletContainerDispatcher servletContainerDispatcher;
-   protected ServletContext servletContext;
+public class FilterDispatcher implements Filter, HttpRequestFactory, HttpResponseFactory {
+    protected ServletContainerDispatcher servletContainerDispatcher;
+    protected ServletContext servletContext;
 
-   public Dispatcher getDispatcher()
-   {
-      return servletContainerDispatcher.getDispatcher();
-   }
+    public Dispatcher getDispatcher() {
+        return servletContainerDispatcher.getDispatcher();
+    }
 
 
-   public void init(FilterConfig servletConfig) throws ServletException
-   {
-      Map<Class<?>, Object> map = ResteasyContext.getContextDataMap();
-      map.put(ServletContext.class, servletConfig.getServletContext());
-      map.put(FilterConfig.class, servletConfig);
-      servletContainerDispatcher = new ServletContainerDispatcher();
-      FilterBootstrap bootstrap = new FilterBootstrap(servletConfig);
-      servletContext = servletConfig.getServletContext();
-      servletContainerDispatcher.init(servletContext, bootstrap, this, this);
-      servletContainerDispatcher.getDispatcher().getDefaultContextObjects().put(FilterConfig.class, servletConfig);
+    public void init(FilterConfig servletConfig) throws ServletException {
+        Map<Class<?>, Object> map = ResteasyContext.getContextDataMap();
+        map.put(ServletContext.class, servletConfig.getServletContext());
+        map.put(FilterConfig.class, servletConfig);
+        servletContainerDispatcher = new ServletContainerDispatcher();
+        FilterBootstrap bootstrap = new FilterBootstrap(servletConfig);
+        servletContext = servletConfig.getServletContext();
+        servletContainerDispatcher.init(servletContext, bootstrap, this, this);
+        servletContainerDispatcher.getDispatcher().getDefaultContextObjects().put(FilterConfig.class, servletConfig);
 
-   }
+    }
 
-   public HttpRequest createResteasyHttpRequest(String httpMethod, HttpServletRequest request, ResteasyHttpHeaders headers, ResteasyUriInfo uriInfo, HttpResponse theResponse, HttpServletResponse response)
-   {
-      return new HttpServletInputMessage(request, response, servletContext, theResponse, headers, uriInfo, httpMethod.toUpperCase(), (SynchronousDispatcher) getDispatcher());
-   }
+    public HttpRequest createResteasyHttpRequest(String httpMethod, HttpServletRequest request, ResteasyHttpHeaders headers, ResteasyUriInfo uriInfo, HttpResponse theResponse, HttpServletResponse response) {
+        return new HttpServletInputMessage(request, response, servletContext, theResponse, headers, uriInfo, httpMethod.toUpperCase(), (SynchronousDispatcher) getDispatcher());
+    }
 
 
-   public HttpResponse createResteasyHttpResponse(HttpServletResponse response, HttpServletRequest request)
-   {
-      return new HttpServletResponseWrapper(response, request, getDispatcher().getProviderFactory());
-   }
+    public HttpResponse createResteasyHttpResponse(HttpServletResponse response, HttpServletRequest request) {
+        return new HttpServletResponseWrapper(response, request, getDispatcher().getProviderFactory());
+    }
 
-   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException
-   {
-      try
-      {
-         servletContainerDispatcher.service(((HttpServletRequest) servletRequest).getMethod(), (HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse, false);
-      }
-      catch (NotFoundException e)
-      {
-         filterChain.doFilter(servletRequest, servletResponse);
-      }
-   }
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        try {
+            servletContainerDispatcher.service(((HttpServletRequest) servletRequest).getMethod(), (HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse, false);
+        } catch (NotFoundException e) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+    }
 
-   public void destroy()
-   {
-      servletContainerDispatcher.destroy();
-   }
+    public void destroy() {
+        servletContainerDispatcher.destroy();
+    }
 
 
 }

@@ -11,11 +11,11 @@ import javax.ws.rs.QueryParam;
 
 @Path("/")
 public class ParamConverterDefaultIntegerResource {
-   @PUT
-   public void putDefault(@QueryParam("pojo") @DefaultValue("100") int q,
+    @PUT
+    public void putDefault(@QueryParam("pojo") @DefaultValue("100") int q,
                            @MatrixParam("pojo") @DefaultValue("100") int mp, @DefaultValue("100") @HeaderParam("pojo") int hp) {
-      Assert.assertEquals(100100, q);
-      Assert.assertEquals(100100, mp);
-      Assert.assertEquals(100100, hp);
-   }
+        Assert.assertEquals(100100, q);
+        Assert.assertEquals(100100, mp);
+        Assert.assertEquals(100100, hp);
+    }
 }

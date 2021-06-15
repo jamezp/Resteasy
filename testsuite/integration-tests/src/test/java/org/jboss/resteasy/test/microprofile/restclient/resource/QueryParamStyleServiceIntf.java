@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import java.util.List;
 
-@RegisterRestClient(baseUri ="http://localhost:8080/queryParamStyle_service", configKey="qParamS")
+@RegisterRestClient(baseUri = "http://localhost:8080/queryParamStyle_service", configKey = "qParamS")
 @Path("/theService")
 @Singleton
 public interface QueryParamStyleServiceIntf {

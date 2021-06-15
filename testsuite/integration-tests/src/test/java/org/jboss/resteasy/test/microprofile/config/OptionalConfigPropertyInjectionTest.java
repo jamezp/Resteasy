@@ -27,53 +27,49 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class OptionalConfigPropertyInjectionTest
-{
+public class OptionalConfigPropertyInjectionTest {
 
-   private static Client client;
+    private static Client client;
 
-   @Deployment
-   public static Archive<?> deploy()
-   {
-      WebArchive war = TestUtil.prepareArchive(OptionalConfigPropertyInjectionTest.class.getSimpleName())
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-      return TestUtil.finishContainerPrepare(war, null, OptionalConfigPropertyInjectionResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(OptionalConfigPropertyInjectionTest.class.getSimpleName())
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        return TestUtil.finishContainerPrepare(war, null, OptionalConfigPropertyInjectionResource.class);
+    }
 
-   @BeforeClass
-   public static void setup()
-   {
-      client = ClientBuilder.newClient();
-   }
+    @BeforeClass
+    public static void setup() {
+        client = ClientBuilder.newClient();
+    }
 
-   @AfterClass
-   public static void cleanup()
-   {
-      client.close();
-   }
+    @AfterClass
+    public static void cleanup() {
+        client.close();
+    }
 
-   /**
-    * @tpTestDetails This test checks injection of optional config properties when:
-    * - optional property does not exist
-    * - optional property exists
-    * @tpSince RESTEasy 4.6.0
-    */
-   @Test
-   public void testOptionalPropertiesInjection() {
+    /**
+     * @tpTestDetails This test checks injection of optional config properties when:
+     * - optional property does not exist
+     * - optional property exists
+     * @tpSince RESTEasy 4.6.0
+     */
+    @Test
+    public void testOptionalPropertiesInjection() {
 
-      String missingOptionalPropertyValue = client.target(generateEndpointURL(OptionalConfigPropertyInjectionResource.MISSING_OPTIONAL_PROPERTY_PATH))
-            .request(MediaType.TEXT_PLAIN_TYPE)
-            .get(String.class);
-      Assert.assertNull(missingOptionalPropertyValue);
+        String missingOptionalPropertyValue = client.target(generateEndpointURL(OptionalConfigPropertyInjectionResource.MISSING_OPTIONAL_PROPERTY_PATH))
+                .request(MediaType.TEXT_PLAIN_TYPE)
+                .get(String.class);
+        Assert.assertNull(missingOptionalPropertyValue);
 
-      String presentOptionalPropertyValue = client.target(generateEndpointURL(OptionalConfigPropertyInjectionResource.PRESENT_OPTIONAL_PROPERTY_PATH))
-            .request(MediaType.TEXT_PLAIN_TYPE)
-            .get(String.class);
-      Assert.assertEquals(OptionalConfigPropertyInjectionResource.OPTIONAL_PROPERTY_VALUE, presentOptionalPropertyValue);
-   }
+        String presentOptionalPropertyValue = client.target(generateEndpointURL(OptionalConfigPropertyInjectionResource.PRESENT_OPTIONAL_PROPERTY_PATH))
+                .request(MediaType.TEXT_PLAIN_TYPE)
+                .get(String.class);
+        Assert.assertEquals(OptionalConfigPropertyInjectionResource.OPTIONAL_PROPERTY_VALUE, presentOptionalPropertyValue);
+    }
 
-   private String generateEndpointURL(String path) {
-     return PortProviderUtil.generateURL(path, OptionalConfigPropertyInjectionTest.class.getSimpleName());
-   }
+    private String generateEndpointURL(String path) {
+        return PortProviderUtil.generateURL(path, OptionalConfigPropertyInjectionTest.class.getSimpleName());
+    }
 
 }

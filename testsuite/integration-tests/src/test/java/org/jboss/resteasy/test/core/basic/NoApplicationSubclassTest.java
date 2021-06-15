@@ -29,39 +29,39 @@ import javax.ws.rs.core.Response;
 @RunAsClient
 public class NoApplicationSubclassTest {
 
-   private static ResteasyClient client;
+    private static ResteasyClient client;
 
-   @Deployment
-   public static Archive<?> deploy() {
-      WebArchive war = ShrinkWrap.create(WebArchive.class, NoApplicationSubclassTest.class.getSimpleName() + ".war");
-      war.addClasses(NoApplicationSubclassResource.class);
-      war.addAsWebInfResource(NoApplicationSubclassTest.class.getPackage(), "NoApplicationSubclassWeb.xml", "web.xml");
-      return war;
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = ShrinkWrap.create(WebArchive.class, NoApplicationSubclassTest.class.getSimpleName() + ".war");
+        war.addClasses(NoApplicationSubclassResource.class);
+        war.addAsWebInfResource(NoApplicationSubclassTest.class.getPackage(), "NoApplicationSubclassWeb.xml", "web.xml");
+        return war;
+    }
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, NoApplicationSubclassTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, NoApplicationSubclassTest.class.getSimpleName());
+    }
 
-   @Before
-   public void setup() {
-      client = (ResteasyClient) ClientBuilder.newClient();
-   }
+    @Before
+    public void setup() {
+        client = (ResteasyClient) ClientBuilder.newClient();
+    }
 
-   @After
-   public void after() throws Exception {
-      client.close();
-   }
+    @After
+    public void after() throws Exception {
+        client.close();
+    }
 
-   /**
-    * @tpTestDetails Check if resource is present in application
-    * @tpSince RESTEasy 3.6.2.Final
-    */
-   @Test
-   public void testResource() {
-      Response response = client.target(generateURL("/myresources/hello")).request().get();
-      Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
-      Assert.assertEquals("Wrong content of response", "hello world", response.readEntity(String.class));
-      response.close();
-   }
+    /**
+     * @tpTestDetails Check if resource is present in application
+     * @tpSince RESTEasy 3.6.2.Final
+     */
+    @Test
+    public void testResource() {
+        Response response = client.target(generateURL("/myresources/hello")).request().get();
+        Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
+        Assert.assertEquals("Wrong content of response", "hello world", response.readEntity(String.class));
+        response.close();
+    }
 }

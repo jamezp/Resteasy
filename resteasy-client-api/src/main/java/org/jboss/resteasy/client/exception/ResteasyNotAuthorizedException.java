@@ -14,8 +14,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyNotAuthorizedException extends NotAuthorizedException implements WebApplicationExceptionWrapper<NotAuthorizedException> {
 
-   private static final long serialVersionUID = 7034604450379314101L;
-   private final NotAuthorizedException wrapped;
+    private static final long serialVersionUID = 7034604450379314101L;
+    private final NotAuthorizedException wrapped;
 
     ResteasyNotAuthorizedException(final NotAuthorizedException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

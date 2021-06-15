@@ -20,15 +20,16 @@ import java.util.concurrent.ConcurrentMap;
  * Note: this is not a secure map. It should not be used in situations where the map is populated
  * from user input.
  */
-class CopyOnWriteMap<K,V> implements ConcurrentMap<K, V> {
+class CopyOnWriteMap<K, V> implements ConcurrentMap<K, V> {
 
     private volatile Map<K, V> delegate = Collections.emptyMap();
 
-    CopyOnWriteMap() {}
+    CopyOnWriteMap() {
+    }
 
     CopyOnWriteMap(final Map<K, V> existing) {
         if (existing.getClass() == CopyOnWriteMap.class) {
-            this.delegate = ((CopyOnWriteMap<K, V>)existing).delegate;
+            this.delegate = ((CopyOnWriteMap<K, V>) existing).delegate;
         } else {
             this.delegate = new HashMap<>(existing);
         }
@@ -38,7 +39,7 @@ class CopyOnWriteMap<K,V> implements ConcurrentMap<K, V> {
     public synchronized V putIfAbsent(K key, V value) {
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing != null) {
+        if (existing != null) {
             return existing;
         }
         putInternal(key, value);
@@ -49,7 +50,7 @@ class CopyOnWriteMap<K,V> implements ConcurrentMap<K, V> {
     public synchronized boolean remove(Object key, Object value) {
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing.equals(value)) {
+        if (existing.equals(value)) {
             removeInternal(key);
             return true;
         }
@@ -60,7 +61,7 @@ class CopyOnWriteMap<K,V> implements ConcurrentMap<K, V> {
     public synchronized boolean replace(K key, V oldValue, V newValue) {
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing.equals(oldValue)) {
+        if (existing.equals(oldValue)) {
             putInternal(key, newValue);
             return true;
         }
@@ -71,7 +72,7 @@ class CopyOnWriteMap<K,V> implements ConcurrentMap<K, V> {
     public synchronized V replace(K key, V value) {
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing != null) {
+        if (existing != null) {
             putInternal(key, value);
             return existing;
         }
@@ -116,7 +117,7 @@ class CopyOnWriteMap<K,V> implements ConcurrentMap<K, V> {
     @Override
     public synchronized void putAll(Map<? extends K, ? extends V> m) {
         final Map<K, V> delegate = new HashMap<>(this.delegate);
-        for(Entry<? extends K, ? extends V> e : m.entrySet()) {
+        for (Entry<? extends K, ? extends V> e : m.entrySet()) {
             delegate.put(e.getKey(), e.getValue());
         }
         this.delegate = delegate;

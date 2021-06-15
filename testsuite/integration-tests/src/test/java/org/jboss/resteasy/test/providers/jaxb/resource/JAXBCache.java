@@ -9,33 +9,33 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class JAXBCache {
 
-   private static final Logger logger = Logger.getLogger(JAXBCache.class);
+    private static final Logger logger = Logger.getLogger(JAXBCache.class);
 
-   private static JAXBCache instance = new JAXBCache();
+    private static JAXBCache instance = new JAXBCache();
 
-   private ConcurrentHashMap<Object, JAXBContext> contextCache = new ConcurrentHashMap<Object, JAXBContext>();
+    private ConcurrentHashMap<Object, JAXBContext> contextCache = new ConcurrentHashMap<Object, JAXBContext>();
 
-   private JAXBCache() {
+    private JAXBCache() {
 
-   }
+    }
 
-   public static JAXBCache instance() {
-      return instance;
-   }
+    public static JAXBCache instance() {
+        return instance;
+    }
 
-   public JAXBContext getJAXBContext(Class<?>... classes) {
-      JAXBContext context = contextCache.get(classes);
-      if (context == null) {
-         try {
-            context = JAXBContext.newInstance(classes);
-         } catch (JAXBException e) {
-            throw new ExceptionAdapter(e);
-         }
-         contextCache.putIfAbsent(classes, context);
-      }
-      logger.debugv("Locating JAXBContext for package: {0}", (Object[]) classes);
-      return context;
-   }
+    public JAXBContext getJAXBContext(Class<?>... classes) {
+        JAXBContext context = contextCache.get(classes);
+        if (context == null) {
+            try {
+                context = JAXBContext.newInstance(classes);
+            } catch (JAXBException e) {
+                throw new ExceptionAdapter(e);
+            }
+            contextCache.putIfAbsent(classes, context);
+        }
+        logger.debugv("Locating JAXBContext for package: {0}", (Object[]) classes);
+        return context;
+    }
 
    /*public JAXBContext getJAXBContext(String... packageNames) {
       String contextPath = buildContextPath(packageNames);
@@ -49,15 +49,15 @@ public final class JAXBCache {
       return null;
    }*/
 
-   private String buildContextPath(String[] packageNames) {
-      StringBuilder b = new StringBuilder();
-      for (int i = 0; i < packageNames.length; i++) {
-         b.append(packageNames[i]);
-         if (i != (packageNames.length - 1)) {
-            b.append(":");
-         }
-      }
-      return b.toString();
-   }
+    private String buildContextPath(String[] packageNames) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < packageNames.length; i++) {
+            b.append(packageNames[i]);
+            if (i != (packageNames.length - 1)) {
+                b.append(":");
+            }
+        }
+        return b.toString();
+    }
 
 }

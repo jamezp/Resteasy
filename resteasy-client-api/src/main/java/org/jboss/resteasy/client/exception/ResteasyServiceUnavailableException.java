@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyServiceUnavailableException extends ServiceUnavailableException implements WebApplicationExceptionWrapper<ServiceUnavailableException> {
 
-   private static final long serialVersionUID = -4477873328299557209L;
-   private final ServiceUnavailableException wrapped;
+    private static final long serialVersionUID = -4477873328299557209L;
+    private final ServiceUnavailableException wrapped;
 
     ResteasyServiceUnavailableException(final ServiceUnavailableException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

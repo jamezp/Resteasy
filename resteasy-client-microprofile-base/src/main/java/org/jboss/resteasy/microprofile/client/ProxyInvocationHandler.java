@@ -49,9 +49,9 @@ public class ProxyInvocationHandler implements InvocationHandler {
     private final AtomicBoolean closed;
 
     public ProxyInvocationHandler(final Class<?> restClientInterface,
-                           final Object target,
-                           final Set<Object> providerInstances,
-                           final ResteasyClient client, final BeanManager beanManager) {
+                                  final Object target,
+                                  final Set<Object> providerInstances,
+                                  final ResteasyClient client, final BeanManager beanManager) {
         this.target = target;
         this.providerInstances = providerInstances;
         this.client = client;
@@ -150,7 +150,7 @@ public class ProxyInvocationHandler implements InvocationHandler {
                     cause = cause.getCause();
                 }
                 if (cause instanceof ExceptionMapping.HandlerException) {
-                    ((ExceptionMapping.HandlerException)cause).mapException(method);
+                    ((ExceptionMapping.HandlerException) cause).mapException(method);
                 }
                 if (cause instanceof ResponseProcessingException) {
                     ResponseProcessingException rpe = (ResponseProcessingException) cause;
@@ -267,7 +267,7 @@ public class ProxyInvocationHandler implements InvocationHandler {
                 merged.add(annotation);
             }
         }
-        return merged.toArray(new Annotation[]{});
+        return merged.toArray(new Annotation[] {});
     }
 
 }

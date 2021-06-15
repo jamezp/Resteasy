@@ -34,49 +34,49 @@ import java.net.URL;
 @RunAsClient
 public class ResponseExceptionMapperRuntimeExceptionTest {
 
-   @Deployment
-   public static Archive<?> createTestArchive() {
-      WebArchive war = TestUtil.prepareArchive(ResponseExceptionMapperRuntimeExceptionTest.class.getSimpleName());
-      return TestUtil.finishContainerPrepare(war, null, ResponseExceptionMapperRuntimeExceptionMapper.class, ExceptionMapperRuntimeExceptionWithReasonMapper.class,
-               ResponseExceptionMapperRuntimeExceptionResource.class, ResponseExceptionMapperRuntimeExceptionResourceInterface.class, ResponseExceptionMapper.class);
-   }
+    @Deployment
+    public static Archive<?> createTestArchive() {
+        WebArchive war = TestUtil.prepareArchive(ResponseExceptionMapperRuntimeExceptionTest.class.getSimpleName());
+        return TestUtil.finishContainerPrepare(war, null, ResponseExceptionMapperRuntimeExceptionMapper.class, ExceptionMapperRuntimeExceptionWithReasonMapper.class,
+                ResponseExceptionMapperRuntimeExceptionResource.class, ResponseExceptionMapperRuntimeExceptionResourceInterface.class, ResponseExceptionMapper.class);
+    }
 
-   /**
-    * @tpTestDetails Check ExceptionMapper for WebApplicationException
-    * @tpSince RESTEasy 3.6.0
-    */
-   @Test
-   public void testRuntimeApplicationException() throws Exception {
-      ResponseExceptionMapperRuntimeExceptionResourceInterface service = BuilderResolver.instance()
-            .newBuilder()
-            .baseUrl(new URL(PortProviderUtil.generateURL("/test",
-                  ResponseExceptionMapperRuntimeExceptionTest.class.getSimpleName())))
-            .register(ResponseExceptionMapperRuntimeExceptionMapper.class)
-            .build(ResponseExceptionMapperRuntimeExceptionResourceInterface.class);
-      try {
-         service.get();
-         fail("Should not get here");
-      } catch (RuntimeException e) {
-         // assert test exception message
-         assertEquals(ExceptionMapperRuntimeExceptionWithReasonMapper.REASON, e.getMessage());
-      }
-   }
+    /**
+     * @tpTestDetails Check ExceptionMapper for WebApplicationException
+     * @tpSince RESTEasy 3.6.0
+     */
+    @Test
+    public void testRuntimeApplicationException() throws Exception {
+        ResponseExceptionMapperRuntimeExceptionResourceInterface service = BuilderResolver.instance()
+                .newBuilder()
+                .baseUrl(new URL(PortProviderUtil.generateURL("/test",
+                        ResponseExceptionMapperRuntimeExceptionTest.class.getSimpleName())))
+                .register(ResponseExceptionMapperRuntimeExceptionMapper.class)
+                .build(ResponseExceptionMapperRuntimeExceptionResourceInterface.class);
+        try {
+            service.get();
+            fail("Should not get here");
+        } catch (RuntimeException e) {
+            // assert test exception message
+            assertEquals(ExceptionMapperRuntimeExceptionWithReasonMapper.REASON, e.getMessage());
+        }
+    }
 
-   @Test
-   public void testRuntimeAException() throws Exception {
-      ResponseExceptionMapperRuntimeExceptionResourceInterface service = BuilderResolver.instance()
-              .newBuilder()
-              .baseUrl(new URL(PortProviderUtil.generateURL("/test",
-                      ResponseExceptionMapperRuntimeExceptionTest.class.getSimpleName())))
-              .build(ResponseExceptionMapperRuntimeExceptionResourceInterface.class);
-      try {
-         service.get();
-         fail("Should not get here");
-      } catch (WebApplicationException e) {
-         String str = e.getResponse().readEntity(String.class);
-         Assert.assertEquals("Test error occurred", str);
-      }
-   }
+    @Test
+    public void testRuntimeAException() throws Exception {
+        ResponseExceptionMapperRuntimeExceptionResourceInterface service = BuilderResolver.instance()
+                .newBuilder()
+                .baseUrl(new URL(PortProviderUtil.generateURL("/test",
+                        ResponseExceptionMapperRuntimeExceptionTest.class.getSimpleName())))
+                .build(ResponseExceptionMapperRuntimeExceptionResourceInterface.class);
+        try {
+            service.get();
+            fail("Should not get here");
+        } catch (WebApplicationException e) {
+            String str = e.getResponse().readEntity(String.class);
+            Assert.assertEquals("Test error occurred", str);
+        }
+    }
 
 
 }

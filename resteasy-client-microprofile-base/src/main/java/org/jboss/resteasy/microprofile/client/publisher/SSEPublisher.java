@@ -61,7 +61,7 @@ public class SSEPublisher<T> implements Publisher<T> {
      * @param processor the stream
      * @param input     the SSE input
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void pump(final SSEProcessor processor, final SseEventInputImpl input) {
         Map<Class<?>, Object> contextDataMap = ResteasyContext.getContextDataMap();
         Runnable readEventTask = new Runnable() {
@@ -81,7 +81,7 @@ public class SSEPublisher<T> implements Publisher<T> {
                             processor.onError(e);
                             return;
                         }
-                    processor.onCompletion();
+                        processor.onCompletion();
                     } else {
                         try {
                             while ((event = input.read(providers)) != null) {

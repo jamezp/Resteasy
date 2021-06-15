@@ -34,110 +34,90 @@ import java.net.URI;
  * @version $Revision: 1 $
  */
 
-public class InternalDispatcher
-{
+public class InternalDispatcher {
 
-   private static InternalDispatcher instance = new InternalDispatcher();
+    private static InternalDispatcher instance = new InternalDispatcher();
 
-   // using a singleton so that that end users can override this behavior
-   public static InternalDispatcher getInstance()
-   {
-      return instance;
-   }
+    // using a singleton so that that end users can override this behavior
+    public static InternalDispatcher getInstance() {
+        return instance;
+    }
 
-   public static void setInstance(InternalDispatcher instance)
-   {
-      InternalDispatcher.instance = instance;
-   }
+    public static void setInstance(InternalDispatcher instance) {
+        InternalDispatcher.instance = instance;
+    }
 
-   public Object getEntity(String uri)
-   {
-      return getResponse(uri).getEntity();
-   }
+    public Object getEntity(String uri) {
+        return getResponse(uri).getEntity();
+    }
 
-   public Response delete(String uri)
-   {
-      return getResponse(createRequest(uri, "DELETE"));
-   }
+    public Response delete(String uri) {
+        return getResponse(createRequest(uri, "DELETE"));
+    }
 
-   public Response putEntity(String uri, String contentType, Object entity)
-   {
-      return executeEntity("PUT", uri, contentType, entity);
+    public Response putEntity(String uri, String contentType, Object entity) {
+        return executeEntity("PUT", uri, contentType, entity);
 
-   }
+    }
 
-   public Response putEntity(String uri, Object entity)
-   {
-      return putEntity(uri, "*/*", entity);
-   }
+    public Response putEntity(String uri, Object entity) {
+        return putEntity(uri, "*/*", entity);
+    }
 
-   public Response executeEntity(String method, String uri, String contentType, Object entity)
-   {
-      MockHttpRequest post = createRequest(uri, method);
-      post.contentType(contentType);
-      return getResponse(post, entity);
-   }
+    public Response executeEntity(String method, String uri, String contentType, Object entity) {
+        MockHttpRequest post = createRequest(uri, method);
+        post.contentType(contentType);
+        return getResponse(post, entity);
+    }
 
-   public Response postEntity(String uri, String contentType, Object entity)
-   {
-      return executeEntity("POST", uri, contentType, entity);
-   }
+    public Response postEntity(String uri, String contentType, Object entity) {
+        return executeEntity("POST", uri, contentType, entity);
+    }
 
-   public Response postEntity(String uri, Object entity)
-   {
-      return postEntity(uri, "*/*", entity);
-   }
+    public Response postEntity(String uri, Object entity) {
+        return postEntity(uri, "*/*", entity);
+    }
 
-   public Response getResponse(String uri)
-   {
-      return getResponse(createRequest(uri, "GET"));
-   }
+    public Response getResponse(String uri) {
+        return getResponse(createRequest(uri, "GET"));
+    }
 
-   public Response getResponse(MockHttpRequest request)
-   {
-      return getResponse(request, null);
-   }
+    public Response getResponse(MockHttpRequest request) {
+        return getResponse(request, null);
+    }
 
-   public Response getResponse(MockHttpRequest request, Object entity)
-   {
-      try
-      {
-         Dispatcher dispatcher = ResteasyContext.getContextData(Dispatcher.class);
-         if (dispatcher == null)
-         {
-            return null;
-         }
-         enhanceRequest(request);
-         return dispatcher.internalInvocation(request, new MockHttpResponse(), entity);
-      }
-      finally
-      {
-      }
+    public Response getResponse(MockHttpRequest request, Object entity) {
+        try {
+            Dispatcher dispatcher = ResteasyContext.getContextData(Dispatcher.class);
+            if (dispatcher == null) {
+                return null;
+            }
+            enhanceRequest(request);
+            return dispatcher.internalInvocation(request, new MockHttpResponse(), entity);
+        } finally {
+        }
 
-   }
+    }
 
-   protected void enhanceRequest(MockHttpRequest request)
-   {
-      HttpRequest previousRequest = ResteasyContext.getContextData(HttpRequest.class);
-      if (previousRequest != null)
-      {
-         request.getMutableHeaders().putAll(previousRequest.getHttpHeaders().getRequestHeaders());
-      }
-   }
+    protected void enhanceRequest(MockHttpRequest request) {
+        HttpRequest previousRequest = ResteasyContext.getContextData(HttpRequest.class);
+        if (previousRequest != null) {
+            request.getMutableHeaders().putAll(previousRequest.getHttpHeaders().getRequestHeaders());
+        }
+    }
 
-   public static MockHttpRequest createRequest(String relativeUri, String verb)
-   {
-      UriInfo uriInfo = ResteasyContext.getContextData(UriInfo.class);
+    public static MockHttpRequest createRequest(String relativeUri, String verb) {
+        UriInfo uriInfo = ResteasyContext.getContextData(UriInfo.class);
 
-      URI baseUri = uriInfo.getBaseUri();
-      URI absoluteUri = baseUri.resolve(parseRelativeUri(relativeUri));
-      return MockHttpRequest.create(verb, absoluteUri, baseUri);
-   }
+        URI baseUri = uriInfo.getBaseUri();
+        URI absoluteUri = baseUri.resolve(parseRelativeUri(relativeUri));
+        return MockHttpRequest.create(verb, absoluteUri, baseUri);
+    }
 
-   private static URI parseRelativeUri(String relativeUri) {
-      if(relativeUri.startsWith("/")) {
-         return URI.create(relativeUri.substring(1));
-      }
-      return URI.create(relativeUri);
-   }
+    private static URI parseRelativeUri(String relativeUri) {
+        if (relativeUri.startsWith("/")) {
+            return URI.create(relativeUri.substring(1));
+        }
+        return URI.create(relativeUri);
+    }
 }

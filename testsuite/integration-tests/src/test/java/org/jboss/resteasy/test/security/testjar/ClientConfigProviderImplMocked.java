@@ -43,7 +43,7 @@ public class ClientConfigProviderImplMocked implements ClientConfigProvider {
                     correctTruststore.load(in, "123456".toCharArray());
                 }
                 sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, new TrustManager[]{new CustomTrustManager(correctTruststore)}, null);
+                sslContext.init(null, new TrustManager[] {new CustomTrustManager(correctTruststore)}, null);
             } catch (Exception e) {
                 throw new ClientConfigException(e);
             }

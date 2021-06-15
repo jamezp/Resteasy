@@ -29,7 +29,7 @@ public class BasicTest {
         deployment.getProviderFactory().registerProvider(JacksonJsonProvider.class);
         final Registry registry = deployment.getRegistry();
         registry.addPerRequestResource(BasicResource.class);
-        final Client client1 =  ClientBuilder.newClient().register(JacksonJsonProvider.class);
+        final Client client1 = ClientBuilder.newClient().register(JacksonJsonProvider.class);
         setupClient(client1);
         setupBaseUrl("http://%s:%d%s");
     }
@@ -87,9 +87,9 @@ public class BasicTest {
     public void sendBodyTest(final String method) {
         final String randomText = UUID.randomUUID().toString();
         final String resp =
-            client.target(generateURL("/basic"))
-                .request()
-                .method(method, Entity.text(randomText), String.class);
+                client.target(generateURL("/basic"))
+                        .request()
+                        .method(method, Entity.text(randomText), String.class);
         assertEquals(method.toUpperCase() + " " + randomText, resp);
     }
 

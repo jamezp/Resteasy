@@ -21,16 +21,14 @@ import org.jboss.resteasy.spi.util.FindAnnotation;
 @Provider
 @Produces({"application/xml", "application/*+xml", "text/xml", "text/*+xml"})
 @Consumes({"application/xml", "application/*+xml", "text/xml", "text/*+xml"})
-public class JAXBXmlRootElementProvider extends AbstractJAXBProvider<Object>
-{
+public class JAXBXmlRootElementProvider extends AbstractJAXBProvider<Object> {
 
-   @Override
-   protected boolean isReadWritable(Class<?> type,
-                                    Type genericType,
-                                    Annotation[] annotations,
-                                    MediaType mediaType)
-   {
-      return type.isAnnotationPresent(XmlRootElement.class) && (FindAnnotation.findAnnotation(type, annotations, DoNotUseJAXBProvider.class) == null) && !IgnoredMediaTypes.ignored(type, annotations, mediaType);
-   }
+    @Override
+    protected boolean isReadWritable(Class<?> type,
+                                     Type genericType,
+                                     Annotation[] annotations,
+                                     MediaType mediaType) {
+        return type.isAnnotationPresent(XmlRootElement.class) && (FindAnnotation.findAnnotation(type, annotations, DoNotUseJAXBProvider.class) == null) && !IgnoredMediaTypes.ignored(type, annotations, mediaType);
+    }
 
 }

@@ -20,62 +20,62 @@ import java.util.Map;
  * @version $Revision: 1 $
  */
 public class MultipartRelatedInputImpl extends MultipartInputImpl implements
-      MultipartRelatedInput {
-   private Map<String, InputPart> relatedMap;
-   private String start;
-   private String startInfo;
-   private String type;
-   private InputPart rootPart;
+        MultipartRelatedInput {
+    private Map<String, InputPart> relatedMap;
+    private String start;
+    private String startInfo;
+    private String type;
+    private InputPart rootPart;
 
-   public MultipartRelatedInputImpl(final MediaType contentType, final Providers workers) {
-      super(contentType, workers);
-   }
+    public MultipartRelatedInputImpl(final MediaType contentType, final Providers workers) {
+        super(contentType, workers);
+    }
 
-   public MultipartRelatedInputImpl (final Multipart multipart, final Providers workers)
-           throws IOException {
-      super(multipart, workers);
-   }
+    public MultipartRelatedInputImpl(final Multipart multipart, final Providers workers)
+            throws IOException {
+        super(multipart, workers);
+    }
 
-   @Override
-   public void parse(InputStream is) throws IOException {
-      super.parse(is);
-      ContentTypeField contentTypeField = (ContentTypeField) mimeMessage
-            .getHeader().getField(FieldName.CONTENT_TYPE);
-      start = contentTypeField.getParameter("start");
-      startInfo = contentTypeField.getParameter("start-info");
-      type = contentTypeField.getParameter("type");
-      rootPart = start == null ? getParts().get(0) : getRelatedMap().get(start);
-   }
+    @Override
+    public void parse(InputStream is) throws IOException {
+        super.parse(is);
+        ContentTypeField contentTypeField = (ContentTypeField) mimeMessage
+                .getHeader().getField(FieldName.CONTENT_TYPE);
+        start = contentTypeField.getParameter("start");
+        startInfo = contentTypeField.getParameter("start-info");
+        type = contentTypeField.getParameter("type");
+        rootPart = start == null ? getParts().get(0) : getRelatedMap().get(start);
+    }
 
-   @Override
-   protected InputPart extractPart(BodyPart bodyPart) throws IOException {
-      InputPart inputPart = super.extractPart(bodyPart);
-      getRelatedMap()
-            .put(inputPart.getHeaders().getFirst("Content-ID"), inputPart);
-      return inputPart;
-   }
+    @Override
+    protected InputPart extractPart(BodyPart bodyPart) throws IOException {
+        InputPart inputPart = super.extractPart(bodyPart);
+        getRelatedMap()
+                .put(inputPart.getHeaders().getFirst("Content-ID"), inputPart);
+        return inputPart;
+    }
 
-   public Map<String, InputPart> getRelatedMap() {
-      if (relatedMap == null) {
-         relatedMap = new LinkedHashMap<String, InputPart>();
-      }
-      return relatedMap;
-   }
+    public Map<String, InputPart> getRelatedMap() {
+        if (relatedMap == null) {
+            relatedMap = new LinkedHashMap<String, InputPart>();
+        }
+        return relatedMap;
+    }
 
-   public InputPart getRootPart() {
-      return rootPart;
-   }
+    public InputPart getRootPart() {
+        return rootPart;
+    }
 
-   public String getStart() {
-      return start;
-   }
+    public String getStart() {
+        return start;
+    }
 
-   public String getStartInfo() {
-      return startInfo;
-   }
+    public String getStartInfo() {
+        return startInfo;
+    }
 
-   public String getType() {
-      return type;
-   }
+    public String getType() {
+        return type;
+    }
 
 }

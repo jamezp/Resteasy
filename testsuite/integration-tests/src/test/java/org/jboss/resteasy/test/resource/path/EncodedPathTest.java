@@ -28,53 +28,45 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class EncodedPathTest
-{
-   static Client client;
+public class EncodedPathTest {
+    static Client client;
 
-   @BeforeClass
-   public static void setup() {
-      client = ClientBuilder.newClient();
-   }
+    @BeforeClass
+    public static void setup() {
+        client = ClientBuilder.newClient();
+    }
 
-   @AfterClass
-   public static void close() {
-      client.close();
-   }
+    @AfterClass
+    public static void close() {
+        client.close();
+    }
 
-   @Deployment
-   public static Archive<?> deploy() {
-      WebArchive war = TestUtil.prepareArchive(EncodedPathTest.class.getSimpleName());
-      return TestUtil.finishContainerPrepare(war, null, EncodedPathResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(EncodedPathTest.class.getSimpleName());
+        return TestUtil.finishContainerPrepare(war, null, EncodedPathResource.class);
+    }
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, EncodedPathTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, EncodedPathTest.class.getSimpleName());
+    }
 
-   private void _test(String path)
-   {
-      Builder builder = client.target(generateURL(path)).request();
-      Response response = null;
-      try
-      {
-         response = builder.get();
-         Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(e);
-      }
-      finally
-      {
-         response.close();
-      }
-   }
+    private void _test(String path) {
+        Builder builder = client.target(generateURL(path)).request();
+        Response response = null;
+        try {
+            response = builder.get();
+            Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            response.close();
+        }
+    }
 
-   @Test
-   public void testEncoded() throws Exception
-   {
-      _test("/hello%20world");
-      _test("/goodbye%7Bworld");
-   }
+    @Test
+    public void testEncoded() throws Exception {
+        _test("/hello%20world");
+        _test("/goodbye%7Bworld");
+    }
 }

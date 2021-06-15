@@ -15,18 +15,18 @@ import org.jboss.resteasy.annotations.providers.multipart.XopWithMultipartRelate
 @Path("/ITest")
 public interface XOPMultipartProxy {
 
-   @POST
-   @Consumes(MediaType.APPLICATION_XML)
-   @Path("/getFileXOPMulti")
-   @Produces("multipart/related")
-   @XopWithMultipartRelated
-   XOPMultipartProxyGetFileResponse getFile(String request) throws Exception;
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    @Path("/getFileXOPMulti")
+    @Produces("multipart/related")
+    @XopWithMultipartRelated
+    XOPMultipartProxyGetFileResponse getFile(String request) throws Exception;
 
-   @POST
-   @Consumes("multipart/related")
-   @Produces(MediaType.APPLICATION_XML)
-   @Path("/putFile")
-   Response putFile(@XopWithMultipartRelated XOPMultipartProxyPutFileRequest putFileRequest) throws IOException;
+    @POST
+    @Consumes("multipart/related")
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("/putFile")
+    Response putFile(@XopWithMultipartRelated XOPMultipartProxyPutFileRequest putFileRequest) throws IOException;
 }
 
 

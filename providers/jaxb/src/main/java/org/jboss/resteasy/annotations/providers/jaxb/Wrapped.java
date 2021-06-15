@@ -30,11 +30,10 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Wrapped
-{
-   String element() default "collection";
+public @interface Wrapped {
+    String element() default "collection";
 
-   String namespace() default "";
+    String namespace() default "";
 
-   String prefix() default "";
+    String prefix() default "";
 }

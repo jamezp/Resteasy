@@ -22,9 +22,9 @@ public class BlockingThrowingWriter implements MessageBodyWriter<BlockingThrowin
 
     @Override
     public void writeTo(BlockingThrowingWriterData t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+                        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
             throws IOException, WebApplicationException {
-       throw new WebApplicationException(Response.ok("this is fine").build());
+        throw new WebApplicationException(Response.ok("this is fine").build());
     }
 
 }

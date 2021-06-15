@@ -4,7 +4,7 @@
   "data": {
     "id": 1,
     "subject": "resteasy sse data",
-    "to":  "all-resteasy-user",
+    "to": "all-resteasy-user",
     "timestamp": "2020-09-12T12:12:49.836",
     "name": "resteasyuser",
     "project": "resteasy",
@@ -21,7 +21,7 @@
         "lastUpdateTime": "2020-09-02T15:11:56.185645",
         "lastUpdateUser": "resteasy-user"
       },
-        {
+      {
         "id": 11,
         "title": "uuid-update",
         "subtitle": "uuid-collection",

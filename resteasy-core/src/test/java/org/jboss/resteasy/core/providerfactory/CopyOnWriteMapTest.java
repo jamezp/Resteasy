@@ -62,7 +62,7 @@ public class CopyOnWriteMapTest {
 
         final Map<String, String> secondMap = new CopyOnWriteMap<>(firstMap);
         assertEquals(firstMap.entrySet(), secondMap.entrySet());
-        firstMap.put(NEW_KEY,NEW_VALUE);
+        firstMap.put(NEW_KEY, NEW_VALUE);
         assertFalse(secondMap.containsKey(NEW_KEY));
     }
 

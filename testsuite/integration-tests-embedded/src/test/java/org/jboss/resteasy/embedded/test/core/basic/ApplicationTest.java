@@ -32,154 +32,149 @@ import static org.jboss.resteasy.test.TestPortProvider.generateURL;
  */
 public class ApplicationTest extends EmbeddedServerTestBase {
 
-   private static final String CONTENT_ERROR_MESSAGE = "Wrong content of response";
+    private static final String CONTENT_ERROR_MESSAGE = "Wrong content of response";
 
-   static Client client;
-   private static EmbeddedJaxrsServer server;
-   private static ResteasyDeployment deployment;
+    static Client client;
+    private static EmbeddedJaxrsServer server;
+    private static ResteasyDeployment deployment;
 
-   @Before
-   public void setup() throws Exception
-   {
-      server = getServer();
+    @Before
+    public void setup() throws Exception {
+        server = getServer();
 
-      deployment = server.getDeployment();
-      List<String> scannedResourceClasses = deployment.getScannedResourceClasses();
-      scannedResourceClasses.add(ApplicationTestResourceA.class.getName());
-      scannedResourceClasses.add(ApplicationTestSingletonA.class.getName());
-      scannedResourceClasses.add(ApplicationTestResourceB.class.getName());
-      scannedResourceClasses.add(ApplicationTestSingletonB.class.getName());
-      server.setDeployment(deployment);
+        deployment = server.getDeployment();
+        List<String> scannedResourceClasses = deployment.getScannedResourceClasses();
+        scannedResourceClasses.add(ApplicationTestResourceA.class.getName());
+        scannedResourceClasses.add(ApplicationTestSingletonA.class.getName());
+        scannedResourceClasses.add(ApplicationTestResourceB.class.getName());
+        scannedResourceClasses.add(ApplicationTestSingletonB.class.getName());
+        server.setDeployment(deployment);
 
-      client = ClientBuilder.newBuilder().build();
-   }
+        client = ClientBuilder.newBuilder().build();
+    }
 
-   @After
-   public void end() throws Exception
-   {
-      try
-      {
-         client.close();
-      }
-      catch (Exception e)
-      {
+    @After
+    public void end() throws Exception {
+        try {
+            client.close();
+        } catch (Exception e) {
 
-      }
-      server.stop();
-   }
+        }
+        server.stop();
+    }
 
-   /**
-    * @tpTestDetails Test first application definition.  Declared ApplicationPath,
-    * getClasses and getSingletons methods
-    * @tpSince RESTEasy 4.1.0
-    */
-   @Test
-   public void testExplicitA() throws Exception {
+    /**
+     * @tpTestDetails Test first application definition.  Declared ApplicationPath,
+     * getClasses and getSingletons methods
+     * @tpSince RESTEasy 4.1.0
+     */
+    @Test
+    public void testExplicitA() throws Exception {
 
-      deployment.setApplicationClass(ApplicationTestAExplicitApplication.class.getName());
-      server.start();
-      server.deploy();
+        deployment.setApplicationClass(ApplicationTestAExplicitApplication.class.getName());
+        server.start();
+        server.deploy();
 
-      WebTarget base = client.target(generateURL("/a/explicit"));
+        WebTarget base = client.target(generateURL("/a/explicit"));
 
-      String value = base.path("resources/a").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
+        String value = base.path("resources/a").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
 
-      Response response = base.path("resources/b").request().get();
-      Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
+        Response response = base.path("resources/b").request().get();
+        Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
 
-      value = base.path("singletons/a").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
+        value = base.path("singletons/a").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
 
-      response = base.path("singletons/b").request().get();
-      Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
-      client.close();
-   }
+        response = base.path("singletons/b").request().get();
+        Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
+        client.close();
+    }
 
-   /**
-    * @tpTestDetails Test second application definition.  Declared ApplicationPath,
-    * getClasses and getSingletons methods.
-    * @tpSince RESTEasy 4.1.0
-    */
-   @Test
-   public void testExplicitB() throws Exception {
+    /**
+     * @tpTestDetails Test second application definition.  Declared ApplicationPath,
+     * getClasses and getSingletons methods.
+     * @tpSince RESTEasy 4.1.0
+     */
+    @Test
+    public void testExplicitB() throws Exception {
 
-      deployment.setApplicationClass(ApplicationTestBExplicitApplication.class.getName());
-      server.start();
-      server.deploy();
+        deployment.setApplicationClass(ApplicationTestBExplicitApplication.class.getName());
+        server.start();
+        server.deploy();
 
-      WebTarget base = client.target(generateURL("/b/explicit"));
+        WebTarget base = client.target(generateURL("/b/explicit"));
 
-      String value = base.path("resources/b").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
+        String value = base.path("resources/b").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
 
-      Response response = base.path("resources/a").request().get();
-      Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
+        Response response = base.path("resources/a").request().get();
+        Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
 
-      value = base.path("singletons/b").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
+        value = base.path("singletons/b").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
 
-      response = base.path("singletons/a").request().get();
-      Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
-      client.close();
-   }
+        response = base.path("singletons/a").request().get();
+        Assert.assertEquals(HttpResponseCodes.SC_NOT_FOUND, response.getStatus());
+        client.close();
+    }
 
-   /**
-    * @tpTestDetails Test scanned application in deployment: Declared ApplicationPath,
-    * no declared getClasses and getSingletons methods.
-    * @tpSince RESTEasy 4.1.0
-    */
-   @Test
-   public void testScanned() throws Exception {
+    /**
+     * @tpTestDetails Test scanned application in deployment: Declared ApplicationPath,
+     * no declared getClasses and getSingletons methods.
+     * @tpSince RESTEasy 4.1.0
+     */
+    @Test
+    public void testScanned() throws Exception {
 
-      deployment.setApplicationClass(ApplicationTestScannedApplication.class.getName());
-      server.start();
-      server.deploy();
+        deployment.setApplicationClass(ApplicationTestScannedApplication.class.getName());
+        server.start();
+        server.deploy();
 
-      WebTarget base = client.target(generateURL("/scanned"));
+        WebTarget base = client.target(generateURL("/scanned"));
 
-      String value = base.path("resources/a").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
+        String value = base.path("resources/a").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
 
-      value = base.path("resources/b").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
+        value = base.path("resources/b").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
 
-      value = base.path("singletons/a").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
+        value = base.path("singletons/a").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
 
-      value = base.path("singletons/b").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
-      client.close();
-   }
+        value = base.path("singletons/b").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
+        client.close();
+    }
 
-   /**
-    * @tpTestDetails Test scanned application in deployment: No declared ApplicationPath,
-    * no declared getClasses and getSingletons methods. This application is mapped
-    * to different location using setRootResourcePath.  This replaces the web.xml
-    * statement <url-pattern>/mapped/*</url-pattern> in <servlet-mapping>.
-    * @tpSince RESTEasy 4.1.0
-    */
-   @Test
-   public void testMapped() throws Exception {
+    /**
+     * @tpTestDetails Test scanned application in deployment: No declared ApplicationPath,
+     * no declared getClasses and getSingletons methods. This application is mapped
+     * to different location using setRootResourcePath.  This replaces the web.xml
+     * statement <url-pattern>/mapped/*</url-pattern> in <servlet-mapping>.
+     * @tpSince RESTEasy 4.1.0
+     */
+    @Test
+    public void testMapped() throws Exception {
 
-      deployment.setApplicationClass(ApplicationTestMappedApplication.class.getName());
-      server.setRootResourcePath("/mapped");
-      server.start();
-      server.deploy();
+        deployment.setApplicationClass(ApplicationTestMappedApplication.class.getName());
+        server.setRootResourcePath("/mapped");
+        server.start();
+        server.deploy();
 
-      WebTarget base = client.target(generateURL("/mapped"));
+        WebTarget base = client.target(generateURL("/mapped"));
 
-      String value = base.path("resources/a").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
+        String value = base.path("resources/a").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
 
-      value = base.path("resources/b").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
+        value = base.path("resources/b").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
 
-      value = base.path("singletons/a").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
+        value = base.path("singletons/a").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "a", value);
 
-      value = base.path("singletons/b").request().get(String.class);
-      Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
-      client.close();
-   }
+        value = base.path("singletons/b").request().get(String.class);
+        Assert.assertEquals(CONTENT_ERROR_MESSAGE, "b", value);
+        client.close();
+    }
 }

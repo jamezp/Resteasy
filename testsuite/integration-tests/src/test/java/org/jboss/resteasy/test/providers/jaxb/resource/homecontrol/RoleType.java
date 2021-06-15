@@ -19,46 +19,38 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- *
  */
 @XmlType(name = "RoleType")
 @XmlEnum
 public enum RoleType {
 
 
-   /**
-    * standard role which is needed to access the homecontrol application
-    *
-    *
-    */
-   USER,
+    /**
+     * standard role which is needed to access the homecontrol application
+     */
+    USER,
 
-   /**
-    * Administration user for administrate the whole homecontrol application
-    *
-    *
-    */
-   ADMIN,
+    /**
+     * Administration user for administrate the whole homecontrol application
+     */
+    ADMIN,
 
-   /**
-    * User for the backup module of homecontrol
-    *
-    *
-    */
-   BACKUP_USER,
+    /**
+     * User for the backup module of homecontrol
+     */
+    BACKUP_USER,
 
-   /**
-    * Admin user for administrating the backup module of homecontrol
-    *
-    */
-   BACKUP_ADMIN;
+    /**
+     * Admin user for administrating the backup module of homecontrol
+     */
+    BACKUP_ADMIN;
 
-   public String value() {
-      return name();
-   }
+    public String value() {
+        return name();
+    }
 
-   public static RoleType fromValue(String v) {
-      return valueOf(v);
-   }
+    public static RoleType fromValue(String v) {
+        return valueOf(v);
+    }
 
 }

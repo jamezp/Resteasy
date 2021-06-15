@@ -33,7 +33,7 @@ public class QueryParamStyleTest {
     protected static final Logger LOG = Logger.getLogger(QueryParamStyleTest.class.getName());
     private static final String WAR_SERVICE = "queryParamStyle_service";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(QueryParamStyleService.class);

@@ -11,6 +11,7 @@ public class ConstructorParams400Resource {
     public ConstructorParams400Resource(@CookieParam("cookieP") final Item cookieP) {
         throw new RuntimeException("force an constructor exception");
     }
+
     @GET
     @Path("get")
     public Response getIt() {

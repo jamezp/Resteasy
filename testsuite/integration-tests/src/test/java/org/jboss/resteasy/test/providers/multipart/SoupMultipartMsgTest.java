@@ -38,7 +38,7 @@ import java.util.List;
 @RunAsClient
 public class SoupMultipartMsgTest {
     protected final Logger logger = LogManager.getLogger(SoupMultipartMsgTest.class.getName());
-    static ResteasyClient  client;
+    static ResteasyClient client;
 
     @Deployment
     public static Archive<?> createTestArchive() {
@@ -53,7 +53,7 @@ public class SoupMultipartMsgTest {
 
     @BeforeClass
     public static void before() throws Exception {
-        client = (ResteasyClient)ClientBuilder.newClient();
+        client = (ResteasyClient) ClientBuilder.newClient();
     }
 
     @AfterClass
@@ -153,12 +153,13 @@ public class SoupMultipartMsgTest {
         Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
         List<String> controlList = SoupVendorResource.getControlList();
 
-        GenericType<List<Soup>> gType = new GenericType<List<Soup>>(){};
+        GenericType<List<Soup>> gType = new GenericType<List<Soup>>() {
+        };
         for (InputPart inputPart : multipartInput.getParts()) {
             if (MediaType.APPLICATION_XML_TYPE.equals(inputPart.getMediaType())) {
                 // List<Soup> soupList = inputPart.getBody(gType.getRawType(), gType.getType());
                 List<Soup> soupList = inputPart.getBody(gType);
-                for(Soup soup : soupList) {
+                for (Soup soup : soupList) {
                     String name = soup.getId();
                     if (controlList.contains(name)) {
                         controlList.remove(name);

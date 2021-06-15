@@ -27,7 +27,7 @@ public class AsyncThrowingWriter implements AsyncMessageBodyWriter<AsyncThrowing
 
     @Override
     public void writeTo(AsyncThrowingWriterData t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+                        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
             throws IOException, WebApplicationException {
         entityStream.write("KO".getBytes(Charset.forName("UTF-8")));
         entityStream.close();
@@ -35,14 +35,14 @@ public class AsyncThrowingWriter implements AsyncMessageBodyWriter<AsyncThrowing
 
     @Override
     public CompletionStage<Void> asyncWriteTo(AsyncThrowingWriterData t, Class<?> type, Type genericType,
-            Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-            AsyncOutputStream entityStream) {
-       WebApplicationException ex = new WebApplicationException(Response.ok("this is fine").build());
-       if(t.throwNow)
-          throw ex;
-       CompletableFuture<Void> ret = new CompletableFuture<>();
-       ret.completeExceptionally(ex);
-       return ret;
+                                              Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+                                              AsyncOutputStream entityStream) {
+        WebApplicationException ex = new WebApplicationException(Response.ok("this is fine").build());
+        if (t.throwNow)
+            throw ex;
+        CompletableFuture<Void> ret = new CompletableFuture<>();
+        ret.completeExceptionally(ex);
+        return ret;
     }
 
 }

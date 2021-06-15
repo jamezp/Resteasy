@@ -11,9 +11,8 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LinkHeaderParam
-{
-   String rel() default "";
+public @interface LinkHeaderParam {
+    String rel() default "";
 
-   String title() default "";
+    String title() default "";
 }

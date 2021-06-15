@@ -22,7 +22,7 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 <module xmlns="urn:jboss:module:1.3" name="com.fasterxml.jackson.datatype.jackson-datatype-jdk8">
-     <resources>
+    <resources>
         <!-- Insert resources here -->
     </resources>
 

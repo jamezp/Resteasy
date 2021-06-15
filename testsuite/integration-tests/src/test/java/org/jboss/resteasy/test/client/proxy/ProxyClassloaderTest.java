@@ -21,33 +21,30 @@ import javax.ws.rs.core.Response;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ProxyClassloaderTest
-{
+public class ProxyClassloaderTest {
 
-   @Deployment
-   public static Archive<?> deploySimpleResource()
-   {
-      WebArchive war = TestUtil.prepareArchive(ProxyClassloaderTest.class.getSimpleName());
-      war.addClass(ResourceWithInterfaceSimpleClient.class);
-      war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
-              new RuntimePermission("setContextClassLoader"),
-              new RuntimePermission("createClassLoader"),
-              new RuntimePermission("getClassLoader")
-      ), "permissions.xml");
-      return TestUtil.finishContainerPrepare(war, null, ClientSmokeResource.class, ClassloaderResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploySimpleResource() {
+        WebArchive war = TestUtil.prepareArchive(ProxyClassloaderTest.class.getSimpleName());
+        war.addClass(ResourceWithInterfaceSimpleClient.class);
+        war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
+                new RuntimePermission("setContextClassLoader"),
+                new RuntimePermission("createClassLoader"),
+                new RuntimePermission("getClassLoader")
+        ), "permissions.xml");
+        return TestUtil.finishContainerPrepare(war, null, ClientSmokeResource.class, ClassloaderResource.class);
+    }
 
-   @Test
-   public void testNoTCCL() throws Exception
-   {
-      ResteasyClient client = (ResteasyClient) ClientBuilder.newClient();
-      String target2 = PortProviderUtil.generateURL("", ProxyClassloaderTest.class.getSimpleName());
-      String target = PortProviderUtil.generateURL("/cl/cl?param=" + target2, ProxyClassloaderTest.class.getSimpleName());
-      Response response = client.target(target).request().get();
-      String entity = response.readEntity(String.class);
-      Assert.assertEquals("basic", entity);
-      response.close();
-      client.close();
-   }
+    @Test
+    public void testNoTCCL() throws Exception {
+        ResteasyClient client = (ResteasyClient) ClientBuilder.newClient();
+        String target2 = PortProviderUtil.generateURL("", ProxyClassloaderTest.class.getSimpleName());
+        String target = PortProviderUtil.generateURL("/cl/cl?param=" + target2, ProxyClassloaderTest.class.getSimpleName());
+        Response response = client.target(target).request().get();
+        String entity = response.readEntity(String.class);
+        Assert.assertEquals("basic", entity);
+        response.close();
+        client.close();
+    }
 
 }

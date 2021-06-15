@@ -24,32 +24,29 @@ import java.beans.PropertyEditorSupport;
  *
  * {@literal @}InitBinder
  * public void initBinder(WebDataBinder binder) {
- *     binder.registerCustomEditor(MediaType.class,
- *         new MediaTypeEditor());
+ * binder.registerCustomEditor(MediaType.class,
+ * new MediaTypeEditor());
  * }
  *
  * @author <a href="justin@justinedelson.com">Justin Edelson</a>
  * @version $Revision$
  */
-public class MediaTypeEditor extends PropertyEditorSupport
-{
+public class MediaTypeEditor extends PropertyEditorSupport {
 
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public String getAsText()
-   {
-      return ((MediaType) getValue()).toString();
-   }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getAsText() {
+        return ((MediaType) getValue()).toString();
+    }
 
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public void setAsText(String text) throws IllegalArgumentException
-   {
-      setValue(MediaType.valueOf(text));
-   }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAsText(String text) throws IllegalArgumentException {
+        setValue(MediaType.valueOf(text));
+    }
 
 }

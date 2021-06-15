@@ -18,24 +18,18 @@ import java.io.IOException;
  */
 @Provider
 @Priority(Priorities.HEADER_DECORATOR)
-public class AcceptEncodingGZIPFilter implements ClientRequestFilter
-{
+public class AcceptEncodingGZIPFilter implements ClientRequestFilter {
 
-   @Override
-   public void filter(ClientRequestContext ctx) throws IOException
-   {
-      String encoding = ctx.getHeaderString(HttpHeaders.ACCEPT_ENCODING);
-      if (encoding == null)
-      {
-         ctx.getHeaders().add(HttpHeaders.ACCEPT_ENCODING, "gzip, deflate");
-      }
-      else
-      {
-         if (!encoding.contains("gzip"))
-         {
-            encoding += ", gzip";
-            ctx.getHeaders().add(HttpHeaders.ACCEPT_ENCODING, encoding);
-         }
-      }
-   }
+    @Override
+    public void filter(ClientRequestContext ctx) throws IOException {
+        String encoding = ctx.getHeaderString(HttpHeaders.ACCEPT_ENCODING);
+        if (encoding == null) {
+            ctx.getHeaders().add(HttpHeaders.ACCEPT_ENCODING, "gzip, deflate");
+        } else {
+            if (!encoding.contains("gzip")) {
+                encoding += ", gzip";
+                ctx.getHeaders().add(HttpHeaders.ACCEPT_ENCODING, encoding);
+            }
+        }
+    }
 }

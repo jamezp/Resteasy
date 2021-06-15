@@ -25,18 +25,15 @@ import java.lang.reflect.Type;
 @Provider
 @Produces("application/x-www-form-urlencoded")
 @Consumes("application/x-www-form-urlencoded")
-public class JaxrsServerFormUrlEncodedProvider  implements MessageBodyReader<Form>
-{
+public class JaxrsServerFormUrlEncodedProvider implements MessageBodyReader<Form> {
     protected boolean useContainerParams;
 
-    public JaxrsServerFormUrlEncodedProvider(final boolean useContainerParams)
-    {
+    public JaxrsServerFormUrlEncodedProvider(final boolean useContainerParams) {
         this.useContainerParams = useContainerParams;
     }
 
     @Override
-    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-    {
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return (useContainerParams && Form.class.isAssignableFrom(type));
     }
 
@@ -45,8 +42,7 @@ public class JaxrsServerFormUrlEncodedProvider  implements MessageBodyReader<For
 
     @SuppressWarnings("unchecked")
     @Override
-    public Form readFrom(Class<Form> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException
-    {
+    public Form readFrom(Class<Form> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
         LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
         MultivaluedMap<String, String> map = null;
         if (useContainerParams) {

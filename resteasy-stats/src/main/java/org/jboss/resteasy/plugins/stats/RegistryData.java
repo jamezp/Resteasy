@@ -13,13 +13,11 @@ import java.util.TreeSet;
  */
 @XmlRootElement(name = "registry")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RegistryData
-{
-   @XmlElementRef
-   private Set<RegistryEntry> entries = new TreeSet<RegistryEntry>();
+public class RegistryData {
+    @XmlElementRef
+    private Set<RegistryEntry> entries = new TreeSet<RegistryEntry>();
 
-   public Set<RegistryEntry> getEntries()
-   {
-      return entries;
-   }
+    public Set<RegistryEntry> getEntries() {
+        return entries;
+    }
 }

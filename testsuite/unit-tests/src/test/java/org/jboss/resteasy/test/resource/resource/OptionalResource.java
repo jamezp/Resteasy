@@ -84,6 +84,7 @@ public class OptionalResource {
 
     public static class Holder<T> {
         private final T value;
+
         private Holder(final T value) {
             this.value = value;
         }

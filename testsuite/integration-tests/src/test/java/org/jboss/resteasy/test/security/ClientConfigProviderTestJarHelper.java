@@ -111,14 +111,14 @@ class ClientConfigProviderTestJarHelper {
     }
 
     static Process runClientConfigProviderBearerTestJar(TestType testType, String jarPath) throws IOException {
-        return ClientConfigProviderTestJarHelper.runClientConfigProviderTestJar(jarPath, new String[]{bearerJarConfigProperties.mainClassName, testType.name()});
+        return ClientConfigProviderTestJarHelper.runClientConfigProviderTestJar(jarPath, new String[] {bearerJarConfigProperties.mainClassName, testType.name()});
     }
 
     static Process runClientConfigProviderTestJar(String jarPath, String[] args) throws IOException {
         // use quotation marks for classpath on windows because folder names can have spaces
         String classPath = System.getProperty("os.name").contains("indows") ? "\"" + jarPath + ";" + System.getProperty("java.class.path") + "\"" : jarPath + ":" + System.getProperty("java.class.path");
         return Runtime.getRuntime()
-                .exec("java -cp "  +  classPath + " " + ClientConfigProviderTestJarHelper.PACKAGE_NAME + "." + String.join(" ", args) );
+                .exec("java -cp " + classPath + " " + ClientConfigProviderTestJarHelper.PACKAGE_NAME + "." + String.join(" ", args));
     }
 
     static String getResultOfProcess(Process proc) throws IOException {

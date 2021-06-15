@@ -31,15 +31,16 @@ import java.lang.annotation.Target;
  * <p>
  * for a Foo f with id = 123, ObjectToURI.getInstance(f) = "/foo/123"
  * </p>
+ *
  * @author <a href="mailto:sduskis@gmail.com">Solomon Duskis</a>
  * @version $Revision: 1 $
  */
 
 @Target(
-{ElementType.TYPE})
+        {ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MappedBy {
-   Class<?> resource();
+    Class<?> resource();
 
-   String method() default "";
+    String method() default "";
 }

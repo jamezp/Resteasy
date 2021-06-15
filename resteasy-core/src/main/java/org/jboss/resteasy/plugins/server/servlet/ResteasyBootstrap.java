@@ -15,25 +15,22 @@ import javax.servlet.ServletContextListener;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class ResteasyBootstrap implements ServletContextListener
-{
-   protected ResteasyDeployment deployment;
+public class ResteasyBootstrap implements ServletContextListener {
+    protected ResteasyDeployment deployment;
 
-   public void contextInitialized(ServletContextEvent event)
-   {
-      ServletContext servletContext = event.getServletContext();
-      Map<Class<?>, Object> map = ResteasyContext.getContextDataMap();
-      map.put(ServletContext.class, servletContext);
-      ListenerBootstrap config = new ListenerBootstrap(event.getServletContext());
-      deployment = config.createDeployment();
-      deployment.start();
+    public void contextInitialized(ServletContextEvent event) {
+        ServletContext servletContext = event.getServletContext();
+        Map<Class<?>, Object> map = ResteasyContext.getContextDataMap();
+        map.put(ServletContext.class, servletContext);
+        ListenerBootstrap config = new ListenerBootstrap(event.getServletContext());
+        deployment = config.createDeployment();
+        deployment.start();
 
-      servletContext.setAttribute(ResteasyDeployment.class.getName(), deployment);
-   }
+        servletContext.setAttribute(ResteasyDeployment.class.getName(), deployment);
+    }
 
-   public void contextDestroyed(ServletContextEvent event)
-   {
-      deployment.stop();
-   }
+    public void contextDestroyed(ServletContextEvent event) {
+        deployment.stop();
+    }
 
 }

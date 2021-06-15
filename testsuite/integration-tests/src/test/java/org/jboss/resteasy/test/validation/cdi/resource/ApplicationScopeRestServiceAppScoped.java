@@ -7,13 +7,12 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class ApplicationScopeRestServiceAppScoped implements ApplicationScopeIRestServiceAppScoped {
 
-   private static final Logger logger = Logger.getLogger(ApplicationScopeRestServiceAppScoped.class);
+    private static final Logger logger = Logger.getLogger(ApplicationScopeRestServiceAppScoped.class);
 
-   public String sendDto(ApplicationScopeMyDto myDto) {
-      if (logger.isDebugEnabled())
-      {
-         logger.debug("RestServiceAppScoped: Nevertheless: " + myDto, new Exception("RestServiceAppScoped"));
-      }
-      return myDto == null ? null : myDto.getPath();
-   }
+    public String sendDto(ApplicationScopeMyDto myDto) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("RestServiceAppScoped: Nevertheless: " + myDto, new Exception("RestServiceAppScoped"));
+        }
+        return myDto == null ? null : myDto.getPath();
+    }
 }

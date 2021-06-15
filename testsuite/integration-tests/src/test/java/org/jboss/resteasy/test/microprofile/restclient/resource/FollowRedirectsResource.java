@@ -11,7 +11,7 @@ public class FollowRedirectsResource {
 
     @Path("redirected")
     @GET
-    public Response redirected(){
+    public Response redirected() {
         return Response.ok("OK").build();
     }
 

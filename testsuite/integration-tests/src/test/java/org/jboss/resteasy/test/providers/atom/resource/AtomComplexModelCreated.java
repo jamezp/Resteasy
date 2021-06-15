@@ -11,15 +11,15 @@ import java.util.Date;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AtomComplexModelCreated {
 
-   @XmlElement
-   private Date value;
+    @XmlElement
+    private Date value;
 
-   public Date getValue() {
-      return value;
-   }
+    public Date getValue() {
+        return value;
+    }
 
-   public void setValue(Date created) {
-      value = created;
-   }
+    public void setValue(Date created) {
+        value = created;
+    }
 
 }

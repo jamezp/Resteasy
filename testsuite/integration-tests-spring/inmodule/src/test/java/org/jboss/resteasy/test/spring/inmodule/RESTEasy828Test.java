@@ -31,80 +31,80 @@ import java.util.logging.LoggingPermission;
 @RunAsClient
 public class RESTEasy828Test {
 
-   static Client client;
+    static Client client;
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, RESTEasy828Test.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, RESTEasy828Test.class.getSimpleName());
+    }
 
-   @Before
-   public void init() {
-      client = ClientBuilder.newClient();
-   }
+    @Before
+    public void init() {
+        client = ClientBuilder.newClient();
+    }
 
-   @After
-   public void after() {
-      client.close();
-   }
+    @After
+    public void after() {
+        client.close();
+    }
 
-   @Deployment
-   private static Archive<?> deploy() {
-      WebArchive archive = ShrinkWrap.create(WebArchive.class, RESTEasy828Test.class.getSimpleName() + ".war")
-              .addAsWebInfResource(RESTEasy828Test.class.getPackage(), "resteasy828/web.xml", "web.xml");
-      archive.addAsWebInfResource(RESTEasy828Test.class.getPackage(),
-              "resteasy828/applicationContext.xml", "applicationContext.xml");
+    @Deployment
+    private static Archive<?> deploy() {
+        WebArchive archive = ShrinkWrap.create(WebArchive.class, RESTEasy828Test.class.getSimpleName() + ".war")
+                .addAsWebInfResource(RESTEasy828Test.class.getPackage(), "resteasy828/web.xml", "web.xml");
+        archive.addAsWebInfResource(RESTEasy828Test.class.getPackage(),
+                "resteasy828/applicationContext.xml", "applicationContext.xml");
 
-      archive.addClass(RESTEasy828Resource.class);
+        archive.addClass(RESTEasy828Resource.class);
 
-      archive.addAsLibraries(Maven
-              .resolver()
-              .loadPomFromFile("pom.xml")
-              .resolve("org.springframework:spring-webmvc")
-              .withTransitivity()
-              .asFile());
+        archive.addAsLibraries(Maven
+                .resolver()
+                .loadPomFromFile("pom.xml")
+                .resolve("org.springframework:spring-webmvc")
+                .withTransitivity()
+                .asFile());
 
-      archive.addAsLibraries(Maven
-              .resolver()
-              .loadPomFromFile("pom.xml")
-              .resolve("org.jboss.resteasy:resteasy-spring")
-              .withTransitivity()
-              .asFile());
+        archive.addAsLibraries(Maven
+                .resolver()
+                .loadPomFromFile("pom.xml")
+                .resolve("org.jboss.resteasy:resteasy-spring")
+                .withTransitivity()
+                .asFile());
 
-      archive.addAsLibraries(Maven
-              .resolver()
-              .loadPomFromFile("pom.xml")
-              .resolve("org.jboss.resteasy:resteasy-core")
-              .withTransitivity()
-              .asFile());
+        archive.addAsLibraries(Maven
+                .resolver()
+                .loadPomFromFile("pom.xml")
+                .resolve("org.jboss.resteasy:resteasy-core")
+                .withTransitivity()
+                .asFile());
 
-      archive.addAsLibraries(Maven
-              .resolver()
-              .loadPomFromFile("pom.xml")
-              .resolve("org.jboss.resteasy:resteasy-core-spi")
-              .withTransitivity()
-              .asFile());
-
-
-      // Permission needed for "arquillian.debug" to run
-      // "suppressAccessChecks" required for access to arquillian-core.jar
-      // remaining permissions needed to run springframework
-      archive.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
-              new PropertyPermission("arquillian.*", "read"),
-              new ReflectPermission("suppressAccessChecks"),
-              new RuntimePermission("accessDeclaredMembers"),
-              new FilePermission("<<ALL FILES>>", "read"),
-              new LoggingPermission("control", "")
-      ), "permissions.xml");
+        archive.addAsLibraries(Maven
+                .resolver()
+                .loadPomFromFile("pom.xml")
+                .resolve("org.jboss.resteasy:resteasy-core-spi")
+                .withTransitivity()
+                .asFile());
 
 
-      return archive;
-   }
+        // Permission needed for "arquillian.debug" to run
+        // "suppressAccessChecks" required for access to arquillian-core.jar
+        // remaining permissions needed to run springframework
+        archive.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
+                new PropertyPermission("arquillian.*", "read"),
+                new ReflectPermission("suppressAccessChecks"),
+                new RuntimePermission("accessDeclaredMembers"),
+                new FilePermission("<<ALL FILES>>", "read"),
+                new LoggingPermission("control", "")
+        ), "permissions.xml");
 
-   @Test
-   public void testResteasy828() throws InterruptedException {
-      WebTarget target = client.target(generateURL("/resteasy828"));
-      Response response = target.request().get();
-      Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
-      Assert.assertNotNull(target.request().get(String.class));
-   }
+
+        return archive;
+    }
+
+    @Test
+    public void testResteasy828() throws InterruptedException {
+        WebTarget target = client.target(generateURL("/resteasy828"));
+        Response response = target.request().get();
+        Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
+        Assert.assertNotNull(target.request().get(String.class));
+    }
 }

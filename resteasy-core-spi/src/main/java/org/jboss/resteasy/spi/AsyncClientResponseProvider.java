@@ -16,7 +16,7 @@ public interface AsyncClientResponseProvider<T> {
      *
      * @return T reactive type
      */
-   T fromCompletionStage(CompletionStage<?> completionStage);
+    T fromCompletionStage(CompletionStage<?> completionStage);
 
     /**
      * Turns {@link CompletionStage} to a reactive type in a deferred fashion.  For instance, in the case of
@@ -27,5 +27,5 @@ public interface AsyncClientResponseProvider<T> {
      *
      * @return T reactive type
      */
-   T fromCompletionStage(Supplier<CompletionStage<?>> completionStageSupplier);
+    T fromCompletionStage(Supplier<CompletionStage<?>> completionStageSupplier);
 }

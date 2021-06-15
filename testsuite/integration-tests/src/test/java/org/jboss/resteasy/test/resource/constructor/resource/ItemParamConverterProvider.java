@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import java.lang.annotation.Annotation;
 
 @Provider
-public class ItemParamConverterProvider   implements ParamConverterProvider {
+public class ItemParamConverterProvider implements ParamConverterProvider {
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType,
                                               Type genericType,

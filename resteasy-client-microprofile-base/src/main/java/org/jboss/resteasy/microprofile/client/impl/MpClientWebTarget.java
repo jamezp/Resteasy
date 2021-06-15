@@ -13,13 +13,12 @@ import java.util.List;
 
 public class MpClientWebTarget extends ClientWebTarget {
 
-   private List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories;
-   private QueryParamStyle queryParamStyle;
+    private List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories;
+    private QueryParamStyle queryParamStyle;
 
-   protected MpClientWebTarget(final ResteasyClient client, final ClientConfiguration configuration,
+    protected MpClientWebTarget(final ResteasyClient client, final ClientConfiguration configuration,
                                 final List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories,
-                                final QueryParamStyle queryParamStyle)
-    {
+                                final QueryParamStyle queryParamStyle) {
         super(client, configuration);
         this.asyncInterceptorFactories = asyncInterceptorFactories;
         this.queryParamStyle = queryParamStyle;
@@ -27,29 +26,26 @@ public class MpClientWebTarget extends ClientWebTarget {
 
     public MpClientWebTarget(final ResteasyClient client, final String uri, final ClientConfiguration configuration,
                              final List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories,
-                             final QueryParamStyle queryParamStyle) throws IllegalArgumentException, NullPointerException
-    {
-       super(client, new MpUriBuilder().uri(uri,queryParamStyle), configuration);
-       this.asyncInterceptorFactories = asyncInterceptorFactories;
-       this.queryParamStyle = queryParamStyle;
+                             final QueryParamStyle queryParamStyle) throws IllegalArgumentException, NullPointerException {
+        super(client, new MpUriBuilder().uri(uri, queryParamStyle), configuration);
+        this.asyncInterceptorFactories = asyncInterceptorFactories;
+        this.queryParamStyle = queryParamStyle;
     }
 
     public MpClientWebTarget(final ResteasyClient client, final URI uri, final ClientConfiguration configuration,
                              final List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories,
-                             final QueryParamStyle queryParamStyle) throws NullPointerException
-    {
-       super(client, new MpUriBuilder().uri(uri,queryParamStyle), configuration);
-       this.asyncInterceptorFactories = asyncInterceptorFactories;
-       this.queryParamStyle = queryParamStyle;
+                             final QueryParamStyle queryParamStyle) throws NullPointerException {
+        super(client, new MpUriBuilder().uri(uri, queryParamStyle), configuration);
+        this.asyncInterceptorFactories = asyncInterceptorFactories;
+        this.queryParamStyle = queryParamStyle;
     }
 
     public MpClientWebTarget(final ResteasyClient client, final UriBuilder uriBuilder, final ClientConfiguration configuration,
                              final List<AsyncInvocationInterceptorFactory> asyncInterceptorFactories,
-                             final QueryParamStyle queryParamStyle) throws NullPointerException
-    {
-       super(client, uriBuilder, configuration);
-       this.asyncInterceptorFactories = asyncInterceptorFactories;
-       this.queryParamStyle = queryParamStyle;
+                             final QueryParamStyle queryParamStyle) throws NullPointerException {
+        super(client, uriBuilder, configuration);
+        this.asyncInterceptorFactories = asyncInterceptorFactories;
+        this.queryParamStyle = queryParamStyle;
     }
 
     @Override

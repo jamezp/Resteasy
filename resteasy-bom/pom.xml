@@ -7,7 +7,7 @@
         <artifactId>resteasy-jaxrs-all</artifactId>
         <version>4.7.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
-   </parent>
+    </parent>
 
     <name>RESTEasy Maven Import (BOM)</name>
     <description/>
@@ -161,30 +161,30 @@
                 <artifactId>resteasy-client-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
-           <dependency>
+            <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                 <artifactId>resteasy-cdi</artifactId>
-                 <version>${project.version}</version>
+                <artifactId>resteasy-cdi</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                 <artifactId>resteasy-rxjava2</artifactId>
-                 <version>${project.version}</version>
+                <artifactId>resteasy-rxjava2</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                 <artifactId>resteasy-wadl</artifactId>
-                 <version>${project.version}</version>
+                <artifactId>resteasy-wadl</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                 <artifactId>resteasy-wadl-undertow-connector</artifactId>
-                 <version>${project.version}</version>
+                <artifactId>resteasy-wadl-undertow-connector</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                 <artifactId>resteasy-vertx</artifactId>
-                 <version>${project.version}</version>
+                <artifactId>resteasy-vertx</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

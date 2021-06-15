@@ -9,7 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-@RegisterRestClient(baseUri ="http://localhost:8080/jsonBinding_service")
+@RegisterRestClient(baseUri = "http://localhost:8080/jsonBinding_service")
 @Path("/jsonBindingService")
 @Singleton
 public interface JsonBindingMPServiceIntf {

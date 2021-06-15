@@ -269,7 +269,9 @@ X-RESTEasy-Tracing-000: [{"event":"START","duration":0,"timestamp":1952866945099
     <section>
         <title>List Of Tracing Events</title>
         <para>
-            The tracing events are defined in <ulink url="https://github.com/resteasy/resteasy-extensions/blob/master/tracing/src/main/java/org/jboss/resteasy/tracing/api/RESTEasyServerTracingEvent.java">RESTEasyServerTracingEvent</ulink>. Here is a complete list of the tracing events and its descriptions:
+            The tracing events are defined in <ulink
+                url="https://github.com/resteasy/resteasy-extensions/blob/master/tracing/src/main/java/org/jboss/resteasy/tracing/api/RESTEasyServerTracingEvent.java">
+            RESTEasyServerTracingEvent</ulink>. Here is a complete list of the tracing events and its descriptions:
 
             <itemizedlist>
                 <listitem>

@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyRedirectionException extends RedirectionException implements WebApplicationExceptionWrapper<RedirectionException> {
 
-   private static final long serialVersionUID = 8815768802777099877L;
-   private final RedirectionException wrapped;
+    private static final long serialVersionUID = 8815768802777099877L;
+    private final RedirectionException wrapped;
 
     ResteasyRedirectionException(final RedirectionException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()));

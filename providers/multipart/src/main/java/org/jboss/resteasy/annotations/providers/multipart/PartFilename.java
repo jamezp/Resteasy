@@ -13,7 +13,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PartFilename
-{
-   String value();
+public @interface PartFilename {
+    String value();
 }

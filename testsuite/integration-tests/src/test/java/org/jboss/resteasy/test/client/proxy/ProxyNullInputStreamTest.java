@@ -30,33 +30,32 @@ import org.junit.runner.RunWith;
 @RunAsClient
 public class ProxyNullInputStreamTest {
 
-   @Deployment
-   public static Archive<?> deploySimpleResource() {
-      WebArchive war = TestUtil.prepareArchive(ProxyNullInputStreamTest.class.getSimpleName());
-      war.addClasses(ProxyNullInputStreamResource.class,
-              ProxyNullInputStreamClientResponseFilter.class);
-      return TestUtil.finishContainerPrepare(war, null, (Class<?>[]) null);
-   }
+    @Deployment
+    public static Archive<?> deploySimpleResource() {
+        WebArchive war = TestUtil.prepareArchive(ProxyNullInputStreamTest.class.getSimpleName());
+        war.addClasses(ProxyNullInputStreamResource.class,
+                ProxyNullInputStreamClientResponseFilter.class);
+        return TestUtil.finishContainerPrepare(war, null, (Class<?>[]) null);
+    }
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, ProxyNullInputStreamTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, ProxyNullInputStreamTest.class.getSimpleName());
+    }
 
 
-   @Test
-   public void testNullPointerEx () throws Exception {
-      Client client = ClientBuilder.newBuilder().register(ProxyNullInputStreamClientResponseFilter.class).build();
-      ProxyNullInputStreamResource pResource = ((ResteasyWebTarget)client.target(generateURL("/test/user/mydb")))
-              .proxyBuilder(ProxyNullInputStreamResource.class)
-              .build();
-      try
-      {
-         pResource.getUserHead("myDb");
-      } catch (Exception e) {
-         Assert.assertEquals("HTTP 404 Not Found", e.getMessage());
-      } finally {
-         client.close();
-      }
+    @Test
+    public void testNullPointerEx() throws Exception {
+        Client client = ClientBuilder.newBuilder().register(ProxyNullInputStreamClientResponseFilter.class).build();
+        ProxyNullInputStreamResource pResource = ((ResteasyWebTarget) client.target(generateURL("/test/user/mydb")))
+                .proxyBuilder(ProxyNullInputStreamResource.class)
+                .build();
+        try {
+            pResource.getUserHead("myDb");
+        } catch (Exception e) {
+            Assert.assertEquals("HTTP 404 Not Found", e.getMessage());
+        } finally {
+            client.close();
+        }
 
-   }
+    }
 }

@@ -19,44 +19,38 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- *
  */
 @XmlType(name = "ErrorType")
 @XmlEnum
 public enum ErrorType {
 
 
-   /**
-    * The requested resource was not found
-    *
-    */
-   NOT_FOUND,
+    /**
+     * The requested resource was not found
+     */
+    NOT_FOUND,
 
-   /**
-    * The requested format did not match the specification
-    *
-    */
-   VALIDATION,
+    /**
+     * The requested format did not match the specification
+     */
+    VALIDATION,
 
-   /**
-    * An error happend during the request processing
-    *
-    */
-   INTERNAL_SERVER_ERROR,
+    /**
+     * An error happend during the request processing
+     */
+    INTERNAL_SERVER_ERROR,
 
-   /**
-    * Request can't be processed, because the caller has insufficient authorization
-    *
-    *
-    */
-   SECURITY;
+    /**
+     * Request can't be processed, because the caller has insufficient authorization
+     */
+    SECURITY;
 
-   public String value() {
-      return name();
-   }
+    public String value() {
+        return name();
+    }
 
-   public static ErrorType fromValue(String v) {
-      return valueOf(v);
-   }
+    public static ErrorType fromValue(String v) {
+        return valueOf(v);
+    }
 
 }

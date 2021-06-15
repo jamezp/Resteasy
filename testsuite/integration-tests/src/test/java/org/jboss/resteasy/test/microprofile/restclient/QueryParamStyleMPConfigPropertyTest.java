@@ -32,7 +32,7 @@ public class QueryParamStyleMPConfigPropertyTest {
     protected static final Logger LOG = Logger.getLogger(QueryParamStyleMPConfigPropertyTest.class.getName());
     private static final String WAR_SERVICE = "queryParamStyle_MPConifg_service";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(QueryParamStyleService.class);
@@ -59,7 +59,7 @@ public class QueryParamStyleMPConfigPropertyTest {
 
     @Test
     public void commaSeparated() {
-        String key = QueryParamStyleServiceIntf.class.getCanonicalName()+"/mp-rest/queryParamStyle";
+        String key = QueryParamStyleServiceIntf.class.getCanonicalName() + "/mp-rest/queryParamStyle";
         System.setProperty(key, "COMMA_sePARated");
 
         QueryParamStyleServiceIntf serviceIntf = builder
@@ -73,7 +73,7 @@ public class QueryParamStyleMPConfigPropertyTest {
 
     @Test
     public void arraPairs() {
-        String key = "qParamS"+"/mp-rest/queryParamStyle";
+        String key = "qParamS" + "/mp-rest/queryParamStyle";
         System.setProperty(key, "arraY_Pairs");
 
         QueryParamStyleServiceIntf serviceIntf = builder

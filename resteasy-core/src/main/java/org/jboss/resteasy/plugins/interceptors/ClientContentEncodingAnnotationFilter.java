@@ -16,19 +16,16 @@ import java.io.IOException;
  */
 @ConstrainedTo(RuntimeType.CLIENT)
 @Priority(Priorities.HEADER_DECORATOR)
-public class ClientContentEncodingAnnotationFilter implements WriterInterceptor
-{
-   protected String encoding;
+public class ClientContentEncodingAnnotationFilter implements WriterInterceptor {
+    protected String encoding;
 
-   public ClientContentEncodingAnnotationFilter(final String encoding)
-   {
-      this.encoding = encoding;
-   }
+    public ClientContentEncodingAnnotationFilter(final String encoding) {
+        this.encoding = encoding;
+    }
 
-   @Override
-   public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException
-   {
-      context.getHeaders().putSingle(HttpHeaders.CONTENT_ENCODING, encoding);
-      context.proceed();
-   }
+    @Override
+    public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
+        context.getHeaders().putSingle(HttpHeaders.CONTENT_ENCODING, encoding);
+        context.proceed();
+    }
 }

@@ -32,81 +32,75 @@ import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class SseEventSinkTest
-{
+public class SseEventSinkTest {
 
-   private static final Logger logger = Logger.getLogger(SseEventSinkTest.class);
+    private static final Logger logger = Logger.getLogger(SseEventSinkTest.class);
 
-   @Deployment
-   public static Archive<?> deploy()
-   {
-      WebArchive war = TestUtil.prepareArchive(SseEventSinkTest.class.getSimpleName());
-      war.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-      war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
-              new RuntimePermission("modifyThread")
-      ), "permissions.xml");
-      return TestUtil.finishContainerPrepare(war, null, Arrays.asList(SseResource.class),ExecutorServletContextListener.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(SseEventSinkTest.class.getSimpleName());
+        war.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+        war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
+                new RuntimePermission("modifyThread")
+        ), "permissions.xml");
+        return TestUtil.finishContainerPrepare(war, null, Arrays.asList(SseResource.class), ExecutorServletContextListener.class);
+    }
 
-   private String generateURL(String path)
-   {
-      return PortProviderUtil.generateURL(path, SseEventSinkTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, SseEventSinkTest.class.getSimpleName());
+    }
 
-   @After
-   public void stopSendEvent() throws Exception
-   {
-      Client isOpenClient = ClientBuilder.newClient();
-      Invocation.Builder isOpenRequest = isOpenClient.target(generateURL("/server-sent-events/stopevent"))
-            .request();
-      isOpenRequest.get();
+    @After
+    public void stopSendEvent() throws Exception {
+        Client isOpenClient = ClientBuilder.newClient();
+        Invocation.Builder isOpenRequest = isOpenClient.target(generateURL("/server-sent-events/stopevent"))
+                .request();
+        isOpenRequest.get();
 
-   }
+    }
 
-   @Test
-   public void testCloseByEvnetSource() throws Exception
-   {
-      final CountDownLatch latch = new CountDownLatch(5);
-      final List<String> results = new ArrayList<String>();
-      final AtomicInteger errors = new AtomicInteger(0);
-      Client client = ClientBuilder.newClient();
-      WebTarget target = client.target(generateURL("/server-sent-events/events"));
-      SseEventSource eventSource = SseEventSource.target(target).build();
+    @Test
+    public void testCloseByEvnetSource() throws Exception {
+        final CountDownLatch latch = new CountDownLatch(5);
+        final List<String> results = new ArrayList<String>();
+        final AtomicInteger errors = new AtomicInteger(0);
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(generateURL("/server-sent-events/events"));
+        SseEventSource eventSource = SseEventSource.target(target).build();
 
-      Assert.assertEquals(SseEventSourceImpl.class, eventSource.getClass());
-      eventSource.register(event -> {
-         results.add(event.readData(String.class));
-         latch.countDown();
-      }, ex -> {
+        Assert.assertEquals(SseEventSourceImpl.class, eventSource.getClass());
+        eventSource.register(event -> {
+            results.add(event.readData(String.class));
+            latch.countDown();
+        }, ex -> {
             errors.incrementAndGet();
             logger.error(ex.getMessage(), ex);
             throw new RuntimeException(ex);
-         });
-      eventSource.open();
+        });
+        eventSource.open();
 
-      boolean waitResult = latch.await(30, TimeUnit.SECONDS);
-      Assert.assertEquals(0, errors.get());
-      Assert.assertTrue("Waiting for event to be delivered has timed out.", waitResult);
-      Client isOpenClient = ClientBuilder.newClient();
-      Invocation.Builder isOpenRequest = isOpenClient.target(generateURL("/server-sent-events/isopen"))
-            .request();
+        boolean waitResult = latch.await(30, TimeUnit.SECONDS);
+        Assert.assertEquals(0, errors.get());
+        Assert.assertTrue("Waiting for event to be delivered has timed out.", waitResult);
+        Client isOpenClient = ClientBuilder.newClient();
+        Invocation.Builder isOpenRequest = isOpenClient.target(generateURL("/server-sent-events/isopen"))
+                .request();
 
-      javax.ws.rs.core.Response response = isOpenRequest.get();
-      Assert.assertTrue("EventSink open is expected ", response.readEntity(Boolean.class));
+        javax.ws.rs.core.Response response = isOpenRequest.get();
+        Assert.assertTrue("EventSink open is expected ", response.readEntity(Boolean.class));
 
-      eventSource.close();
-      Assert.assertFalse("Closed eventSource state is expceted", eventSource.isOpen());
+        eventSource.close();
+        Assert.assertFalse("Closed eventSource state is expceted", eventSource.isOpen());
 
-      WebTarget messageTarget = ClientBuilder.newClient().target(generateURL("/server-sent-events"));
-      for (int counter = 0; counter < 5; counter++)
-      {
-         String msg = "messageAfterClose";
-         messageTarget.request().post(Entity.text(msg));
-      }
+        WebTarget messageTarget = ClientBuilder.newClient().target(generateURL("/server-sent-events"));
+        for (int counter = 0; counter < 5; counter++) {
+            String msg = "messageAfterClose";
+            messageTarget.request().post(Entity.text(msg));
+        }
 
-      Assert.assertTrue("EventSource should not receive msg after it is closed",
-            results.indexOf("messageAfterClose") == -1);
-      Assert.assertFalse("EventSink close is expected ", isOpenRequest.get().readEntity(Boolean.class));
+        Assert.assertTrue("EventSource should not receive msg after it is closed",
+                results.indexOf("messageAfterClose") == -1);
+        Assert.assertFalse("EventSink close is expected ", isOpenRequest.get().readEntity(Boolean.class));
 
-   }
+    }
 }

@@ -15,14 +15,15 @@ public class MpUriBuilder extends ResteasyUriBuilderImpl {
     public MpUriBuilder() {
         super();
     }
+
     /*
      * Constructor enables this class to be cloned and parent values
      * set properly.
      */
     public MpUriBuilder(final String host, final String scheme, final int port,
                         final String userInfo, final String path, final String query,
-                        final String fragment, final String ssp, final String authority){
-        super(host, scheme, port, userInfo, path, query,fragment, ssp, authority);
+                        final String fragment, final String ssp, final String authority) {
+        super(host, scheme, port, userInfo, path, query, fragment, ssp, authority);
     }
 
     public void setQueryParamStyle(QueryParamStyle queryParamStyle) {
@@ -32,18 +33,17 @@ public class MpUriBuilder extends ResteasyUriBuilderImpl {
     @Override
     public UriBuilder clone() {
         MpUriBuilder builder = new MpUriBuilder(getHost(), getScheme(), getPort(),
-                getUserInfo(), getPath(), getQuery(), getFragment(),getSsp(),
+                getUserInfo(), getPath(), getQuery(), getFragment(), getSsp(),
                 getAuthority());
         builder.setQueryParamStyle(queryParamStyle);
         return builder;
     }
 
     @Override
-    public UriBuilder clientQueryParam(String name, Object... values) throws IllegalArgumentException
-    {
+    public UriBuilder clientQueryParam(String name, Object... values) throws IllegalArgumentException {
         UriBuilder uriBuilder = null;
 
-        switch(queryParamStyle){
+        switch (queryParamStyle) {
             case COMMA_SEPARATED:
                 clientQueryParamCommaSeparated(name, values);
                 break;
@@ -59,9 +59,12 @@ public class MpUriBuilder extends ResteasyUriBuilderImpl {
 
     /**
      * key=value1,value2,value3.
+     *
      * @param name
      * @param values
+     *
      * @return
+     *
      * @throws IllegalArgumentException
      */
     private UriBuilder clientQueryParamCommaSeparated(String name, Object... values) throws IllegalArgumentException {
@@ -102,9 +105,12 @@ public class MpUriBuilder extends ResteasyUriBuilderImpl {
 
     /**
      * key[]=value1&key[]=value2&key[]=value3.
+     *
      * @param name
      * @param values
+     *
      * @return
+     *
      * @throws IllegalArgumentException
      */
     private UriBuilder clientQueryParamArrayPairs(String name, Object... values) throws IllegalArgumentException {
@@ -139,11 +145,11 @@ public class MpUriBuilder extends ResteasyUriBuilderImpl {
         return this;
     }
 
-    public UriBuilder uri(String uriTemplate, QueryParamStyle queryParamStyle) throws IllegalArgumentException
-    {
+    public UriBuilder uri(String uriTemplate, QueryParamStyle queryParamStyle) throws IllegalArgumentException {
         this.queryParamStyle = queryParamStyle;
         return uriTemplate(uriTemplate);
     }
+
     public UriBuilder uri(URI uri, QueryParamStyle queryParamStyle) throws IllegalArgumentException {
         this.queryParamStyle = queryParamStyle;
         return uri(uri);

@@ -8,7 +8,8 @@
           class="org.jboss.resteasy.test.spring.inmodule.resource.RequestScopedBeanQualifierInjectorFactoryImpl">
     </bean>
 
-    <bean id="testBean" class="org.jboss.resteasy.test.spring.inmodule.resource.RequestScopedBeanTestBean" scope="request">
+    <bean id="testBean" class="org.jboss.resteasy.test.spring.inmodule.resource.RequestScopedBeanTestBean"
+          scope="request">
         <property name="configured" value="configuredValue"/>
     </bean>
 

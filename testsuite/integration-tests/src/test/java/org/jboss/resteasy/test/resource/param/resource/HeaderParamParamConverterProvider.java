@@ -15,21 +15,22 @@ public class HeaderParamParamConverterProvider implements ParamConverterProvider
             result.setValue(value + "-MORE");
             return result;
         }
+
         @Override
         public String toString(HeaderParamMyClass value) {
             return "paramConverter";
         }
     }
 
-    public HeaderParamParamConverterProvider () {
+    public HeaderParamParamConverterProvider() {
     }
 
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType,
                                               Annotation[] annotations) {
         final ParamConverter<T> result;
-        if (rawType.isAssignableFrom(HeaderParamMyClass .class)) {
-            result = (ParamConverter<T>)new MyClassConverter();
+        if (rawType.isAssignableFrom(HeaderParamMyClass.class)) {
+            result = (ParamConverter<T>) new MyClassConverter();
         } else {
             result = null;
         }

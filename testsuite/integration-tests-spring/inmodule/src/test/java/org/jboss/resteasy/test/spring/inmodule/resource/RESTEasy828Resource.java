@@ -10,8 +10,8 @@ import javax.ws.rs.core.Context;
 @Component
 @Path("/resteasy828")
 public class RESTEasy828Resource {
-   @GET
-   public String get(@Context ServletContext context) {
-      return context.getClass().toString();
-   }
+    @GET
+    public String get(@Context ServletContext context) {
+        return context.getClass().toString();
+    }
 }

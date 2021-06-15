@@ -24,7 +24,7 @@ public class BlockingWriter implements MessageBodyWriter<BlockingWriterData> {
 
     @Override
     public void writeTo(BlockingWriterData t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+                        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
             throws IOException, WebApplicationException {
         String resp = NettyUtil.isIoThread() ? "KO" : "OK";
         entityStream.write(resp.getBytes(Charset.forName("UTF-8")));

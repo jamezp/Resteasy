@@ -20,17 +20,17 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<module xmlns="urn:jboss:module:1.5" name="org.apache.james.mime4j" >
-   <properties>
-      <property name="jboss.api" value="private"/>
-   </properties>
+<module xmlns="urn:jboss:module:1.5" name="org.apache.james.mime4j">
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
 
-   <resources>
-      <!-- Insert resources here -->
-   </resources>
+    <resources>
+        <!-- Insert resources here -->
+    </resources>
 
-   <dependencies>
-      <module name="javax.api"/>
-      <module name="org.apache.commons.logging"/>
-   </dependencies>
+    <dependencies>
+        <module name="javax.api"/>
+        <module name="org.apache.commons.logging"/>
+    </dependencies>
 </module>

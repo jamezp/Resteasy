@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyNotSupportedException extends NotSupportedException implements WebApplicationExceptionWrapper<NotSupportedException> {
 
-   private static final long serialVersionUID = 6195843283913647466L;
-   private final NotSupportedException wrapped;
+    private static final long serialVersionUID = 6195843283913647466L;
+    private final NotSupportedException wrapped;
 
     ResteasyNotSupportedException(final NotSupportedException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

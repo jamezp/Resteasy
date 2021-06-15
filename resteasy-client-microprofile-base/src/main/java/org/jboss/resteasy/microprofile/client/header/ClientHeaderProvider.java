@@ -66,6 +66,7 @@ public class ClientHeaderProvider {
 
     /**
      * add headers to headers map
+     *
      * @param headers map to add headers to
      */
     public void addHeaders(MultivaluedMap<String, String> headers) {

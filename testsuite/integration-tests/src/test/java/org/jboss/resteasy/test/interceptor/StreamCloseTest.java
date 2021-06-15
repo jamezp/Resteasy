@@ -31,56 +31,50 @@ import java.util.PropertyPermission;
  * @tpTestCaseDetails Verify outpustream close is invoked on server side (https://issues.jboss.org/browse/RESTEASY-1650)
  */
 @RunWith(Arquillian.class)
-public class StreamCloseTest
-{
-   @Deployment
-   public static Archive<?> deploy()
-   {
-      WebArchive war = TestUtil.prepareArchive(StreamCloseTest.class.getSimpleName());
-      war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
-              new SocketPermission(PortProviderUtil.getHost(), "connect,resolve"),
-              new PropertyPermission("arquillian.*", "read"),
-              new RuntimePermission("accessDeclaredMembers"),
-              new ReflectPermission("suppressAccessChecks"),
-              new PropertyPermission("org.jboss.resteasy.port", "read"),
-              new RuntimePermission("getenv.RESTEASY_PORT"),
-              new PropertyPermission("ipv6", "read"),
-              new PropertyPermission("node", "read")
-      ), "permissions.xml");
-      return TestUtil.finishContainerPrepare(war, null, InterceptorStreamResource.class, TestInterceptor.class, PortProviderUtil.class);
-   }
+public class StreamCloseTest {
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(StreamCloseTest.class.getSimpleName());
+        war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
+                new SocketPermission(PortProviderUtil.getHost(), "connect,resolve"),
+                new PropertyPermission("arquillian.*", "read"),
+                new RuntimePermission("accessDeclaredMembers"),
+                new ReflectPermission("suppressAccessChecks"),
+                new PropertyPermission("org.jboss.resteasy.port", "read"),
+                new RuntimePermission("getenv.RESTEASY_PORT"),
+                new PropertyPermission("ipv6", "read"),
+                new PropertyPermission("node", "read")
+        ), "permissions.xml");
+        return TestUtil.finishContainerPrepare(war, null, InterceptorStreamResource.class, TestInterceptor.class, PortProviderUtil.class);
+    }
 
-   static Client client;
+    static Client client;
 
-   @Before
-   public void setup()
-   {
-      client = ClientBuilder.newClient();
-   }
+    @Before
+    public void setup() {
+        client = ClientBuilder.newClient();
+    }
 
-   @After
-   public void cleanup()
-   {
-      client.close();
-   }
+    @After
+    public void cleanup() {
+        client.close();
+    }
 
-   private String generateURL(String path)
-   {
-      return PortProviderUtil.generateURL(path, StreamCloseTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, StreamCloseTest.class.getSimpleName());
+    }
 
-   @Test
-   public void testPriority() throws Exception
-   {
-      final int count = TestInterceptor.closeCounter.get();
-      Response response = client.target(generateURL("/test")).request().post(Entity.text("test"));
-      response.bufferEntity();
-      Assert.assertEquals("Wrong response status, interceptors don't work correctly", HttpResponseCodes.SC_OK,
-            response.getStatus());
-      Assert.assertEquals("Wrong content of response, interceptors don't work correctly", "test",
-            response.readEntity(String.class));
-      response.close();
-      Assert.assertEquals(1, TestInterceptor.closeCounter.get() - count);
+    @Test
+    public void testPriority() throws Exception {
+        final int count = TestInterceptor.closeCounter.get();
+        Response response = client.target(generateURL("/test")).request().post(Entity.text("test"));
+        response.bufferEntity();
+        Assert.assertEquals("Wrong response status, interceptors don't work correctly", HttpResponseCodes.SC_OK,
+                response.getStatus());
+        Assert.assertEquals("Wrong content of response, interceptors don't work correctly", "test",
+                response.readEntity(String.class));
+        response.close();
+        Assert.assertEquals(1, TestInterceptor.closeCounter.get() - count);
 
-   }
+    }
 }

@@ -9,10 +9,10 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("app")
 public class ClientWebApplicationExceptionMicroProfileProxyApplication extends Application {
 
-   @Override
-   public Set<Class<?>> getClasses() {
-      HashSet<Class<?>> classes = new HashSet<Class<?>>();
-      classes.add(ClientWebApplicationExceptionMicroProfileProxyResource.class);
-      return classes;
-   }
+    @Override
+    public Set<Class<?>> getClasses() {
+        HashSet<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(ClientWebApplicationExceptionMicroProfileProxyResource.class);
+        return classes;
+    }
 }

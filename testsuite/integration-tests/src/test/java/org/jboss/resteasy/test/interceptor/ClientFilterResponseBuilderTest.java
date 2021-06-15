@@ -7,6 +7,7 @@ import org.jboss.resteasy.test.interceptor.resource.PriorityExecutionResource;
 import org.jboss.resteasy.test.interceptor.resource.ResponseBuilderCustomResponseFilter;
 //import org.jboss.resteasy.test.interceptor.resource.ResponseBuilderCustomRequestFilter;
 import javax.ws.rs.core.Response;
+
 import org.jboss.resteasy.utils.PortProviderUtil;
 import org.jboss.resteasy.utils.TestUtil;
 import org.jboss.shrinkwrap.api.Archive;

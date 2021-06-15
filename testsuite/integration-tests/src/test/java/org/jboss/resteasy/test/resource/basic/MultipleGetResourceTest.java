@@ -82,7 +82,7 @@ public class MultipleGetResourceTest {
                 false, ContainerConstants.DEFAULT_CONTAINER_QUALIFIER);
 
         WebTarget base = client.target(generateURL("/api"));
-        Response  response = base.request().get();
+        Response response = base.request().get();
         Assert.assertEquals(500, response.getStatus());
         response.close();
         Assert.assertThat(errorStringLog.count(), is(2));

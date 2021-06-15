@@ -11,8 +11,8 @@ import javax.ws.rs.core.Response;
 @Path("/gzippost")
 public interface GzipProxy {
 
-   @Consumes("application/json")
-   @POST
-   @GZIP
-   Response post(@GZIP Pair pair);
+    @Consumes("application/json")
+    @POST
+    @GZIP
+    Response post(@GZIP Pair pair);
 }

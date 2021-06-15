@@ -13,11 +13,9 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Consumes({"application/fastinfoset", "application/*+fastinfoset"})
 @Produces({"application/fastinfoset", "application/*+fastinfoset"})
-public class FastinfoSetXmlSeeAlsoProvider extends JAXBXmlSeeAlsoProvider
-{
-   @Override
-   protected boolean needsSecurity()
-   {
-      return false;
-   }
+public class FastinfoSetXmlSeeAlsoProvider extends JAXBXmlSeeAlsoProvider {
+    @Override
+    protected boolean needsSecurity() {
+        return false;
+    }
 }

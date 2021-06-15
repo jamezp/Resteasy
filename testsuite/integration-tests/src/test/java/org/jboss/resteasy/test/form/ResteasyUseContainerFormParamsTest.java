@@ -36,13 +36,14 @@ import java.util.Map;
 public class ResteasyUseContainerFormParamsTest {
     private static Client client;
     private static String testSimpleName = ResteasyUseContainerFormParamsTest.class.getSimpleName();
+
     @Deployment
     public static Archive<?> createTestArchive() {
         WebArchive war = TestUtil.prepareArchive(testSimpleName);
         war.addClasses(ResteasyUseContainerFormParamsResource.class,
                 ResteasyUseContainerFormParamsFilter.class);
         Map<String, String> contextParam = new HashMap<>();
-        contextParam.put("resteasy.use.container.form.params","true");
+        contextParam.put("resteasy.use.container.form.params", "true");
         return TestUtil.finishContainerPrepare(war, contextParam, null);
     }
 
@@ -67,6 +68,7 @@ public class ResteasyUseContainerFormParamsTest {
                 new Form("hello", "world").param("yo", "mama")));
         Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
     }
+
     @Test
     public void testMap() throws Exception {
         Builder builder = client.target(generateURL("/map"))

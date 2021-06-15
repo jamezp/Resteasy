@@ -8,9 +8,9 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class WriterExceptionMapper implements ExceptionMapper<WriterException> {
-   public static int STATUS_CODE = 100302;
+    public static int STATUS_CODE = 100302;
 
-   public Response toResponse(WriterException e) {
-      return Response.status(STATUS_CODE).entity(e.getMessage()).build();
-   }
+    public Response toResponse(WriterException e) {
+        return Response.status(STATUS_CODE).entity(e.getMessage()).build();
+    }
 }

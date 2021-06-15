@@ -56,7 +56,7 @@ public class ResourceConstructorParamsTest {
 
     @Before
     public void init() {
-        client = (ResteasyClient)ClientBuilder.newClient();
+        client = (ResteasyClient) ClientBuilder.newClient();
     }
 
     @After

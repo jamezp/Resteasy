@@ -11,11 +11,14 @@ public class Soup {
     @XmlElement
     private String id;
 
-    public Soup(){}
-    public Soup(final String id){
+    public Soup() {
+    }
+
+    public Soup(final String id) {
         this.id = id;
     }
-    public String getId(){
+
+    public String getId() {
         return id;
     }
 }

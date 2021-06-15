@@ -8,13 +8,12 @@ import javax.ws.rs.core.Response;
 @RequestScoped
 public class ApplicationScopeRestServiceReqScoped implements ApplicationScopeIRestServiceReqScoped {
 
-   private static final Logger logger = Logger.getLogger(ApplicationScopeRestServiceReqScoped.class);
+    private static final Logger logger = Logger.getLogger(ApplicationScopeRestServiceReqScoped.class);
 
-   public Response sendDto(ApplicationScopeMyDto myDto) {
-      if (logger.isDebugEnabled())
-      {
-         logger.debug("RestServiceReqScoped: Nevertheless: " + myDto, new Exception("RestServiceReqScoped"));
-      }
-      return Response.ok(myDto == null ? "null" : myDto.getPath()).header("entered", "true").build();
-   }
+    public Response sendDto(ApplicationScopeMyDto myDto) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("RestServiceReqScoped: Nevertheless: " + myDto, new Exception("RestServiceReqScoped"));
+        }
+        return Response.ok(myDto == null ? "null" : myDto.getPath()).header("entered", "true").build();
+    }
 }

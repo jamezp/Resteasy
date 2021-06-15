@@ -1,6 +1,7 @@
 package org.jboss.resteasy.jose.jws.util;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import java.security.Security;
 
 public class BouncyIntegration {

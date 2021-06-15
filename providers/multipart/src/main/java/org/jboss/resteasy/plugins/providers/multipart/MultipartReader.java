@@ -22,21 +22,19 @@ import java.lang.reflect.Type;
  */
 @Provider
 @Consumes("multipart/*")
-public class MultipartReader implements MessageBodyReader<MultipartInput>
-{
-   protected @Context Providers workers;
+public class MultipartReader implements MessageBodyReader<MultipartInput> {
+    protected @Context
+    Providers workers;
 
 
-   public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return type.equals(MultipartInput.class);
-   }
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type.equals(MultipartInput.class);
+    }
 
-   public MultipartInput readFrom(Class<MultipartInput> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException
-   {
-      String boundary = mediaType.getParameters().get("boundary");
-      if (boundary == null) throw new IOException(Messages.MESSAGES.unableToGetBoundary());
-      MultipartInputImpl input = new MultipartInputImpl(mediaType, workers);
+    public MultipartInput readFrom(Class<MultipartInput> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
+        String boundary = mediaType.getParameters().get("boundary");
+        if (boundary == null) throw new IOException(Messages.MESSAGES.unableToGetBoundary());
+        MultipartInputImpl input = new MultipartInputImpl(mediaType, workers);
       /*
       StringWriter writer = new StringWriter();
       int b;
@@ -48,7 +46,7 @@ public class MultipartReader implements MessageBodyReader<MultipartInput>
       } while (b != -1);
       System.out.println(writer.toString());
       */
-      input.parse(entityStream);
-      return input;
-   }
+        input.parse(entityStream);
+        return input;
+    }
 }

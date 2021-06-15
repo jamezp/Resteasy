@@ -26,88 +26,88 @@ import java.util.Set;
 
 public class ClientHeadersDefaultFactoryCDITest {
 
-   private UndertowJaxrsServer undertowJaxrsServer;
-   private WeldContainer weldContainer;
+    private UndertowJaxrsServer undertowJaxrsServer;
+    private WeldContainer weldContainer;
 
-   static class Worker {
+    static class Worker {
 
-      @Inject
-      @RestClient
-      private ClientHeaderParamIntf service;
+        @Inject
+        @RestClient
+        private ClientHeaderParamIntf service;
 
-      public String work() {
-         return service.hello("Stefano");
-      }
-   }
+        public String work() {
+            return service.hello("Stefano");
+        }
+    }
 
-   @Path("/")
-   @RegisterRestClient(baseUri="http://localhost:8081")
-   @RegisterClientHeaders
-   @ClientHeaderParam(name="IntfHeader", value="intfValue")
-   public interface ClientHeaderParamIntf {
+    @Path("/")
+    @RegisterRestClient(baseUri = "http://localhost:8081")
+    @RegisterClientHeaders
+    @ClientHeaderParam(name = "IntfHeader", value = "intfValue")
+    public interface ClientHeaderParamIntf {
 
-      @Path("hello/{h}")
-      @GET
-      @ClientHeaderParam(name = "MthdHeader", value = "hello")
-      String hello(@PathParam("h") String h);
-   }
+        @Path("hello/{h}")
+        @GET
+        @ClientHeaderParam(name = "MthdHeader", value = "hello")
+        String hello(@PathParam("h") String h);
+    }
 
-   @Path("/")
-   public static class ClientParamResource {
+    @Path("/")
+    public static class ClientParamResource {
 
-      @Path("hello/{h}")
-      @GET
-      public String hello(@PathParam("h") String h, @Context HttpHeaders httpHeaders) {
-         return getValue(httpHeaders, "IntfHeader")
-                 + " - "
-                 + getValue(httpHeaders, "MthdHeader");
-      }
+        @Path("hello/{h}")
+        @GET
+        public String hello(@PathParam("h") String h, @Context HttpHeaders httpHeaders) {
+            return getValue(httpHeaders, "IntfHeader")
+                    + " - "
+                    + getValue(httpHeaders, "MthdHeader");
+        }
 
-      private String getValue(HttpHeaders httpHeaders, String headerName) {
-         List<String> values = httpHeaders.getRequestHeader(headerName);
-         if (values.size() > 0) {
-            return headerName + ": " + values.get(0);
-         }
+        private String getValue(HttpHeaders httpHeaders, String headerName) {
+            List<String> values = httpHeaders.getRequestHeader(headerName);
+            if (values.size() > 0) {
+                return headerName + ": " + values.get(0);
+            }
 
-         return headerName + ": NO VALUE";
-      }
-   }
+            return headerName + ": NO VALUE";
+        }
+    }
 
-   @ApplicationPath("")
-   public static class MyApp extends Application {
+    @ApplicationPath("")
+    public static class MyApp extends Application {
 
-      @Override
-      public Set<Class<?>> getClasses() {
-         HashSet<Class<?>> classes = new HashSet<Class<?>>();
-         classes.add(ClientParamResource.class);
-         return classes;
-      }
-   }
+        @Override
+        public Set<Class<?>> getClasses() {
+            HashSet<Class<?>> classes = new HashSet<Class<?>>();
+            classes.add(ClientParamResource.class);
+            return classes;
+        }
+    }
 
-   @Before
-   public void init() throws Exception {
-      Weld weld = new Weld();
-      weld.addBeanClass(Worker.class);
-      weld.addBeanClass(ClientHeaderParamIntf.class);
-      weldContainer = weld.initialize();
-      undertowJaxrsServer = new UndertowJaxrsServer().start();
-      undertowJaxrsServer.deploy(MyApp.class);
-   }
+    @Before
+    public void init() throws Exception {
+        Weld weld = new Weld();
+        weld.addBeanClass(Worker.class);
+        weld.addBeanClass(ClientHeaderParamIntf.class);
+        weldContainer = weld.initialize();
+        undertowJaxrsServer = new UndertowJaxrsServer().start();
+        undertowJaxrsServer.deploy(MyApp.class);
+    }
 
-   @After
-   public void stop() throws Exception {
-      if (undertowJaxrsServer != null) {
-         undertowJaxrsServer.stop();
-      }
-      if (weldContainer != null) {
-         weldContainer.close();
-      }
-   }
+    @After
+    public void stop() throws Exception {
+        if (undertowJaxrsServer != null) {
+            undertowJaxrsServer.stop();
+        }
+        if (weldContainer != null) {
+            weldContainer.close();
+        }
+    }
 
-   @Test
-   public void test() {
-      String result = weldContainer.select(Worker.class).get().work();
-      Assert.assertTrue(result.contains("IntfHeader: intfValue"));
-      Assert.assertTrue(result.contains("MthdHeader: hello"));
-   }
+    @Test
+    public void test() {
+        String result = weldContainer.select(Worker.class).get().work();
+        Assert.assertTrue(result.contains("IntfHeader: intfValue"));
+        Assert.assertTrue(result.contains("MthdHeader: hello"));
+    }
 }

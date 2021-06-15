@@ -12,21 +12,21 @@ import javax.ws.rs.Produces;
 @RequestScoped
 @Path("/foo")
 public class FooResource {
-   @Min(3L)
-   private int k = 0;
+    @Min(3L)
+    private int k = 0;
 
-   public FooResource() {
-   }
+    public FooResource() {
+    }
 
-   @GET
-   @Produces({"application/json"})
-   public List<String> getAll() {
-      List<String> data = new ArrayList<>();
+    @GET
+    @Produces({"application/json"})
+    public List<String> getAll() {
+        List<String> data = new ArrayList<>();
 
-      for(int i = 0; i < 10; ++i) {
-         data.add(UUID.randomUUID().toString());
-      }
+        for (int i = 0; i < 10; ++i) {
+            data.add(UUID.randomUUID().toString());
+        }
 
-      return data;
-   }
+        return data;
+    }
 }

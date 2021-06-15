@@ -10,7 +10,6 @@ import java.io.InputStream;
  * Copied from keycloak
  *
  * Any class that extends JsonWebToken will use NON_DEFAULT inclusion
- *
  */
 public class JsonSerialization {
     public static final ObjectMapper mapper = new ObjectMapper();
@@ -39,7 +38,6 @@ public class JsonSerialization {
     public static <T> T readValue(InputStream bytes, Class<T> type) throws IOException {
         return mapper.readValue(bytes, type);
     }
-
 
 
 }

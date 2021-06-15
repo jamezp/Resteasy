@@ -7,14 +7,14 @@ import java.io.IOException;
 
 public class GreetingInterceptor implements WriterInterceptor {
 
-   @Override
-   public void aroundWriteTo(WriterInterceptorContext context)
-         throws IOException, WebApplicationException {
-      String entity = (String) context.getEntity();
-      if (entity != null) {
-         context.setEntity("Hello " + entity + " !");
-      }
-      context.proceed();
-   }
+    @Override
+    public void aroundWriteTo(WriterInterceptorContext context)
+            throws IOException, WebApplicationException {
+        String entity = (String) context.getEntity();
+        if (entity != null) {
+            context.setEntity("Hello " + entity + " !");
+        }
+        context.proceed();
+    }
 
 }

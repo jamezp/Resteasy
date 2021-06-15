@@ -22,11 +22,11 @@ import java.lang.annotation.Target;
  * @author <a href="mailto:stef@epardaud.fr">Stéphane Épardaud</a>
  */
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER,
-      ElementType.FIELD})
+        ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Decorators(values = {
-      @Decorator(processor = LinkDecorator.class, target = Marshaller.class),
-      @Decorator(processor = JsonLinkDecorator.class, target = DecoratedEntityContainer.class)
+        @Decorator(processor = LinkDecorator.class, target = Marshaller.class),
+        @Decorator(processor = JsonLinkDecorator.class, target = DecoratedEntityContainer.class)
 })
 @Documented
 public @interface AddLinks {

@@ -23,6 +23,5 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MultipartForm
-{
+public @interface MultipartForm {
 }

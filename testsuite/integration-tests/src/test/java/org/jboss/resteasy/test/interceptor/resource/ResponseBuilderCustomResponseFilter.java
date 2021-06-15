@@ -31,7 +31,7 @@ public class ResponseBuilderCustomResponseFilter implements ClientResponseFilter
                        ClientResponseContext responseContext) throws IOException {
 
         Response response = Response.ok(responseContext.getEntityStream()).build();
-        if (responseContext.getStatus() == 200 ) {
+        if (responseContext.getStatus() == 200) {
             ResponseChecker checker = new ResponseChecker();
             BufferedInputStream fis = checker.check(response);
             responseContext.setEntityStream(fis);
@@ -47,7 +47,7 @@ public class ResponseBuilderCustomResponseFilter implements ClientResponseFilter
             }
 
             ByteArrayInputStream bis = new ByteArrayInputStream(responseContent.getBytes());
-            return new BufferedInputStream((InputStream)bis);
+            return new BufferedInputStream((InputStream) bis);
 
         }
     }

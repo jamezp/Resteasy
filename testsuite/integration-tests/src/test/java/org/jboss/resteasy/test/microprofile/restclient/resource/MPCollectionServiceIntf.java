@@ -7,7 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import java.util.List;
 
-@RegisterRestClient(baseUri ="http://localhost:8080/war_service")
+@RegisterRestClient(baseUri = "http://localhost:8080/war_service")
 @Path("/theService")
 @Singleton
 public interface MPCollectionServiceIntf {

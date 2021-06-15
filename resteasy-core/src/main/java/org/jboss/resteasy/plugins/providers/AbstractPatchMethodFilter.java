@@ -75,7 +75,7 @@ public abstract class AbstractPatchMethodFilter implements ContainerRequestFilte
     protected abstract boolean isDisabled(ContainerRequestContext context);
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void filter(final ContainerRequestContext requestContext)
             throws IOException {
         if (isDisabled(requestContext)) {

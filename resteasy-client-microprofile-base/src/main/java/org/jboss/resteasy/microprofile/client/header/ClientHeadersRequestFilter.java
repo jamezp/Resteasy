@@ -46,11 +46,11 @@ public class ClientHeadersRequestFilter implements ClientRequestFilter {
         );
 
         @SuppressWarnings("unchecked")
-        MultivaluedMap<String,String> containerHeaders = (MultivaluedMap<String, String>) requestContext.getProperty(MpClientInvocation.CONTAINER_HEADERS);
-        if(containerHeaders == null)
+        MultivaluedMap<String, String> containerHeaders = (MultivaluedMap<String, String>) requestContext.getProperty(MpClientInvocation.CONTAINER_HEADERS);
+        if (containerHeaders == null)
             containerHeaders = EMPTY_MAP;
         // stupid final rules
-        MultivaluedMap<String,String> incomingHeaders = containerHeaders;
+        MultivaluedMap<String, String> incomingHeaders = containerHeaders;
 
         if (!factory.isPresent() || factory.get() instanceof DefaultClientHeadersFactoryImpl) {
             // When using the default factory, pass the proposed outgoing headers onto the request context.

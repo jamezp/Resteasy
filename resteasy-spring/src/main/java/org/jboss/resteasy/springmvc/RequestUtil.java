@@ -13,40 +13,33 @@ import java.io.IOException;
  * @version $Revision: 1 $
  */
 
-public class RequestUtil
-{
+public class RequestUtil {
 
-   private static String RESPONSE_WRAPPER_KEY = RequestUtil.class.getName() + ".RESPONSE_WRAPPER";
+    private static String RESPONSE_WRAPPER_KEY = RequestUtil.class.getName() + ".RESPONSE_WRAPPER";
 
-   public static HttpServletRequest getRequest()
-   {
-      return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-   }
+    public static HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    }
 
-   public static ResteasyRequestWrapper getRequestWrapper(HttpServletRequest request) throws ServletException,
-         IOException
-   {
-      ResteasyRequestWrapper wrapper = (ResteasyRequestWrapper) request.getAttribute(RESPONSE_WRAPPER_KEY);
-      if (wrapper == null)
-      {
-         request.setAttribute(RESPONSE_WRAPPER_KEY, wrapper = new ResteasyRequestWrapper(request));
-      }
-      return wrapper;
-   }
+    public static ResteasyRequestWrapper getRequestWrapper(HttpServletRequest request) throws ServletException,
+            IOException {
+        ResteasyRequestWrapper wrapper = (ResteasyRequestWrapper) request.getAttribute(RESPONSE_WRAPPER_KEY);
+        if (wrapper == null) {
+            request.setAttribute(RESPONSE_WRAPPER_KEY, wrapper = new ResteasyRequestWrapper(request));
+        }
+        return wrapper;
+    }
 
-   public static HttpRequest getHttpRequest(HttpServletRequest request) throws ServletException, IOException
-   {
-      return getRequestWrapper(request).getHttpRequest();
-   }
+    public static HttpRequest getHttpRequest(HttpServletRequest request) throws ServletException, IOException {
+        return getRequestWrapper(request).getHttpRequest();
+    }
 
-   public static ResteasyRequestWrapper getRequestWrapper(HttpServletRequest request, String method, String prefix)
-         throws ServletException, IOException
-   {
-      ResteasyRequestWrapper wrapper = (ResteasyRequestWrapper) request.getAttribute(RESPONSE_WRAPPER_KEY);
-      if (wrapper == null)
-      {
-         request.setAttribute(RESPONSE_WRAPPER_KEY, wrapper = new ResteasyRequestWrapper(request, method, prefix));
-      }
-      return wrapper;
-   }
+    public static ResteasyRequestWrapper getRequestWrapper(HttpServletRequest request, String method, String prefix)
+            throws ServletException, IOException {
+        ResteasyRequestWrapper wrapper = (ResteasyRequestWrapper) request.getAttribute(RESPONSE_WRAPPER_KEY);
+        if (wrapper == null) {
+            request.setAttribute(RESPONSE_WRAPPER_KEY, wrapper = new ResteasyRequestWrapper(request, method, prefix));
+        }
+        return wrapper;
+    }
 }

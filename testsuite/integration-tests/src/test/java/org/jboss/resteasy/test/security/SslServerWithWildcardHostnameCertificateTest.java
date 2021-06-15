@@ -44,118 +44,104 @@ import static org.jboss.resteasy.test.ContainerConstants.SSL_CONTAINER_QUALIFIER
 @RunAsClient
 public class SslServerWithWildcardHostnameCertificateTest extends SslTestBase {
 
-   private static final Logger LOG = Logger.getLogger(SslServerWithWildcardHostnameCertificateTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(SslServerWithWildcardHostnameCertificateTest.class.getName());
 
-   private static KeyStore truststore;
+    private static KeyStore truststore;
 
-   private static final String SERVER_KEYSTORE_PATH = RESOURCES + "/server-wildcard-hostname.keystore";
-   private static final String CLIENT_TRUSTSTORE_PATH = RESOURCES + "/client-wildcard-hostname.truststore";
-   private static final String URL = generateHttpsURL(SSL_CONTAINER_PORT_OFFSET_WILDCARD);
+    private static final String SERVER_KEYSTORE_PATH = RESOURCES + "/server-wildcard-hostname.keystore";
+    private static final String CLIENT_TRUSTSTORE_PATH = RESOURCES + "/client-wildcard-hostname.truststore";
+    private static final String URL = generateHttpsURL(SSL_CONTAINER_PORT_OFFSET_WILDCARD);
 
-   @TargetsContainer(SSL_CONTAINER_QUALIFIER_WILDCARD)
-   @Deployment(managed=false, name=DEPLOYMENT_NAME)
-   public static Archive<?> createDeployment() {
-      WebArchive war = TestUtil.prepareArchive(DEPLOYMENT_NAME);
-      return TestUtil.finishContainerPrepare(war, null, SslResource.class);
-   }
+    @TargetsContainer(SSL_CONTAINER_QUALIFIER_WILDCARD)
+    @Deployment(managed = false, name = DEPLOYMENT_NAME)
+    public static Archive<?> createDeployment() {
+        WebArchive war = TestUtil.prepareArchive(DEPLOYMENT_NAME);
+        return TestUtil.finishContainerPrepare(war, null, SslResource.class);
+    }
 
-   @BeforeClass
-   public static void prepareTruststore() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
-      truststore = KeyStore.getInstance("jks");
-      try (InputStream in = new FileInputStream(CLIENT_TRUSTSTORE_PATH)) {
-         truststore.load(in, PASSWORD.toCharArray());
-      }
-   }
+    @BeforeClass
+    public static void prepareTruststore() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+        truststore = KeyStore.getInstance("jks");
+        try (InputStream in = new FileInputStream(CLIENT_TRUSTSTORE_PATH)) {
+            truststore.load(in, PASSWORD.toCharArray());
+        }
+    }
 
-   @Before
-   public void startContainer() throws Exception {
-      if (!containerController.isStarted(SSL_CONTAINER_QUALIFIER_WILDCARD)) {
-         containerController.start(SSL_CONTAINER_QUALIFIER_WILDCARD);
-         secureServer(SERVER_KEYSTORE_PATH, SSL_CONTAINER_PORT_OFFSET_WILDCARD);
-         deployer.deploy(DEPLOYMENT_NAME);
-      }
-   }
+    @Before
+    public void startContainer() throws Exception {
+        if (!containerController.isStarted(SSL_CONTAINER_QUALIFIER_WILDCARD)) {
+            containerController.start(SSL_CONTAINER_QUALIFIER_WILDCARD);
+            secureServer(SERVER_KEYSTORE_PATH, SSL_CONTAINER_PORT_OFFSET_WILDCARD);
+            deployer.deploy(DEPLOYMENT_NAME);
+        }
+    }
 
-   /**
-    * @tpTestDetails HostnameVerificationPolicy.WILDCARD test
-    * Client has truststore containing self-signed certificate.
-    * Server/endpoint is secured with the same self-signed certificate, but only wildcard of server hostname (*host) is included among 'subject alternative names' in the certificate.
-    * Client should trust the server because HostnameVerificationPolicy is set to WILDCARD.
-    * @tpSince RESTEasy 3.7.0
-    */
-   @Test
-   public void testHostnameVerificationPolicyWildcard() {
-      resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
-      resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
+    /**
+     * @tpTestDetails HostnameVerificationPolicy.WILDCARD test
+     * Client has truststore containing self-signed certificate.
+     * Server/endpoint is secured with the same self-signed certificate, but only wildcard of server hostname (*host) is included among 'subject alternative names' in the certificate.
+     * Client should trust the server because HostnameVerificationPolicy is set to WILDCARD.
+     * @tpSince RESTEasy 3.7.0
+     */
+    @Test
+    public void testHostnameVerificationPolicyWildcard() {
+        resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
+        resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
 
-      resteasyClientBuilder.hostnameVerification(ResteasyClientBuilder.HostnameVerificationPolicy.WILDCARD);
+        resteasyClientBuilder.hostnameVerification(ResteasyClientBuilder.HostnameVerificationPolicy.WILDCARD);
 
-      client = resteasyClientBuilder.trustStore(truststore).build();
-      Response response = client.target(URL).request().get();
-      Assert.assertEquals("Hello World!", response.readEntity(String.class));
-      Assert.assertEquals(200, response.getStatus());
-   }
+        client = resteasyClientBuilder.trustStore(truststore).build();
+        Response response = client.target(URL).request().get();
+        Assert.assertEquals("Hello World!", response.readEntity(String.class));
+        Assert.assertEquals(200, response.getStatus());
+    }
 
-   /**
-    * @tpTestDetails HostnameVerificationPolicy.STRICT test
-    * Client has truststore containing self-signed certificate.
-    * Server/endpoint is secured with the same self-signed certificate, but only wildcard of server hostname (*host) is included among 'subject alternative names' in the certificate.
-    * HostnameVerificationPolicy is set to STRICT so exception should be thrown.
-    * @tpSince RESTEasy 3.7.0
-    */
-   @Test
-   public void testHostnameVerificationPolicyStrict() throws Exception {
-      resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
-      resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
+    /**
+     * @tpTestDetails HostnameVerificationPolicy.STRICT test
+     * Client has truststore containing self-signed certificate.
+     * Server/endpoint is secured with the same self-signed certificate, but only wildcard of server hostname (*host) is included among 'subject alternative names' in the certificate.
+     * HostnameVerificationPolicy is set to STRICT so exception should be thrown.
+     * @tpSince RESTEasy 3.7.0
+     */
+    @Test
+    public void testHostnameVerificationPolicyStrict() throws Exception {
+        resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
+        resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
 
-      resteasyClientBuilder.hostnameVerification(ResteasyClientBuilder.HostnameVerificationPolicy.STRICT);
+        resteasyClientBuilder.hostnameVerification(ResteasyClientBuilder.HostnameVerificationPolicy.STRICT);
 
-      client = resteasyClientBuilder.trustStore(truststore).build();
-      try
-      {
-         if (InetAddress.getByName("localhost.localdomain") != null)
-         {
-            String anotherURL = URL.replace("localhost", "localhost.localdomain");
-            try
-            {
-               client.target(anotherURL).request().get();
-               Assert.fail("ProcessingException ie expected");
+        client = resteasyClientBuilder.trustStore(truststore).build();
+        try {
+            if (InetAddress.getByName("localhost.localdomain") != null) {
+                String anotherURL = URL.replace("localhost", "localhost.localdomain");
+                try {
+                    client.target(anotherURL).request().get();
+                    Assert.fail("ProcessingException ie expected");
+                } catch (ProcessingException e) {
+                    //expected
+                }
             }
-            catch (ProcessingException e)
-            {
-               //expected
+        } catch (UnknownHostException e) {
+            try {
+                if (InetAddress.getByName("localhost.localhost") != null) {
+                    String anotherURL = URL.replace("localhost", "localhost.localhost");
+                    try {
+                        client.target(anotherURL).request().get();
+                        Assert.fail("ProcessingException ie expected");
+                    } catch (ProcessingException e1) {
+                        //expected
+                    }
+                }
+            } catch (UnknownHostException e2) {
+                LOG.warn("Neither 'localhost.localdomain' nor 'local.localhost'can be resolved, "
+                        + "nothing is checked");
             }
-         }
-      }
-      catch (UnknownHostException e)
-      {
-         try
-         {
-            if (InetAddress.getByName("localhost.localhost") != null)
-            {
-               String anotherURL = URL.replace("localhost", "localhost.localhost");
-               try
-               {
-                  client.target(anotherURL).request().get();
-                  Assert.fail("ProcessingException ie expected");
-               }
-               catch (ProcessingException e1)
-               {
-                  //expected
-               }
-            }
-         }
-         catch (UnknownHostException e2)
-         {
-           LOG.warn("Neither 'localhost.localdomain' nor 'local.localhost'can be resolved, "
-                 + "nothing is checked");
-         }
-      }
-   }
+        }
+    }
 
-   @After
-   public void after() {
-      client.close();
-   }
+    @After
+    public void after() {
+        client.close();
+    }
 
 }

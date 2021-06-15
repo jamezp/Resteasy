@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet({"/"})
 public class TestServlet extends HttpServlet {
-   @Inject
-   FooResource foo;
+    @Inject
+    FooResource foo;
 
-   public TestServlet() {
-   }
+    public TestServlet() {
+    }
 
-   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-      resp.setContentType("text/plain");
-      resp.getWriter().write(this.foo.getAll().toString());
-   }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/plain");
+        resp.getWriter().write(this.foo.getAll().toString());
+    }
 }

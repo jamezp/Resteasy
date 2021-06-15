@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyInternalServerErrorException extends InternalServerErrorException implements WebApplicationExceptionWrapper<InternalServerErrorException> {
 
-   private static final long serialVersionUID = 5293921582428847923L;
-   private final InternalServerErrorException wrapped;
+    private static final long serialVersionUID = 5293921582428847923L;
+    private final InternalServerErrorException wrapped;
 
     ResteasyInternalServerErrorException(final InternalServerErrorException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

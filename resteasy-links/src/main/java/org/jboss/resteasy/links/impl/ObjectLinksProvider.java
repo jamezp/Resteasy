@@ -131,7 +131,7 @@ public final class ObjectLinksProvider implements LinksProvider<Object> {
     }
 
     private URI buildURI(UriBuilder uriBuilder, LinkResource service,
-            Object entity, Method m) {
+                         Object entity, Method m) {
         for (ParamBinding binding : service.queryParameters()) {
             uriBuilder.queryParam(binding.name(), evaluateEL(m, getELContext(m, entity), binding.value()));
         }

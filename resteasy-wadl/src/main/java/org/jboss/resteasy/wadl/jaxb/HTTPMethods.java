@@ -28,24 +28,23 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- *
  */
 @XmlType(name = "HTTPMethods")
 @XmlEnum
 public enum HTTPMethods {
 
-   GET,
-   POST,
-   PUT,
-   HEAD,
-   DELETE;
+    GET,
+    POST,
+    PUT,
+    HEAD,
+    DELETE;
 
-   public String value() {
-      return name();
-   }
+    public String value() {
+        return name();
+    }
 
-   public static HTTPMethods fromValue(String v) {
-      return valueOf(v);
-   }
+    public static HTTPMethods fromValue(String v) {
+        return valueOf(v);
+    }
 
 }

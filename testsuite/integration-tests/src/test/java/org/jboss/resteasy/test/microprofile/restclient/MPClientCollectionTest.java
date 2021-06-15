@@ -29,7 +29,7 @@ import java.util.List;
  * @tpSubChapter MicroProfile Config
  * @tpChapter Integration tests
  * @tpTestCaseDetails Show how to use injection to get access to the service.
- *                    Show configuration required for a GenericType return type.
+ * Show configuration required for a GenericType return type.
  * @tpSince RESTEasy 4.6.0
  */
 @RunWith(Arquillian.class)
@@ -39,7 +39,7 @@ public class MPClientCollectionTest {
     private static final String WAR_SERVICE = "war_service";
     private static final String WAR_CLIENT = "war_client";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(MPCollectionService.class,
@@ -47,7 +47,7 @@ public class MPClientCollectionTest {
         return TestUtil.finishContainerPrepare(war, null, null);
     }
 
-    @Deployment(name=WAR_CLIENT)
+    @Deployment(name = WAR_CLIENT)
     public static Archive<?> clientDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_CLIENT);
         war.addClasses(MPCollectionResource.class,
@@ -57,9 +57,10 @@ public class MPClientCollectionTest {
     }
 
     static ResteasyClient client;
+
     @BeforeClass
     public static void before() throws Exception {
-        client = (ResteasyClient)ClientBuilder.newClient();
+        client = (ResteasyClient) ClientBuilder.newClient();
     }
 
     @AfterClass
@@ -99,7 +100,8 @@ public class MPClientCollectionTest {
         Response response = client.target(
                 generateURL("/thePatron/got", WAR_CLIENT)).request().get();
         Assert.assertEquals(200, response.getStatus());
-        List<String> l = response.readEntity(new GenericType<List<String>>() {});
+        List<String> l = response.readEntity(new GenericType<List<String>>() {
+        });
         Assert.assertEquals(4, l.size());
         Assert.assertEquals("thePatron", l.get(3));
     }

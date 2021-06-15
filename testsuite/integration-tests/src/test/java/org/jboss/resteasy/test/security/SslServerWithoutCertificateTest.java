@@ -36,64 +36,62 @@ import javax.ws.rs.core.Response;
 @RunAsClient
 public class SslServerWithoutCertificateTest extends SslTestBase {
 
-   private static final Logger LOG = Logger.getLogger(SslServerWithoutCertificateTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(SslServerWithoutCertificateTest.class.getName());
 
-   private static KeyStore truststore;
+    private static KeyStore truststore;
 
-   private static final String CLIENT_TRUSTSTORE_PATH = RESOURCES + "/client.truststore";
-   private static final String URL = generateHttpsURL(0, false);
+    private static final String CLIENT_TRUSTSTORE_PATH = RESOURCES + "/client.truststore";
+    private static final String URL = generateHttpsURL(0, false);
 
-   @Deployment
-   public static Archive<?> createDeployment() {
-      WebArchive war = TestUtil.prepareArchive(DEPLOYMENT_NAME);
-      return TestUtil.finishContainerPrepare(war, null, SslResource.class);
-   }
+    @Deployment
+    public static Archive<?> createDeployment() {
+        WebArchive war = TestUtil.prepareArchive(DEPLOYMENT_NAME);
+        return TestUtil.finishContainerPrepare(war, null, SslResource.class);
+    }
 
-   @BeforeClass
-   public static void prepareTruststore() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
-      truststore = KeyStore.getInstance("jks");
-      try (InputStream in = new FileInputStream(CLIENT_TRUSTSTORE_PATH)) {
-         truststore.load(in, PASSWORD.toCharArray());
-      }
-   }
+    @BeforeClass
+    public static void prepareTruststore() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+        truststore = KeyStore.getInstance("jks");
+        try (InputStream in = new FileInputStream(CLIENT_TRUSTSTORE_PATH)) {
+            truststore.load(in, PASSWORD.toCharArray());
+        }
+    }
 
-   /**
-    * @tpTestDetails
-    * Client has truststore containing self-signed certificate.
-    * Server/endpoint is not secured at all. Client should not trust the unsecured server.
-    * @tpSince RESTEasy 3.7.0
-    */
-   @Test(expected = ProcessingException.class)
-   public void testServerWithoutCertificate() {
-      resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
-      resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
+    /**
+     * @tpTestDetails Client has truststore containing self-signed certificate.
+     * Server/endpoint is not secured at all. Client should not trust the unsecured server.
+     * @tpSince RESTEasy 3.7.0
+     */
+    @Test(expected = ProcessingException.class)
+    public void testServerWithoutCertificate() {
+        resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
+        resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
 
-      client = resteasyClientBuilder.trustStore(truststore).build();
-      client.target(URL).request().get();
-   }
+        client = resteasyClientBuilder.trustStore(truststore).build();
+        client.target(URL).request().get();
+    }
 
-   /**
-    * @tpTestDetails
-    * Client has truststore containing self-signed certificate.
-    * Server/endpoint is not secured at all. However, disableTrustManager is used so client should trust this server.
-    * @tpSince RESTEasy 3.7.0
-    */
-   @Test
-   public void testServerWithoutCertificateDisabledTrustManager() {
-      resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
-      resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
+    /**
+     * @tpTestDetails Client has truststore containing self-signed certificate.
+     * Server/endpoint is not secured at all. However, disableTrustManager is used so client should trust this server.
+     * @tpSince RESTEasy 3.7.0
+     */
+    @Test
+    public void testServerWithoutCertificateDisabledTrustManager() {
+        resteasyClientBuilder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
+        resteasyClientBuilder.setIsTrustSelfSignedCertificates(false);
 
-      resteasyClientBuilder = resteasyClientBuilder.disableTrustManager();
+        resteasyClientBuilder = resteasyClientBuilder.disableTrustManager();
 
-      client = resteasyClientBuilder.trustStore(truststore).build();
-      Response response = client.target(URL).request().get();
-      Assert.assertEquals("Hello World!", response.readEntity(String.class));
-      Assert.assertEquals(200, response.getStatus());
-   }
+        client = resteasyClientBuilder.trustStore(truststore).build();
+        Response response = client.target(URL).request().get();
+        Assert.assertEquals("Hello World!", response.readEntity(String.class));
+        Assert.assertEquals(200, response.getStatus());
+    }
 
-   @After
-   public void after() {
-      client.close();
-   }
+    @After
+    public void after() {
+        client.close();
+    }
 
 }

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- *
  * Creates a value for a specific header (with the specified headerName)
  *
  * Can either provide a static list of values or a computed value, depending on the {@link ClientHeaderParam} annotation

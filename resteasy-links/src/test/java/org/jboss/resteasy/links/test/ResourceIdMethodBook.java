@@ -5,24 +5,24 @@ import org.jboss.resteasy.links.ResourceID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ResourceIdMethodBook extends IdBook{
+public class ResourceIdMethodBook extends IdBook {
 
-   private String name;
+    private String name;
 
-   public ResourceIdMethodBook() {
-   }
+    public ResourceIdMethodBook() {
+    }
 
-   public ResourceIdMethodBook(final String name) {
-      this.name = name;
-   }
+    public ResourceIdMethodBook(final String name) {
+        this.name = name;
+    }
 
-   @ResourceID
-   public String getName() {
-      return name;
-   }
+    @ResourceID
+    public String getName() {
+        return name;
+    }
 
-   public void setName(String name) {
-      this.name = name;
-   }
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

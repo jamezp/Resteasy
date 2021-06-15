@@ -11,10 +11,10 @@ import javax.ws.rs.Produces;
 @Path("test")
 public class TestResource1 {
 
-   @GET
-   @Path("x")
-   @Produces("text/plain")
-   public Response method() {
-      return Response.ok("ok").build();
-   }
+    @GET
+    @Path("x")
+    @Produces("text/plain")
+    public Response method() {
+        return Response.ok("ok").build();
+    }
 }

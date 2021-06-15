@@ -12,9 +12,8 @@ import java.lang.annotation.Annotation;
  * @version $Revision: 1 $
  * @see org.jboss.resteasy.annotations.StringParameterUnmarshallerBinder
  */
-public interface StringParameterUnmarshaller<T>
-{
-   void setAnnotations(Annotation[] annotations);
+public interface StringParameterUnmarshaller<T> {
+    void setAnnotations(Annotation[] annotations);
 
-   T fromString(String str);
+    T fromString(String str);
 }

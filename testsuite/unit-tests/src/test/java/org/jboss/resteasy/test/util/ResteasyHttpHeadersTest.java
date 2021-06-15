@@ -14,38 +14,30 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * @author Nicolas NESMON
  * @tpSubChapter Util tests
  * @tpChapter Unit tests
  * @tpTestCaseDetails Test for UnmodifiableMultivaluedMap
  * @tpSince RESTEasy
- * @author Nicolas NESMON
  */
-public class ResteasyHttpHeadersTest
-{
+public class ResteasyHttpHeadersTest {
 
-   @Test
-   public void testNotModifiable()
-   {
-      MultivaluedMap<String, String> modifiableMultivaluedMap = new MultivaluedHashMap<>();
-      modifiableMultivaluedMap.addAll("Hello", "Bonjour");
+    @Test
+    public void testNotModifiable() {
+        MultivaluedMap<String, String> modifiableMultivaluedMap = new MultivaluedHashMap<>();
+        modifiableMultivaluedMap.addAll("Hello", "Bonjour");
 
-      ResteasyHttpHeaders httpHeaders = new ResteasyHttpHeaders(modifiableMultivaluedMap);
-      try
-      {
-         httpHeaders.getRequestHeader("Hello").add("Interdit");
-         Assert.fail("getRequestHeader() must return a read-only List");
-      }
-      catch (UnsupportedOperationException e)
-      {
-      }
-      try
-      {
-         httpHeaders.getRequestHeaders().clear();
-         Assert.fail("getRequestHeaders() must return a read-only Map");
-      }
-      catch (UnsupportedOperationException e)
-      {
-      }
-   }
+        ResteasyHttpHeaders httpHeaders = new ResteasyHttpHeaders(modifiableMultivaluedMap);
+        try {
+            httpHeaders.getRequestHeader("Hello").add("Interdit");
+            Assert.fail("getRequestHeader() must return a read-only List");
+        } catch (UnsupportedOperationException e) {
+        }
+        try {
+            httpHeaders.getRequestHeaders().clear();
+            Assert.fail("getRequestHeaders() must return a read-only Map");
+        } catch (UnsupportedOperationException e) {
+        }
+    }
 
 }

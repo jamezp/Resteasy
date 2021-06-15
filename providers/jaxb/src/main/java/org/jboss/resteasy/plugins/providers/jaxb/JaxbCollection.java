@@ -8,13 +8,11 @@ import java.util.List;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class JaxbCollection
-{
-   @XmlAnyElement
-   private List<Object> value = new ArrayList<Object>();
+public class JaxbCollection {
+    @XmlAnyElement
+    private List<Object> value = new ArrayList<Object>();
 
-   public List<Object> getValue()
-   {
-      return value;
-   }
+    public List<Object> getValue() {
+        return value;
+    }
 }

@@ -16,24 +16,20 @@ import java.util.List;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class HeaderParamInjector extends StringParameterInjector implements ValueInjector
-{
+public class HeaderParamInjector extends StringParameterInjector implements ValueInjector {
 
-   public HeaderParamInjector(final Class type, final Type genericType, final AccessibleObject target, final String header, final String defaultValue, final Annotation[] annotations, final ResteasyProviderFactory factory)
-   {
-      super(type, genericType, header, HeaderParam.class, defaultValue, target, annotations, factory);
-   }
+    public HeaderParamInjector(final Class type, final Type genericType, final AccessibleObject target, final String header, final String defaultValue, final Annotation[] annotations, final ResteasyProviderFactory factory) {
+        super(type, genericType, header, HeaderParam.class, defaultValue, target, annotations, factory);
+    }
 
-   @Override
-   public Object inject(HttpRequest request, HttpResponse response, boolean unwrapAsync)
-   {
-      List<String> list = request.getHttpHeaders().getRequestHeaders().get(paramName);
-      return extractValues(list);
-   }
+    @Override
+    public Object inject(HttpRequest request, HttpResponse response, boolean unwrapAsync) {
+        List<String> list = request.getHttpHeaders().getRequestHeaders().get(paramName);
+        return extractValues(list);
+    }
 
-   @Override
-   public Object inject(boolean unwrapAsync)
-   {
-      throw new RuntimeException(Messages.MESSAGES.illegalToInjectHeaderParam());
-   }
+    @Override
+    public Object inject(boolean unwrapAsync) {
+        throw new RuntimeException(Messages.MESSAGES.illegalToInjectHeaderParam());
+    }
 }

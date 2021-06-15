@@ -15,7 +15,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DecorateTypes
-{
-   String[] value();
+public @interface DecorateTypes {
+    String[] value();
 }

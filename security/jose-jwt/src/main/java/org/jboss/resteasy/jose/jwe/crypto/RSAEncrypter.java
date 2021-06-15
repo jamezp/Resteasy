@@ -35,103 +35,87 @@ import java.util.Base64;
  * @author Vladimir Dzhuvinov
  * @version $version$ (2013-05-29)
  */
-public class RSAEncrypter
-{
+public class RSAEncrypter {
 
 
-   /**
-    * Random byte generator.
-    */
-   private static SecureRandom randomGen;
+    /**
+     * Random byte generator.
+     */
+    private static SecureRandom randomGen;
 
 
-   /**
-    * Initialises the secure random byte generator.
-    *
-    * @throws RuntimeException If the secure random byte generator couldn't
-    *                          be instantiated.
-    */
-   private static void initSecureRandom()
-   {
+    /**
+     * Initialises the secure random byte generator.
+     *
+     * @throws RuntimeException If the secure random byte generator couldn't
+     *                          be instantiated.
+     */
+    private static void initSecureRandom() {
 
-      try
-      {
-         randomGen = SecureRandom.getInstance("SHA1PRNG");
+        try {
+            randomGen = SecureRandom.getInstance("SHA1PRNG");
 
-      }
-      catch (NoSuchAlgorithmException e)
-      {
+        } catch (NoSuchAlgorithmException e) {
 
-         throw new RuntimeException(e.getMessage(), e);
-      }
-   }
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 
-   public static String encrypt(Algorithm alg, EncryptionMethod enc, CompressionAlgorithm compressionAlgorithm, RSAPublicKey publicKey, String encodedJWEHeader, byte[] bytes)
-   {
+    public static String encrypt(Algorithm alg, EncryptionMethod enc, CompressionAlgorithm compressionAlgorithm, RSAPublicKey publicKey, String encodedJWEHeader, byte[] bytes) {
 
-      if (randomGen == null) initSecureRandom();
+        if (randomGen == null) initSecureRandom();
 
-      // Generate and encrypt the CEK according to the enc method
-      SecretKey cek = AES.generateKey(enc.getCekBitLength());
+        // Generate and encrypt the CEK according to the enc method
+        SecretKey cek = AES.generateKey(enc.getCekBitLength());
 
-      String encryptedKey = null; // The second JWE part
+        String encryptedKey = null; // The second JWE part
 
-      if (alg.equals(Algorithm.RSA1_5))
-      {
+        if (alg.equals(Algorithm.RSA1_5)) {
 
-         encryptedKey = Base64.getUrlEncoder().encodeToString(RSA1_5.encryptCEK(publicKey, cek));
+            encryptedKey = Base64.getUrlEncoder().encodeToString(RSA1_5.encryptCEK(publicKey, cek));
 
-      }
-      else if (alg.equals(Algorithm.RSA_OAEP))
-      {
+        } else if (alg.equals(Algorithm.RSA_OAEP)) {
 
-         encryptedKey = Base64.getUrlEncoder().encodeToString(RSA_OAEP.encryptCEK(publicKey, cek));
+            encryptedKey = Base64.getUrlEncoder().encodeToString(RSA_OAEP.encryptCEK(publicKey, cek));
 
-      }
-      else
-      {
+        } else {
 
-         throw new RuntimeException(Messages.MESSAGES.unsupportedJWEalgorithm());
-      }
+            throw new RuntimeException(Messages.MESSAGES.unsupportedJWEalgorithm());
+        }
 
 
-      // Apply compression if instructed
-      byte[] plainText = DeflateHelper.applyCompression(compressionAlgorithm, bytes);
+        // Apply compression if instructed
+        byte[] plainText = DeflateHelper.applyCompression(compressionAlgorithm, bytes);
 
-      // Compose the AAD
-      byte[] aad = encodedJWEHeader.getBytes(StandardCharsets.UTF_8);
+        // Compose the AAD
+        byte[] aad = encodedJWEHeader.getBytes(StandardCharsets.UTF_8);
 
-      // Encrypt the plain text according to the JWE enc
-      byte[] iv;
-      AuthenticatedCipherText authCipherText;
+        // Encrypt the plain text according to the JWE enc
+        byte[] iv;
+        AuthenticatedCipherText authCipherText;
 
-      if (enc.equals(EncryptionMethod.A128CBC_HS256) || enc.equals(EncryptionMethod.A256CBC_HS512))
-      {
+        if (enc.equals(EncryptionMethod.A128CBC_HS256) || enc.equals(EncryptionMethod.A256CBC_HS512)) {
 
-         iv = AESCBC.generateIV(randomGen);
+            iv = AESCBC.generateIV(randomGen);
 
-         authCipherText = AESCBC.encryptAuthenticated(cek, iv, plainText, aad);
+            authCipherText = AESCBC.encryptAuthenticated(cek, iv, plainText, aad);
 
-      }
-      else if (enc.equals(EncryptionMethod.A128GCM) || enc.equals(EncryptionMethod.A256GCM))
-      {
+        } else if (enc.equals(EncryptionMethod.A128GCM) || enc.equals(EncryptionMethod.A256GCM)) {
 
-         iv = AESGCM.generateIV(randomGen);
+            iv = AESGCM.generateIV(randomGen);
 
-         authCipherText = AESGCM.encrypt(cek, iv, plainText, aad);
+            authCipherText = AESGCM.encrypt(cek, iv, plainText, aad);
 
-      }
-      else
-      {
+        } else {
 
-         throw new RuntimeException(Messages.MESSAGES.unsupportedEncryptionMethod());
-      }
-      StringBuilder builder = new StringBuilder(encodedJWEHeader)
-              .append('.').append(encryptedKey)
-              .append('.').append(Base64.getUrlEncoder().encodeToString(iv))
-              .append('.').append(Base64.getUrlEncoder().encodeToString(authCipherText.getCipherText()))
-              .append('.').append(Base64.getUrlEncoder().encodeToString(authCipherText.getAuthenticationTag()));
+            throw new RuntimeException(Messages.MESSAGES.unsupportedEncryptionMethod());
+        }
+        StringBuilder builder = new StringBuilder(encodedJWEHeader)
+                .append('.').append(encryptedKey)
+                .append('.').append(Base64.getUrlEncoder().encodeToString(iv))
+                .append('.').append(Base64.getUrlEncoder().encodeToString(authCipherText.getCipherText()))
+                .append('.').append(Base64.getUrlEncoder().encodeToString(authCipherText.getAuthenticationTag()));
 
-      return builder.toString();
-   }
+        return builder.toString();
+    }
 }

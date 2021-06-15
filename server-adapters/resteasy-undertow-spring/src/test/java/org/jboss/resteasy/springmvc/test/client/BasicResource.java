@@ -9,82 +9,85 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 @Path("/basic")
-public interface BasicResource
-{
+public interface BasicResource {
 
-   /** test basic setup -- implemented in BasicResourceImpl **/
-   @GET
-   @Produces("text/plain")
-   String getBasicString();
+    /**
+     * test basic setup -- implemented in BasicResourceImpl
+     **/
+    @GET
+    @Produces("text/plain")
+    String getBasicString();
 
-   @GET
-   @Produces("application/xml")
-   @Path("object")
-   BasicJaxbObject getBasicObject();
+    @GET
+    @Produces("application/xml")
+    @Path("object")
+    BasicJaxbObject getBasicObject();
 
-   @GET
-   @Produces("application/json")
-   @Path("object")
-   Response getWrongContentTypeBasicObject();
+    @GET
+    @Produces("application/json")
+    @Path("object")
+    Response getWrongContentTypeBasicObject();
 
-   /** test Spring MVC ModelAndView **/
-   @GET
-   @Produces("application/custom")
-   @Path("/custom-rep")
-   String getSpringMvcValue();
+    /**
+     * test Spring MVC ModelAndView
+     **/
+    @GET
+    @Produces("application/custom")
+    @Path("/custom-rep")
+    String getSpringMvcValue();
 
-   /**
-    * test singleton with custom registration -- implemented in CounterResource,
-    * with bean named singletonScopedResource
-    **/
-   @GET
-   @Produces("text/plain")
-   @Path("/singleton/count")
-   Integer getSingletonCount();
+    /**
+     * test singleton with custom registration -- implemented in CounterResource,
+     * with bean named singletonScopedResource
+     **/
+    @GET
+    @Produces("text/plain")
+    @Path("/singleton/count")
+    Integer getSingletonCount();
 
-   /**
-    * test prototype with custom registration -- implemented in CounterResource,
-    * with bean named prototypeScopedResource
-    **/
-   @GET
-   @Produces("text/plain")
-   @Path("/prototype/count")
-   Integer getPrototypeCount();
+    /**
+     * test prototype with custom registration -- implemented in CounterResource,
+     * with bean named prototypeScopedResource
+     **/
+    @GET
+    @Produces("text/plain")
+    @Path("/prototype/count")
+    Integer getPrototypeCount();
 
-   /**
-    * test getting context header via setting of an @Context object in an @Autowired
-    * constructor
-    **/
-   @GET
-   @Produces("text/plain")
-   @Path("/header")
-   String getContentTypeHeader();
+    /**
+     * test getting context header via setting of an @Context object in an @Autowired
+     * constructor
+     **/
+    @GET
+    @Produces("text/plain")
+    @Path("/header")
+    String getContentTypeHeader();
 
-   /**
-    * test Spring @Context injection into a separate java object by spring -
-    * This is extended functionality, not JAX-RS core
-    **/
-   @GET
-   @Produces("text/plain")
-   @Path("/url")
-   String getURL();
+    /**
+     * test Spring @Context injection into a separate java object by spring -
+     * This is extended functionality, not JAX-RS core
+     **/
+    @GET
+    @Produces("text/plain")
+    @Path("/url")
+    String getURL();
 
-   /**
-    * test Spring @Controllers along with
-    **/
-   @GET
-   @Produces("text/plain")
-   @Path("interceptor-test")
-   Integer getSpringInterceptorCount(@QueryParam("type") String type);
+    /**
+     * test Spring @Controllers along with
+     **/
+    @GET
+    @Produces("text/plain")
+    @Path("interceptor-test")
+    Integer getSpringInterceptorCount(@QueryParam("type") String type);
 
-   @GET
-   @Produces("text/plain")
-   @Path("bogus-rul-test")
-   Response testBogusUrl();
+    @GET
+    @Produces("text/plain")
+    @Path("bogus-rul-test")
+    Response testBogusUrl();
 
-   @GET
-   @Produces("application/xml")
-   @Path("spring/object/xml")
-   BasicJaxbObject testSpringXml();
+    @GET
+    @Produces("application/xml")
+    @Path("spring/object/xml")
+    BasicJaxbObject testSpringXml();
 
 }

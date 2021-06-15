@@ -36,38 +36,35 @@ public class SsePublisherClientTest {
     URL url;
 
     @Deployment
-    public static Archive<?> deploy()
-    {
+    public static Archive<?> deploy() {
         WebArchive war = TestUtil.prepareArchive(SsePublisherClientTest.class.getSimpleName());
         return TestUtil.finishContainerPrepare(war, null, MPSseResource.class, ExecutorServletContextListener.class);
     }
 
-    private String generateURL(String path)
-    {
-       return PortProviderUtil.generateURL(path, SsePublisherClientTest.class.getSimpleName());
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, SsePublisherClientTest.class.getSimpleName());
     }
 
     @Test
-    public void testSseClient() throws Exception
-    {
-       RestClientBuilder builder = RestClientBuilder.newBuilder();
-       RestClientBuilder resteasyBuilder = new BuilderResolver().newBuilder();
-       assertEquals(resteasyBuilder.getClass(), builder.getClass());
-       MPSseClient client = builder.baseUrl(new URL(generateURL(""))).build(MPSseClient.class);
-       Publisher<String> publisher = client.getStrings();
-       CountDownLatch resultsLatch = new CountDownLatch(5);
+    public void testSseClient() throws Exception {
+        RestClientBuilder builder = RestClientBuilder.newBuilder();
+        RestClientBuilder resteasyBuilder = new BuilderResolver().newBuilder();
+        assertEquals(resteasyBuilder.getClass(), builder.getClass());
+        MPSseClient client = builder.baseUrl(new URL(generateURL(""))).build(MPSseClient.class);
+        Publisher<String> publisher = client.getStrings();
+        CountDownLatch resultsLatch = new CountDownLatch(5);
 
-       final Set<String> eventStrings = new HashSet<>();
-       StringSubscriber subscriber = new StringSubscriber(eventStrings, resultsLatch);
-       publisher.subscribe(subscriber);
-       Thread.sleep(1000);
-       subscriber.request(5);
-       assertTrue(resultsLatch.await(10, TimeUnit.SECONDS));
-       //sent 12 items, expects these 10 values [msg4, msg3, msg2, msg1, msg8, msg11, msg7, msg10, msg9, msg0]
-       assertTrue(eventStrings.size() == 10);
-       //msg5 and msg6 are dropped
-       assertFalse(eventStrings.contains("msg5") || eventStrings.contains("msg6"));
-       assertNull(subscriber.throwable);
+        final Set<String> eventStrings = new HashSet<>();
+        StringSubscriber subscriber = new StringSubscriber(eventStrings, resultsLatch);
+        publisher.subscribe(subscriber);
+        Thread.sleep(1000);
+        subscriber.request(5);
+        assertTrue(resultsLatch.await(10, TimeUnit.SECONDS));
+        //sent 12 items, expects these 10 values [msg4, msg3, msg2, msg1, msg8, msg11, msg7, msg10, msg9, msg0]
+        assertTrue(eventStrings.size() == 10);
+        //msg5 and msg6 are dropped
+        assertFalse(eventStrings.contains("msg5") || eventStrings.contains("msg6"));
+        assertNull(subscriber.throwable);
     }
 
     private static class StringSubscriber implements Subscriber<String>, AutoCloseable {
@@ -107,6 +104,7 @@ public class SsePublisherClientTest {
         public void close() throws Exception {
             subscription.cancel();
         }
+
         public void request(long requestedEvents) {
             subscription.request(requestedEvents);
         }

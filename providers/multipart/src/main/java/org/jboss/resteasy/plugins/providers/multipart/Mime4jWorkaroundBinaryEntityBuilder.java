@@ -209,6 +209,7 @@ class Mime4jWorkaroundBinaryEntityBuilder implements ContentHandler {
 
     /**
      * Unsupported.
+     *
      * @see org.apache.james.mime4j.parser.ContentHandler#raw(java.io.InputStream)
      */
     public void raw(InputStream is) throws MimeException, IOException {

@@ -13,16 +13,19 @@ import javax.enterprise.inject.spi.CDI;
  */
 @Dependent
 public class CdiNettyJaxrsServer extends NettyJaxrsServer {
-   private Instance<Object> instance;
-   public CdiNettyJaxrsServer() {
-      this.instance = CDI.current();
-   }
-   public CdiNettyJaxrsServer(final Instance<Object> instance) {
-      this.instance = instance;
-   }
-   @Override
-   protected RequestDispatcher createRequestDispatcher() {
-      return new CdiRequestDispatcher((SynchronousDispatcher)super.deployment.getDispatcher(),
-                        super.deployment.getProviderFactory(), super.domain, instance);
-   }
+    private Instance<Object> instance;
+
+    public CdiNettyJaxrsServer() {
+        this.instance = CDI.current();
+    }
+
+    public CdiNettyJaxrsServer(final Instance<Object> instance) {
+        this.instance = instance;
+    }
+
+    @Override
+    protected RequestDispatcher createRequestDispatcher() {
+        return new CdiRequestDispatcher((SynchronousDispatcher) super.deployment.getDispatcher(),
+                super.deployment.getProviderFactory(), super.domain, instance);
+    }
 }

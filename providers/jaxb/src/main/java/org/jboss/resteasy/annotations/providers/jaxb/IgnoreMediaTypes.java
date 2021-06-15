@@ -14,7 +14,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IgnoreMediaTypes
-{
-   String[] value();
+public @interface IgnoreMediaTypes {
+    String[] value();
 }

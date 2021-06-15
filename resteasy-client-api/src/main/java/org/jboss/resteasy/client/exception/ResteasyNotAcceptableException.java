@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyNotAcceptableException extends NotAcceptableException implements WebApplicationExceptionWrapper<NotAcceptableException> {
 
-   private static final long serialVersionUID = 5369100091818187044L;
-   private final NotAcceptableException wrapped;
+    private static final long serialVersionUID = 5369100091818187044L;
+    private final NotAcceptableException wrapped;
 
     ResteasyNotAcceptableException(final NotAcceptableException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

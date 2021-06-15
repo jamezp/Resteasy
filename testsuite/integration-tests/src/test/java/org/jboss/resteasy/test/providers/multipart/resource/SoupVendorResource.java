@@ -110,8 +110,9 @@ public class SoupVendorResource {
         List<Soup> soupList = new ArrayList<Soup>();
         soupList.add(new Soup("Chicken Noodle"));
         soupList.add(new Soup("Vegetable"));
-        multipartOutput.addPart(soupList, new GenericType<List<Soup>>(){},
-                MediaType.APPLICATION_XML_TYPE );
+        multipartOutput.addPart(soupList, new GenericType<List<Soup>>() {
+                },
+                MediaType.APPLICATION_XML_TYPE);
         multipartOutput.addPart("Granny's Soups", MediaType.TEXT_PLAIN_TYPE);
         return multipartOutput;
     }

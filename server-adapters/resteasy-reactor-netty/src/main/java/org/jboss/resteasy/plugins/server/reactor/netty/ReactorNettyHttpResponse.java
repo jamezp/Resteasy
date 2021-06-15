@@ -36,9 +36,9 @@ public class ReactorNettyHttpResponse implements HttpResponse {
     private final Sinks.Empty<Void> completionSink;
 
     public ReactorNettyHttpResponse(
-        final HttpMethod method,
-        final HttpServerResponse resp,
-        final Sinks.Empty<Void> completionSink
+            final HttpMethod method,
+            final HttpServerResponse resp,
+            final Sinks.Empty<Void> completionSink
     ) {
         this.resp = resp;
         this.completionSink = completionSink;
@@ -95,7 +95,7 @@ public class ReactorNettyHttpResponse implements HttpResponse {
 
             @Override
             public void addFirst(String key, Object value) {
-                headers.getAll(key).add(0, (String)value);
+                headers.getAll(key).add(0, (String) value);
             }
 
             @Override
@@ -115,7 +115,7 @@ public class ReactorNettyHttpResponse implements HttpResponse {
 
             @Override
             public boolean containsKey(Object key) {
-                return headers.contains((String)key);
+                return headers.contains((String) key);
             }
 
             @Override
@@ -135,7 +135,7 @@ public class ReactorNettyHttpResponse implements HttpResponse {
                     return null;
                 }
 
-                return (List)headers.getAll(key.toString());
+                return (List) headers.getAll(key.toString());
             }
 
             @Override
@@ -230,16 +230,15 @@ public class ReactorNettyHttpResponse implements HttpResponse {
     }
 
     @Override
-    public void addNewCookie(NewCookie cookie)
-    {
+    public void addNewCookie(NewCookie cookie) {
         resp.responseHeaders().add(javax.ws.rs.core.HttpHeaders.SET_COOKIE, cookie);
     }
 
     @Override
     public void sendError(int status) {
         final Mono<Void> respMono = resp.status(status)
-            .header(HttpHeaderNames.CONTENT_LENGTH, HttpHeaderValues.ZERO)
-            .then();
+                .header(HttpHeaderNames.CONTENT_LENGTH, HttpHeaderValues.ZERO)
+                .then();
 
         committed = true;
         SinkSubscriber.subscribe(completionSink, respMono);
@@ -250,10 +249,10 @@ public class ReactorNettyHttpResponse implements HttpResponse {
     @Override
     public void sendError(int status, String message) {
         final Mono<Void> respMono = resp.status(status)
-            .header(HttpHeaderNames.CONTENT_LENGTH, Integer.toString(message.length()))
-            .header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN)
-            .sendString(Mono.just(message))
-            .then();
+                .header(HttpHeaderNames.CONTENT_LENGTH, Integer.toString(message.length()))
+                .header(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN)
+                .sendString(Mono.just(message))
+                .then();
 
         SinkSubscriber.subscribe(completionSink, respMono);
         committed();

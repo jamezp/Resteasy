@@ -27,42 +27,35 @@ import java.util.concurrent.CompletionStage;
 @Provider
 @Produces("*/*")
 @Consumes("*/*")
-public class ByteArrayProvider implements MessageBodyReader<byte[]>, AsyncMessageBodyWriter<byte[]>
-{
-   public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return type.isArray() && type.getComponentType().equals(byte.class);
-   }
+public class ByteArrayProvider implements MessageBodyReader<byte[]>, AsyncMessageBodyWriter<byte[]> {
+    public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type.isArray() && type.getComponentType().equals(byte.class);
+    }
 
-   public byte[] readFrom(Class<byte[]> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
-      if (NoContent.isContentLengthZero(httpHeaders)) return new byte[0];
-      return ReadFromStream.readFromStream(1024, entityStream);
-   }
+    public byte[] readFrom(Class<byte[]> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : readFrom", getClass().getName());
+        if (NoContent.isContentLengthZero(httpHeaders)) return new byte[0];
+        return ReadFromStream.readFromStream(1024, entityStream);
+    }
 
-   public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return type.isArray() && type.getComponentType().equals(byte.class) && !MediaTypeHelper.isBlacklisted(mediaType);
-   }
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return type.isArray() && type.getComponentType().equals(byte.class) && !MediaTypeHelper.isBlacklisted(mediaType);
+    }
 
-   public long getSize(byte[] bytes, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return bytes.length;
-   }
+    public long getSize(byte[] bytes, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return bytes.length;
+    }
 
-   public void writeTo(byte[] bytes, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
-      entityStream.write(bytes);
-   }
+    public void writeTo(byte[] bytes, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
+        entityStream.write(bytes);
+    }
 
-   @Override
-   public CompletionStage<Void> asyncWriteTo(byte[] bytes, Class<?> type, Type genericType, Annotation[] annotations,
-                                             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-                                             AsyncOutputStream entityStream)
-   {
-      LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
-      return entityStream.asyncWrite(bytes);
-   }
+    @Override
+    public CompletionStage<Void> asyncWriteTo(byte[] bytes, Class<?> type, Type genericType, Annotation[] annotations,
+                                              MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+                                              AsyncOutputStream entityStream) {
+        LogMessages.LOGGER.debugf("Provider : %s,  Method : writeTo", getClass().getName());
+        return entityStream.asyncWrite(bytes);
+    }
 }

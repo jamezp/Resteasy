@@ -11,37 +11,35 @@ import javax.ws.rs.core.MultivaluedMap;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public interface ServerCache
-{
-   static boolean mayVary(Entry cached, MultivaluedMap<String, String> current) {
-      boolean mayVary = false;
-      for (Map.Entry<String, List<String>> entry : cached.getVaryHeaders().entrySet()) {
-         String headerName = entry.getKey();
-         mayVary |= !(current.containsKey(headerName) && current.get(headerName).containsAll(entry.getValue()));
-      }
-      return mayVary;
-   }
+public interface ServerCache {
+    static boolean mayVary(Entry cached, MultivaluedMap<String, String> current) {
+        boolean mayVary = false;
+        for (Map.Entry<String, List<String>> entry : cached.getVaryHeaders().entrySet()) {
+            String headerName = entry.getKey();
+            mayVary |= !(current.containsKey(headerName) && current.get(headerName).containsAll(entry.getValue()));
+        }
+        return mayVary;
+    }
 
-   interface Entry
-   {
-      int getExpirationInSeconds();
+    interface Entry {
+        int getExpirationInSeconds();
 
-      boolean isExpired();
+        boolean isExpired();
 
-      String getEtag();
+        String getEtag();
 
-      byte[] getCached();
+        byte[] getCached();
 
-      MultivaluedMap<String, Object> getHeaders();
+        MultivaluedMap<String, Object> getHeaders();
 
-      MultivaluedMap<String, String> getVaryHeaders();
-   }
+        MultivaluedMap<String, String> getVaryHeaders();
+    }
 
-   Entry add(String uri, MediaType mediaType, CacheControl cc, MultivaluedMap<String, Object> headers, byte[] entity, String etag, MultivaluedMap<String, String> varyHeaders);
+    Entry add(String uri, MediaType mediaType, CacheControl cc, MultivaluedMap<String, Object> headers, byte[] entity, String etag, MultivaluedMap<String, String> varyHeaders);
 
-   Entry get(String uri, MediaType accept, MultivaluedMap<String, String> headers);
+    Entry get(String uri, MediaType accept, MultivaluedMap<String, String> headers);
 
-   void remove(String uri);
+    void remove(String uri);
 
-   void clear();
+    void clear();
 }

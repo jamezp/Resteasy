@@ -27,7 +27,7 @@
     <properties>
         <property name="jboss.api" value="private"/>
     </properties>
-    
+
     <resources>
         <!-- Insert resources here -->
     </resources>

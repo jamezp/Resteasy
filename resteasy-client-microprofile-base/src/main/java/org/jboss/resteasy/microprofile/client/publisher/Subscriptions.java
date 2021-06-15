@@ -9,11 +9,12 @@ public class Subscriptions {
      * caps the result at Long.MAX_VALUE and returns the previous value.
      *
      * @param requested the AtomicLong holding the current requested value
-     * @param requests the value to add, must be positive (not verified)
+     * @param requests  the value to add, must be positive (not verified)
+     *
      * @return the original value before the add
      */
     public static long add(AtomicLong requested, long requests) {
-        for (;;) {
+        for (; ; ) {
             long r = requested.get();
             if (r == Long.MAX_VALUE) {
                 return Long.MAX_VALUE;
@@ -30,6 +31,7 @@ public class Subscriptions {
      *
      * @param a the first value
      * @param b the second value
+     *
      * @return the sum capped at Long.MAX_VALUE
      */
     public static long add(long a, long b) {
@@ -46,7 +48,8 @@ public class Subscriptions {
      * the amount produced by the operator.
      *
      * @param requested the atomic long keeping track of requests
-     * @param amount delta to subtract
+     * @param amount    delta to subtract
+     *
      * @return value after subtraction or zero
      */
     public static long produced(AtomicLong requested, long amount) {
@@ -68,6 +71,7 @@ public class Subscriptions {
      *
      * @param a left operand
      * @param b right operand
+     *
      * @return Subtraction result or 0 if overflow
      */
     public static long subOrZero(long a, long b) {

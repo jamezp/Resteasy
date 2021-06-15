@@ -19,14 +19,14 @@ import javax.xml.bind.JAXBElement;
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 public class HomecontrolService {
 
-   @POST
-   public JAXBElement<UserType> demo(UserType type) {
-      type.setId(type.getId() + " DemoService_visited");
-      return new ObjectFactory().createUser(type);
-   }
+    @POST
+    public JAXBElement<UserType> demo(UserType type) {
+        type.setId(type.getId() + " DemoService_visited");
+        return new ObjectFactory().createUser(type);
+    }
 
-   @GET
-   public Response get () {
-      return Response.ok().build();
-   }
+    @GET
+    public Response get() {
+        return Response.ok().build();
+    }
 }

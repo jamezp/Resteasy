@@ -34,296 +34,236 @@ import java.util.concurrent.CompletionStage;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class PropertyInjectorImpl implements PropertyInjector
-{
-   protected HashMap<Field, ValueInjector> fieldMap = new HashMap<Field, ValueInjector>();
+public class PropertyInjectorImpl implements PropertyInjector {
+    protected HashMap<Field, ValueInjector> fieldMap = new HashMap<Field, ValueInjector>();
 
-   private static class SetterMethod
-   {
-      private SetterMethod(final Method method, final ValueInjector extractor)
-      {
-         this.method = method;
-         this.extractor = extractor;
-      }
+    private static class SetterMethod {
+        private SetterMethod(final Method method, final ValueInjector extractor) {
+            this.method = method;
+            this.extractor = extractor;
+        }
 
-      public Method method;
-      public ValueInjector extractor;
-   }
+        public Method method;
+        public ValueInjector extractor;
+    }
 
-   protected List<SetterMethod> setters = new ArrayList<SetterMethod>();
-   protected HashMap<Long, Method> setterhashes = new HashMap<Long, Method>();
-   protected Class<?> clazz;
+    protected List<SetterMethod> setters = new ArrayList<SetterMethod>();
+    protected HashMap<Long, Method> setterhashes = new HashMap<Long, Method>();
+    protected Class<?> clazz;
 
-   public PropertyInjectorImpl(final Class<?> clazz, final ResteasyProviderFactory factory)
-   {
-      this.clazz = clazz;
+    public PropertyInjectorImpl(final Class<?> clazz, final ResteasyProviderFactory factory) {
+        this.clazz = clazz;
 
-      populateMap(clazz, factory);
-   }
+        populateMap(clazz, factory);
+    }
 
-   protected void populateMap(Class<?> clazz, ResteasyProviderFactory factory)
-   {
-      for (Field field : getDeclaredFields(clazz))
-      {
-         Annotation[] annotations = field.getAnnotations();
-         if (annotations == null || annotations.length == 0) continue;
-         Class<?> type = field.getType();
-         Type genericType = field.getGenericType();
+    protected void populateMap(Class<?> clazz, ResteasyProviderFactory factory) {
+        for (Field field : getDeclaredFields(clazz)) {
+            Annotation[] annotations = field.getAnnotations();
+            if (annotations == null || annotations.length == 0) continue;
+            Class<?> type = field.getType();
+            Type genericType = field.getGenericType();
 
-         ValueInjector extractor = getParameterExtractor(clazz, factory, field, field.getName(), annotations, type, genericType);
-         if (extractor != null)
-         {
-            if (!Modifier.isPublic(field.getModifiers()))
-            {
-               setAccessible(field);
+            ValueInjector extractor = getParameterExtractor(clazz, factory, field, field.getName(), annotations, type, genericType);
+            if (extractor != null) {
+                if (!Modifier.isPublic(field.getModifiers())) {
+                    setAccessible(field);
+                }
+                fieldMap.put(field, extractor);
             }
-            fieldMap.put(field, extractor);
-         }
-      }
-      for (Method method : getDeclaredMethods(clazz))
-      {
-         if (!method.getName().startsWith("set")) continue;
-         if (method.getParameterTypes().length != 1) continue;
+        }
+        for (Method method : getDeclaredMethods(clazz)) {
+            if (!method.getName().startsWith("set")) continue;
+            if (method.getParameterTypes().length != 1) continue;
 
-         Annotation[] annotations = method.getAnnotations();
-         if (annotations == null || annotations.length == 0) continue;
+            Annotation[] annotations = method.getAnnotations();
+            if (annotations == null || annotations.length == 0) continue;
 
-         Class<?> type = method.getParameterTypes()[0];
-         Type genericType = method.getGenericParameterTypes()[0];
+            Class<?> type = method.getParameterTypes()[0];
+            Type genericType = method.getGenericParameterTypes()[0];
 
-         String propertyName = Introspector.decapitalize(method.getName().substring(3));
+            String propertyName = Introspector.decapitalize(method.getName().substring(3));
 
-         ValueInjector extractor = getParameterExtractor(clazz, factory, method, propertyName, annotations, type, genericType);
-         if (extractor != null)
-         {
-            long hash = 0;
-            try
-            {
-               hash = MethodHashing.methodHash(method);
-            }
-            catch (Exception e)
-            {
-               throw new RuntimeException(e);
-            }
-            if (!Modifier.isPrivate(method.getModifiers()))
-            {
-               Method older = setterhashes.get(hash);
-               if (older != null) continue;
+            ValueInjector extractor = getParameterExtractor(clazz, factory, method, propertyName, annotations, type, genericType);
+            if (extractor != null) {
+                long hash = 0;
+                try {
+                    hash = MethodHashing.methodHash(method);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                if (!Modifier.isPrivate(method.getModifiers())) {
+                    Method older = setterhashes.get(hash);
+                    if (older != null) continue;
+                }
+
+                if (!Modifier.isPublic(method.getModifiers())) {
+                    setAccessible(method);
+                }
+                setters.add(new SetterMethod(method, extractor));
+                setterhashes.put(hash, method);
             }
 
-            if (!Modifier.isPublic(method.getModifiers()))
-            {
-               setAccessible(method);
+        }
+        if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class))
+            populateMap(clazz.getSuperclass(), factory);
+
+
+    }
+
+    private ValueInjector getParameterExtractor(Class<?> clazz, ResteasyProviderFactory factory, AccessibleObject accessibleObject,
+                                                String defaultName, Annotation[] annotations, Class<?> type, Type genericType) {
+        boolean extractBody = (FindAnnotation.findAnnotation(annotations, Body.class) != null);
+        ValueInjector injector = factory.getInjectorFactory().createParameterExtractor(clazz, accessibleObject, defaultName, type, genericType,
+                annotations, extractBody, factory);
+        return injector;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public CompletionStage<Void> inject(HttpRequest request, HttpResponse response, Object target, boolean unwrapAsync) throws Failure {
+        CompletionStage<Void> ret = null;
+        for (Map.Entry<Field, ValueInjector> entry : fieldMap.entrySet()) {
+            Object injectValue = entry.getValue().inject(request, response, unwrapAsync);
+            if (injectValue != null && injectValue instanceof CompletionStage) {
+                if (ret == null) ret = CompletableFuture.completedFuture(null);
+                ret = ret.thenCompose(v -> ((CompletionStage<Object>) injectValue)
+                        .thenAccept(value -> {
+                            try {
+                                entry.getKey().set(target, CompletionStageHolder.resolve(value));
+                            } catch (IllegalAccessException e) {
+                                throw new InternalServerErrorException(e);
+                            }
+                        }));
+            } else {
+                try {
+                    entry.getKey().set(target, CompletionStageHolder.resolve(injectValue));
+                } catch (IllegalAccessException e) {
+                    throw new InternalServerErrorException(e);
+                }
             }
-            setters.add(new SetterMethod(method, extractor));
-            setterhashes.put(hash, method);
-         }
+        }
+        for (SetterMethod setter : setters) {
+            Object injectedValue = setter.extractor.inject(request, response, unwrapAsync);
+            if (injectedValue != null && injectedValue instanceof CompletionStage) {
+                if (ret == null) ret = CompletableFuture.completedFuture(null);
+                ret = ret.thenCompose(v -> ((CompletionStage<Object>) injectedValue)
+                        .thenAccept(value -> {
+                            try {
+                                setter.method.invoke(target, CompletionStageHolder.resolve(value));
+                            } catch (IllegalAccessException e) {
+                                throw new InternalServerErrorException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new ApplicationException(e.getCause());
+                            }
+                        }));
+            } else {
+                try {
+                    setter.method.invoke(target, CompletionStageHolder.resolve(injectedValue));
+                } catch (IllegalAccessException e) {
+                    throw new InternalServerErrorException(e);
+                } catch (InvocationTargetException e) {
+                    throw new ApplicationException(e.getCause());
+                }
 
-      }
-      if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class))
-         populateMap(clazz.getSuperclass(), factory);
-
-
-   }
-
-   private ValueInjector getParameterExtractor(Class<?> clazz, ResteasyProviderFactory factory, AccessibleObject accessibleObject,
-                                               String defaultName, Annotation[] annotations, Class<?> type, Type genericType)
-   {
-      boolean extractBody = (FindAnnotation.findAnnotation(annotations, Body.class) != null);
-      ValueInjector injector = factory.getInjectorFactory().createParameterExtractor(clazz, accessibleObject, defaultName, type, genericType,
-              annotations, extractBody, factory);
-      return injector;
-   }
-
-   @SuppressWarnings("unchecked")
-   @Override
-   public CompletionStage<Void> inject(HttpRequest request, HttpResponse response, Object target, boolean unwrapAsync) throws Failure
-   {
-      CompletionStage<Void> ret = null;
-      for (Map.Entry<Field, ValueInjector> entry : fieldMap.entrySet())
-      {
-         Object injectValue = entry.getValue().inject(request, response, unwrapAsync);
-         if (injectValue != null && injectValue instanceof CompletionStage) {
-            if (ret == null) ret = CompletableFuture.completedFuture(null);
-            ret = ret.thenCompose(v -> ((CompletionStage<Object>)injectValue)
-                    .thenAccept(value -> {
-                       try
-                       {
-                          entry.getKey().set(target, CompletionStageHolder.resolve(value));
-                       }
-                       catch (IllegalAccessException e)
-                       {
-                          throw new InternalServerErrorException(e);
-                       }
-                    }));
-         } else {
-            try {
-               entry.getKey().set(target, CompletionStageHolder.resolve(injectValue));
-            } catch (IllegalAccessException e) {
-               throw new InternalServerErrorException(e);
             }
-         }
-      }
-      for (SetterMethod setter : setters)
-      {
-         Object injectedValue = setter.extractor.inject(request, response, unwrapAsync);
-         if (injectedValue != null && injectedValue instanceof CompletionStage) {
-            if (ret == null) ret = CompletableFuture.completedFuture(null);
-            ret = ret.thenCompose(v -> ((CompletionStage<Object>)injectedValue)
-                    .thenAccept(value -> {
-                       try
-                       {
-                          setter.method.invoke(target, CompletionStageHolder.resolve(value));
-                       }
-                       catch (IllegalAccessException e)
-                       {
-                          throw new InternalServerErrorException(e);
-                       }
-                       catch (InvocationTargetException e)
-                       {
-                          throw new ApplicationException(e.getCause());
-                       }
-                    }));
-         } else {
-            try {
-               setter.method.invoke(target, CompletionStageHolder.resolve(injectedValue));
-            } catch (IllegalAccessException e) {
-               throw new InternalServerErrorException(e);
-            } catch (InvocationTargetException e) {
-               throw new ApplicationException(e.getCause());
-            }
+        }
+        return ret;
+    }
 
-         }
-      }
-      return ret;
-   }
+    @SuppressWarnings("unchecked")
+    @Override
+    public CompletionStage<Void> inject(Object target, boolean unwrapAsync) {
+        CompletionStage<Void> ret = null;
+        for (Map.Entry<Field, ValueInjector> entry : fieldMap.entrySet()) {
+            Object injectedValue = entry.getValue().inject(unwrapAsync);
+            if (injectedValue != null && injectedValue instanceof CompletionStage) {
+                if (ret == null) ret = CompletableFuture.completedFuture(null);
+                ret = ret.thenCompose(v -> ((CompletionStage<Object>) injectedValue)
+                        .thenAccept(value -> {
+                            try {
+                                entry.getKey().set(target, CompletionStageHolder.resolve(value));
+                            } catch (IllegalAccessException e) {
+                                throw new InternalServerErrorException(e);
+                            }
+                        }));
 
-   @SuppressWarnings("unchecked")
-   @Override
-   public CompletionStage<Void> inject(Object target, boolean unwrapAsync)
-   {
-      CompletionStage<Void> ret = null;
-      for (Map.Entry<Field, ValueInjector> entry : fieldMap.entrySet())
-      {
-         Object injectedValue = entry.getValue().inject(unwrapAsync);
-         if (injectedValue != null && injectedValue instanceof CompletionStage) {
-            if (ret == null) ret = CompletableFuture.completedFuture(null);
-            ret = ret.thenCompose(v -> ((CompletionStage<Object>)injectedValue)
-                    .thenAccept(value -> {
-                       try
-                       {
-                          entry.getKey().set(target, CompletionStageHolder.resolve(value));
-                       }
-                       catch (IllegalAccessException e)
-                       {
-                          throw new InternalServerErrorException(e);
-                       }
-                    }));
+            } else {
+                try {
+                    entry.getKey().set(target, CompletionStageHolder.resolve(injectedValue));
+                } catch (IllegalAccessException e) {
+                    throw new InternalServerErrorException(e);
+                }
 
-         } else {
-            try
-            {
-               entry.getKey().set(target, CompletionStageHolder.resolve(injectedValue));
             }
-            catch (IllegalAccessException e)
-            {
-               throw new InternalServerErrorException(e);
-            }
+        }
+        for (SetterMethod setter : setters) {
+            Object injectedValue = setter.extractor.inject(unwrapAsync);
+            if (injectedValue != null && injectedValue instanceof CompletionStage) {
+                if (ret == null) ret = CompletableFuture.completedFuture(null);
+                ret = ret.thenCompose(v -> ((CompletionStage<Object>) injectedValue)
+                        .thenAccept(value -> {
+                            try {
+                                setter.method.invoke(target, CompletionStageHolder.resolve(value));
+                            } catch (IllegalAccessException e) {
+                                throw new InternalServerErrorException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new ApplicationException(e.getCause());
+                            }
+                        }));
 
-         }
-      }
-      for (SetterMethod setter : setters)
-      {
-         Object injectedValue = setter.extractor.inject(unwrapAsync);
-         if (injectedValue != null && injectedValue instanceof CompletionStage) {
-            if (ret == null) ret = CompletableFuture.completedFuture(null);
-            ret = ret.thenCompose(v -> ((CompletionStage<Object>)injectedValue)
-                    .thenAccept(value -> {
-                       try
-                       {
-                          setter.method.invoke(target, CompletionStageHolder.resolve(value));
-                       }
-                       catch (IllegalAccessException e)
-                       {
-                          throw new InternalServerErrorException(e);
-                       }
-                       catch (InvocationTargetException e)
-                       {
-                          throw new ApplicationException(e.getCause());
-                       }
-                    }));
+            } else {
+                try {
+                    setter.method.invoke(target, CompletionStageHolder.resolve(injectedValue));
+                } catch (IllegalAccessException e) {
+                    throw new InternalServerErrorException(e);
+                } catch (InvocationTargetException e) {
+                    throw new ApplicationException(e.getCause());
+                }
 
-         } else {
-            try
-            {
-               setter.method.invoke(target, CompletionStageHolder.resolve(injectedValue));
             }
-            catch (IllegalAccessException e)
-            {
-               throw new InternalServerErrorException(e);
-            }
-            catch (InvocationTargetException e)
-            {
-               throw new ApplicationException(e.getCause());
-            }
+        }
+        return ret;
+    }
 
-         }
-      }
-      return ret;
-   }
+    private Field[] getDeclaredFields(final Class<?> clazz) {
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            return AccessController.doPrivileged(new PrivilegedAction<Field[]>() {
+                @Override
+                public Field[] run() {
+                    return clazz.getDeclaredFields();
+                }
+            });
+        }
+        return clazz.getDeclaredFields();
+    }
 
-   private Field[] getDeclaredFields(final Class<?> clazz)
-   {
-      final SecurityManager sm = System.getSecurityManager();
-      if (sm != null)
-      {
-         return AccessController.doPrivileged(new PrivilegedAction<Field[]>()
-         {
-            @Override
-            public Field[] run()
-            {
-               return clazz.getDeclaredFields();
-            }
-         });
-      }
-      return clazz.getDeclaredFields();
-   }
+    private Method[] getDeclaredMethods(final Class<?> clazz) {
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            return AccessController.doPrivileged(new PrivilegedAction<Method[]>() {
+                @Override
+                public Method[] run() {
+                    return clazz.getDeclaredMethods();
+                }
+            });
+        }
+        return clazz.getDeclaredMethods();
+    }
 
-   private Method[] getDeclaredMethods(final Class<?> clazz)
-   {
-      final SecurityManager sm = System.getSecurityManager();
-      if (sm != null)
-      {
-         return AccessController.doPrivileged(new PrivilegedAction<Method[]>()
-         {
-            @Override
-            public Method[] run()
-            {
-               return clazz.getDeclaredMethods();
-            }
-         });
-      }
-      return clazz.getDeclaredMethods();
-   }
-
-   private void setAccessible(final AccessibleObject member)
-   {
-      final SecurityManager sm = System.getSecurityManager();
-      if (sm != null)
-      {
-         AccessController.doPrivileged(new PrivilegedAction<Void>()
-         {
-            @Override
-            public Void run()
-            {
-               member.setAccessible(true);
-               return null;
-            }
-         });
-      }
-      else
-      {
-         member.setAccessible(true);
-      }
-   }
+    private void setAccessible(final AccessibleObject member) {
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                @Override
+                public Void run() {
+                    member.setAccessible(true);
+                    return null;
+                }
+            });
+        } else {
+            member.setAccessible(true);
+        }
+    }
 }

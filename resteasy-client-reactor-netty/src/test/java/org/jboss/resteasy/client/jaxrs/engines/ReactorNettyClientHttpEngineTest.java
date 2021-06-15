@@ -6,7 +6,9 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.util.concurrent.DefaultEventExecutor;
+
 import static org.hamcrest.CoreMatchers.containsString;
+
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.internal.ClientResponse;
 import org.junit.AfterClass;
@@ -74,7 +76,7 @@ public class ReactorNettyClientHttpEngineTest {
                         timeout);
 
         final ClientBuilder builder = ClientBuilder.newBuilder();
-        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder)builder;
+        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder) builder;
         clientBuilder.httpEngine(engine);
         return builder.build();
     }
@@ -87,7 +89,7 @@ public class ReactorNettyClientHttpEngineTest {
                         HttpResources.get());
 
         final ClientBuilder builder = ClientBuilder.newBuilder();
-        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder)builder;
+        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder) builder;
         clientBuilder.httpEngine(engine);
         return builder.build();
     }
@@ -121,7 +123,7 @@ public class ReactorNettyClientHttpEngineTest {
                         .get("/sleep/{timeout}", (request, response) ->
                                 response.sendString(
                                         Mono.just(DELAYED_HELLO_WORLD)
-                                            .delayElement(Duration.ofMillis(Long.parseLong(request.param("timeout")))))
+                                                .delayElement(Duration.ofMillis(Long.parseLong(request.param("timeout")))))
                         ).get("/param/{name}", (request, response) ->
                                 response.sendString(Mono.just(request.param("name"))))
                         .get("/query", (request, response) -> {
@@ -129,25 +131,25 @@ public class ReactorNettyClientHttpEngineTest {
                             return response.sendString(Mono.just(query.rawQuery()));
                         })
                         .get("/json", (request, response) ->
-                            response.addHeader(HttpHeaderNames.CONTENT_TYPE, "application/json")
-                                .sendString(Mono.just("[]")))
+                                response.addHeader(HttpHeaderNames.CONTENT_TYPE, "application/json")
+                                        .sendString(Mono.just("[]")))
                         .post("/birthday", (request, response) ->
-                            response.addHeader(HttpHeaderNames.CONTENT_TYPE, "application/json")
-                                    .sendString(
-                                            request.receive()
-                                                    .asString()
-                                                    .map(json -> incrementAge(json))))
-                        .get("/response500",(req, resp) ->
-                            resp
-                                .status(500)
-                                .addHeader(HttpHeaderNames.CONTENT_TYPE, "text/plain")
-                                .sendString(Mono.just("oh nos!")))
+                                response.addHeader(HttpHeaderNames.CONTENT_TYPE, "application/json")
+                                        .sendString(
+                                                request.receive()
+                                                        .asString()
+                                                        .map(json -> incrementAge(json))))
+                        .get("/response500", (req, resp) ->
+                                resp
+                                        .status(500)
+                                        .addHeader(HttpHeaderNames.CONTENT_TYPE, "text/plain")
+                                        .sendString(Mono.just("oh nos!")))
                         .post("/headers", (request, response) ->
-                            response.sendString(
-                                Mono.just(
-                                    Optional.ofNullable(
-                                        request.requestHeaders().get(HttpHeaderNames.CONTENT_LENGTH))
-                                        .orElse("Content-Length header was not in request:(:(")))))
+                                response.sendString(
+                                        Mono.just(
+                                                Optional.ofNullable(
+                                                        request.requestHeaders().get(HttpHeaderNames.CONTENT_LENGTH))
+                                                        .orElse("Content-Length header was not in request:(:(")))))
                 .bindNow();
     }
 
@@ -175,7 +177,8 @@ public class ReactorNettyClientHttpEngineTest {
 
     @Test
     public void testSyncGetWithGenericType() {
-        final GenericType<List<String>> stringListType = new GenericType<List<String>>() {};
+        final GenericType<List<String>> stringListType = new GenericType<List<String>>() {
+        };
         final List<String> listOfStrings = client.target(url("/listofstrings")).request().get(stringListType);
         assertEquals("somestring1", listOfStrings.get(0));
         assertEquals("somestring2", listOfStrings.get(1));
@@ -234,7 +237,8 @@ public class ReactorNettyClientHttpEngineTest {
 
     @Test
     public void testAsyncGetWithGenericType() throws ExecutionException, InterruptedException {
-        final GenericType<List<String>> stringListType = new GenericType<List<String>>() {};
+        final GenericType<List<String>> stringListType = new GenericType<List<String>>() {
+        };
         final Future<List<String>> future = client.target(url("/listofstrings")).request().async().get(stringListType);
         final List<String> listOfStrings = future.get();
         assertEquals("somestring1", listOfStrings.get(0));
@@ -292,7 +296,7 @@ public class ReactorNettyClientHttpEngineTest {
                             }
                         });
 
-        while(!future.isDone()) {
+        while (!future.isDone()) {
             // Wait till the result is ready.
         }
         assertEquals(UnknownHostException.class.getName(), entity.get());
@@ -443,7 +447,7 @@ public class ReactorNettyClientHttpEngineTest {
     @Test
     public void testClose() {
         final ClientBuilder builder = ClientBuilder.newBuilder();
-        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder)builder;
+        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder) builder;
         final ChannelGroup channelGroup = new DefaultChannelGroup(new DefaultEventExecutor());
         final ConnectionProvider connectionProvider = ConnectionProvider.create("test");
         final HttpClient httpClient =
@@ -481,10 +485,10 @@ public class ReactorNettyClientHttpEngineTest {
         final String payload = "hello";
         final WebTarget target = client.target(url("/headers"));
         final Response response =
-            target
-                .request()
-                .header("Content-Length", payload.length() + 42)
-                .post(Entity.text(payload));
+                target
+                        .request()
+                        .header("Content-Length", payload.length() + 42)
+                        .post(Entity.text(payload));
         assertEquals(200, response.getStatus());
         assertEquals(Integer.toString(payload.length()), response.readEntity(String.class));
     }
@@ -506,7 +510,7 @@ public class ReactorNettyClientHttpEngineTest {
         try {
             timeoutClient.target(url("/sleep/500")).request().get();
             Assert.fail("timeout exception expected");
-        } catch(ProcessingException ex) {
+        } catch (ProcessingException ex) {
             assertThat(ex.getMessage(),
                     containsString("java.util.concurrent.TimeoutException: Did not observe any item or terminal signal within 200ms"));
         }
@@ -514,7 +518,7 @@ public class ReactorNettyClientHttpEngineTest {
 
     @Test
     public void testTimeoutAsyncInvocation() throws Exception {
-        final Client timeoutClient = setupClient(HttpClient.create(),Duration.ofMillis(200));
+        final Client timeoutClient = setupClient(HttpClient.create(), Duration.ofMillis(200));
 
         final Future<Response> future = timeoutClient.target(url("/sleep/300")).request().async().get();
 
@@ -575,17 +579,17 @@ public class ReactorNettyClientHttpEngineTest {
     public void test500ResponseBodyClosedState() throws Exception {
         try {
             setupClient(HttpClient.create())
-                .target(url("/response500"))
-                .request()
-                .rx()
-                .get(String.class)
-                .toCompletableFuture()
-                .get();
+                    .target(url("/response500"))
+                    .request()
+                    .rx()
+                    .get(String.class)
+                    .toCompletableFuture()
+                    .get();
         } catch (final ExecutionException e) {
             if (e.getCause() instanceof InternalServerErrorException) {
-                final Response r = ((InternalServerErrorException)e.getCause()).getResponse();
+                final Response r = ((InternalServerErrorException) e.getCause()).getResponse();
                 if (r instanceof ClientResponse) {
-                    assertFalse(((ClientResponse)r).isClosed());
+                    assertFalse(((ClientResponse) r).isClosed());
                     return;
                 }
             }

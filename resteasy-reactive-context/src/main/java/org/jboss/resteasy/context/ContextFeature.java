@@ -10,22 +10,20 @@ import org.jboss.resteasy.core.ResteasyContext;
 import org.jboss.resteasy.spi.Dispatcher;
 
 @Provider
-public class ContextFeature implements Feature
-{
-   @Override
-   public boolean configure(FeatureContext context)
-   {
-      // this is tied to the deployment, which is what we want for the reactive context
-      if(context.getConfiguration().getRuntimeType() == RuntimeType.CLIENT)
-         return false;
-      Dispatcher dispatcher = ResteasyContext.getContextData(Dispatcher.class);
-      if(dispatcher == null) {
-         // this can happen, but it means we're not able to find a deployment
-         return false;
-      }
-      // Make sure we have context propagation for this class loader
-      ContextManagerProvider.instance().getContextManager();
-      return true;
-   }
+public class ContextFeature implements Feature {
+    @Override
+    public boolean configure(FeatureContext context) {
+        // this is tied to the deployment, which is what we want for the reactive context
+        if (context.getConfiguration().getRuntimeType() == RuntimeType.CLIENT)
+            return false;
+        Dispatcher dispatcher = ResteasyContext.getContextData(Dispatcher.class);
+        if (dispatcher == null) {
+            // this can happen, but it means we're not able to find a deployment
+            return false;
+        }
+        // Make sure we have context propagation for this class loader
+        ContextManagerProvider.instance().getContextManager();
+        return true;
+    }
 
 }

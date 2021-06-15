@@ -7,12 +7,10 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @Provider
-public class ClientRequestFilterImpl implements ClientRequestFilter
-{
+public class ClientRequestFilterImpl implements ClientRequestFilter {
 
-   @Override
-   public void filter(ClientRequestContext requestContext) throws IOException
-   {
-      requestContext.abortWith(Response.status(456).build());
-   }
+    @Override
+    public void filter(ClientRequestContext requestContext) throws IOException {
+        requestContext.abortWith(Response.status(456).build());
+    }
 }

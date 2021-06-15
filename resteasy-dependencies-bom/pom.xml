@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <parent>
         <groupId>org.jboss</groupId>
@@ -471,11 +472,11 @@
                 <version>${version.rest-assured}</version>
                 <scope>test</scope>
             </dependency>
-	        <dependency>
-	            <groupId>com.google.guava</groupId>
-	            <artifactId>guava</artifactId>
-	            <version>${version.com.google.guava}</version>
-	        </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${version.com.google.guava}</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
@@ -491,7 +492,7 @@
                 <groupId>jakarta.inject</groupId>
                 <artifactId>jakarta.inject-api</artifactId>
                 <version>${version.jakarta.inject.jakarta.inject-api}</version>
-             </dependency>
+            </dependency>
             <!-- Needed by org.jboss.resteasy.utils.PermissionUtil -->
             <dependency>
                 <groupId>com.io7m.xom</groupId>
@@ -790,7 +791,7 @@
                 <artifactId>jetty-server</artifactId>
                 <version>${version.org.eclipse.jetty}</version>
             </dependency>
-           <!-- required to align the Jetty Servlet version for MicroProfile Rest Client tests-->
+            <!-- required to align the Jetty Servlet version for MicroProfile Rest Client tests-->
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlets</artifactId>
@@ -842,14 +843,14 @@
                         <artifactId>cdi-api</artifactId>
                     </exclusion>
                 </exclusions>
-           </dependency>
-           <dependency>
+            </dependency>
+            <dependency>
                 <groupId>org.jboss.weld</groupId>
                 <artifactId>weld-core-impl</artifactId>
                 <version>${version.weld}</version>
-           </dependency>
+            </dependency>
 
-           <dependency>
+            <dependency>
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se-core</artifactId>
                 <version>${version.weld}</version>
@@ -863,7 +864,7 @@
                         <artifactId>javax.inject</artifactId>
                     </exclusion>
                 </exclusions>
-           </dependency>
+            </dependency>
 
             <dependency>
                 <groupId>org.wildfly.core</groupId>

@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
  */
 public class ResteasyNotAllowedException extends NotAllowedException implements WebApplicationExceptionWrapper<NotAllowedException> {
 
-   private static final long serialVersionUID = -6319306078354018353L;
-   private final NotAllowedException wrapped;
+    private static final long serialVersionUID = -6319306078354018353L;
+    private final NotAllowedException wrapped;
 
     ResteasyNotAllowedException(final NotAllowedException wrapped) {
         super(wrapped.getMessage(), sanitize(wrapped.getResponse()), wrapped.getCause());

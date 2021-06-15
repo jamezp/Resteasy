@@ -28,7 +28,7 @@ public class BlockingWriter implements MessageBodyWriter<BlockingWriterData> {
 
     @Override
     public void writeTo(BlockingWriterData t, Class<?> type, Type genericType, Annotation[] annotations,
-            MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
+                        MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
             throws IOException, WebApplicationException {
         String resp = Thread.currentThread() == t.requestThread && !request.getAsyncContext().isSuspended() ? "OK" : "KO";
         entityStream.write(resp.getBytes(Charset.forName("UTF-8")));

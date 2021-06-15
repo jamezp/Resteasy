@@ -27,8 +27,7 @@ public class BuiltResponseEntityNotBacked extends BuiltResponse {
     }
 
     @Override
-    public <T> T readEntity(Class<T> type, Type genericType, Annotation[] anns)
-    {
+    public <T> T readEntity(Class<T> type, Type genericType, Annotation[] anns) {
         throw new IllegalStateException(Messages.MESSAGES.entityNotBackedByInputStream());
     }
 }

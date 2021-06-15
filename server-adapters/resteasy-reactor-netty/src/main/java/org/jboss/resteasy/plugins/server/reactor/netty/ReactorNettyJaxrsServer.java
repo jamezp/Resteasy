@@ -57,338 +57,330 @@ import reactor.netty.http.server.HttpServerResponse;
  * and the server.
  */
 public class ReactorNettyJaxrsServer implements EmbeddedJaxrsServer<ReactorNettyJaxrsServer> {
-   private static final Logger log = Logger.getLogger(ReactorNettyJaxrsServer.class);
+    private static final Logger log = Logger.getLogger(ReactorNettyJaxrsServer.class);
 
-   private final EmbeddedServerHelper serverHelper = new EmbeddedServerHelper();
+    private final EmbeddedServerHelper serverHelper = new EmbeddedServerHelper();
 
-   protected String hostname = null;
-   protected int configuredPort = PortProvider.getPort();
-   protected int runtimePort = -1;
-   protected String root = "";
-   protected ResteasyDeployment deployment;
-   protected SecurityDomain domain;
+    protected String hostname = null;
+    protected int configuredPort = PortProvider.getPort();
+    protected int runtimePort = -1;
+    protected String root = "";
+    protected ResteasyDeployment deployment;
+    protected SecurityDomain domain;
 
-   private Duration idleTimeout;
-   private SSLContext sslContext;
-   private ClientAuth clientAuth = ClientAuth.REQUIRE;
-   private List<Runnable> cleanUpTasks;
-   private UnaryOperator<HttpRequestDecoderSpec> mkDecoderSpec = spec -> spec;
+    private Duration idleTimeout;
+    private SSLContext sslContext;
+    private ClientAuth clientAuth = ClientAuth.REQUIRE;
+    private List<Runnable> cleanUpTasks;
+    private UnaryOperator<HttpRequestDecoderSpec> mkDecoderSpec = spec -> spec;
 
-   private DisposableServer server;
+    private DisposableServer server;
 
-   @Override
-   public ReactorNettyJaxrsServer deploy() {
-      return this;
-   }
+    @Override
+    public ReactorNettyJaxrsServer deploy() {
+        return this;
+    }
 
-   @Override
-   public ReactorNettyJaxrsServer start() {
-      log.info("Starting RestEasy Reactor-based server!");
-      serverHelper.checkDeployment(deployment);
+    @Override
+    public ReactorNettyJaxrsServer start() {
+        log.info("Starting RestEasy Reactor-based server!");
+        serverHelper.checkDeployment(deployment);
 
-      final String appPath = serverHelper.checkAppDeployment(deployment);
-      if (appPath != null && (root == null || "".equals(root))) {
-         setRootResourcePath(appPath);
-      }
+        final String appPath = serverHelper.checkAppDeployment(deployment);
+        if (appPath != null && (root == null || "".equals(root))) {
+            setRootResourcePath(appPath);
+        }
 
-      final Handler handler = new Handler();
+        final Handler handler = new Handler();
 
-      HttpServer svrBuilder = HttpServer.create()
-          .port(configuredPort)
-          .httpRequestDecoder(mkDecoderSpec)
-          .handle(handler::handle);
+        HttpServer svrBuilder = HttpServer.create()
+                .port(configuredPort)
+                .httpRequestDecoder(mkDecoderSpec)
+                .handle(handler::handle);
 
-      if (idleTimeout != null) {
-         svrBuilder = svrBuilder.idleTimeout(idleTimeout);
-      }
+        if (idleTimeout != null) {
+            svrBuilder = svrBuilder.idleTimeout(idleTimeout);
+        }
 
-      if (sslContext != null) {
-         svrBuilder = svrBuilder.secure(sslContextSpec -> sslContextSpec.sslContext(toNettySSLContext(sslContext)));
-      }
-      if (hostname != null && !hostname.trim().isEmpty()) {
-         svrBuilder = svrBuilder.host(hostname);
-      }
+        if (sslContext != null) {
+            svrBuilder = svrBuilder.secure(sslContextSpec -> sslContextSpec.sslContext(toNettySSLContext(sslContext)));
+        }
+        if (hostname != null && !hostname.trim().isEmpty()) {
+            svrBuilder = svrBuilder.host(hostname);
+        }
 
-      if (Boolean.parseBoolean(System.getProperty("resteasy.server.reactor-netty.warmup", "true"))) {
-         log.info("Warming up the reactor-netty server");
-         svrBuilder.warmup().block();
-      }
+        if (Boolean.parseBoolean(System.getProperty("resteasy.server.reactor-netty.warmup", "true"))) {
+            log.info("Warming up the reactor-netty server");
+            svrBuilder.warmup().block();
+        }
 
-      server = svrBuilder.bindNow();
-      runtimePort = server.port();
-      return this;
-   }
+        server = svrBuilder.bindNow();
+        runtimePort = server.port();
+        return this;
+    }
 
-   /**
-    * Calling this method will block the current thread.
-    */
-   public void startAndBlock() {
-       start();
-       server.onDispose().block();
-   }
+    /**
+     * Calling this method will block the current thread.
+     */
+    public void startAndBlock() {
+        start();
+        server.onDispose().block();
+    }
 
-   class Handler {
+    class Handler {
 
-      private final Mono<InputStream> empty = Mono.just(new InputStream() {
-         @Override
-         public int read() {
-            return -1;  // end of stream
-         }
-      });
+        private final Mono<InputStream> empty = Mono.just(new InputStream() {
+            @Override
+            public int read() {
+                return -1;  // end of stream
+            }
+        });
 
-      Publisher<Void> handle(final HttpServerRequest req, final HttpServerResponse resp) {
+        Publisher<Void> handle(final HttpServerRequest req, final HttpServerResponse resp) {
 
-         final ResteasyUriInfo info = extractUriInfo(req, root);
+            final ResteasyUriInfo info = extractUriInfo(req, root);
 
-         // aggregate (and maybe? asInputStream) reads the entire request body into memory (direct?)
-         // Can we stream it in some way?
-         // https://stackoverflow.com/a/51801335/2071683 but requires a thread.  Isn't using a thread
-         // per request even if from the elastic pool a big problem???  I mean we are trying to reduce
-         // threads!
-         // I honestly don't know what the Netty4 adapter is doing here.  When
-         // I try to send a large body it says "request payload too large".  I
-         // don't know if that's configurable or not..
+            // aggregate (and maybe? asInputStream) reads the entire request body into memory (direct?)
+            // Can we stream it in some way?
+            // https://stackoverflow.com/a/51801335/2071683 but requires a thread.  Isn't using a thread
+            // per request even if from the elastic pool a big problem???  I mean we are trying to reduce
+            // threads!
+            // I honestly don't know what the Netty4 adapter is doing here.  When
+            // I try to send a large body it says "request payload too large".  I
+            // don't know if that's configurable or not..
 
-         // This is a subscription tied to the completion writing the response.
-         final Sinks.Empty<Void> completionSink = Sinks.empty();
+            // This is a subscription tied to the completion writing the response.
+            final Sinks.Empty<Void> completionSink = Sinks.empty();
 
-         final AtomicBoolean isTimeoutSet = new AtomicBoolean(false);
+            final AtomicBoolean isTimeoutSet = new AtomicBoolean(false);
 
-         final ReactorNettyHttpResponse resteasyResp =
-             new ReactorNettyHttpResponse(req.method(), resp, completionSink);
+            final ReactorNettyHttpResponse resteasyResp =
+                    new ReactorNettyHttpResponse(req.method(), resp, completionSink);
 
-         return req.receive()
-             .aggregate()
-             .asInputStream()
-             .doOnDiscard(InputStream.class, is -> {
-                try {
-                   is.close();
-                } catch (final IOException ie) {
-                   log.error("Problem closing discarded input stream", ie);
-                }
-             }).switchIfEmpty(empty)
-             .flatMap(body -> {
+            return req.receive()
+                    .aggregate()
+                    .asInputStream()
+                    .doOnDiscard(InputStream.class, is -> {
+                        try {
+                            is.close();
+                        } catch (final IOException ie) {
+                            log.error("Problem closing discarded input stream", ie);
+                        }
+                    }).switchIfEmpty(empty)
+                    .flatMap(body -> {
 
-                // These next 2 classes, along with ReactorNettyHttpResponse provide the main '1-way bridges'
-                // between reactor-netty and RestEasy.
-                final SynchronousDispatcher dispatcher = (SynchronousDispatcher) deployment.getDispatcher();
+                        // These next 2 classes, along with ReactorNettyHttpResponse provide the main '1-way bridges'
+                        // between reactor-netty and RestEasy.
+                        final SynchronousDispatcher dispatcher = (SynchronousDispatcher) deployment.getDispatcher();
 
-                final ReactorNettyHttpRequest resteasyReq =
-                    new ReactorNettyHttpRequest(info, req, body, resteasyResp, dispatcher);
+                        final ReactorNettyHttpRequest resteasyReq =
+                                new ReactorNettyHttpRequest(info, req, body, resteasyResp, dispatcher);
 
-                ResteasyProviderFactory defaultInstance = ResteasyProviderFactory.getInstance();
-                if (defaultInstance instanceof ThreadLocalResteasyProviderFactory) {
-                   ThreadLocalResteasyProviderFactory.push(deployment.getProviderFactory());
-                }
+                        ResteasyProviderFactory defaultInstance = ResteasyProviderFactory.getInstance();
+                        if (defaultInstance instanceof ThreadLocalResteasyProviderFactory) {
+                            ThreadLocalResteasyProviderFactory.push(deployment.getProviderFactory());
+                        }
 
-                try {
-                   // This is what actually kicks RestEasy into action.
-                   deployment.getDispatcher().invoke(resteasyReq, resteasyResp);
-                } finally {
-                   //Runs clean up tasks after request is processed
-                   if(cleanUpTasks != null) {
-                      cleanUpTasks.forEach(Runnable::run);
-                   }
-                }
+                        try {
+                            // This is what actually kicks RestEasy into action.
+                            deployment.getDispatcher().invoke(resteasyReq, resteasyResp);
+                        } finally {
+                            //Runs clean up tasks after request is processed
+                            if (cleanUpTasks != null) {
+                                cleanUpTasks.forEach(Runnable::run);
+                            }
+                        }
 
-                if (defaultInstance instanceof ThreadLocalResteasyProviderFactory) {
-                   ThreadLocalResteasyProviderFactory.pop();
-                }
+                        if (defaultInstance instanceof ThreadLocalResteasyProviderFactory) {
+                            ThreadLocalResteasyProviderFactory.pop();
+                        }
 
-                if (!resteasyReq.getAsyncContext().isSuspended()) {
-                   try {
-                      resteasyResp.close();
-                   } catch (IOException e) {
-                      throw new RuntimeException(e);
-                   }
-                }
+                        if (!resteasyReq.getAsyncContext().isSuspended()) {
+                            try {
+                                resteasyResp.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
 
-                final Mono<Void> actualMono = Optional.ofNullable(resteasyReq.timeout())
-                    .map(timeout -> {
-                       isTimeoutSet.set(true);
-                       return completionSink.asMono().timeout(resteasyReq.timeout());
-                    })
-                    .orElse(completionSink.asMono());
+                        final Mono<Void> actualMono = Optional.ofNullable(resteasyReq.timeout())
+                                .map(timeout -> {
+                                    isTimeoutSet.set(true);
+                                    return completionSink.asMono().timeout(resteasyReq.timeout());
+                                })
+                                .orElse(completionSink.asMono());
 
-                return actualMono
-                    .doFinally(s -> {
-                       try {
-                          body.close();
-                       } catch (final IOException ioe) {
-                          log.error("Failure to close the request's input stream.", ioe);
-                       }
+                        return actualMono
+                                .doFinally(s -> {
+                                    try {
+                                        body.close();
+                                    } catch (final IOException ioe) {
+                                        log.error("Failure to close the request's input stream.", ioe);
+                                    }
+                                });
+                    }).onErrorResume(t -> {
+                        if (!resteasyResp.isCommitted()) {
+                            final Mono<Void> sendMono;
+
+                            if (isTimeoutSet.get() && Exceptions.unwrap(t) instanceof TimeoutException) {
+                                sendMono = resp.status(503).send();
+                            } else {
+                                log.error("Unhandled server error.", t);
+                                sendMono = resp.status(500).send();
+                            }
+                            SinkSubscriber.subscribe(completionSink, sendMono);
+                        } else {
+                            log.error("Unhandled server error, JAXRS response committed.", t);
+                        }
+
+                        return completionSink.asMono();
                     });
-             }).onErrorResume(t -> {
-                if (!resteasyResp.isCommitted()) {
-                   final Mono<Void> sendMono;
+        }
 
-                   if (isTimeoutSet.get() && Exceptions.unwrap(t) instanceof TimeoutException) {
-                      sendMono = resp.status(503).send();
-                   } else {
-                      log.error("Unhandled server error.", t);
-                      sendMono = resp.status(500).send();
-                   }
-                   SinkSubscriber.subscribe(completionSink, sendMono);
-                } else {
-                   log.error("Unhandled server error, JAXRS response committed.", t);
-                }
+    }
 
-                return completionSink.asMono();
-             });
-      }
+    @Override
+    public void stop() {
+        runtimePort = -1;
+        server.disposeNow();
+        if (deployment != null) {
+            deployment.stop();
+        }
+    }
 
-   }
+    @Override
+    public ResteasyDeployment getDeployment() {
+        if (deployment == null) {
+            deployment = new ResteasyDeploymentImpl();
+        }
+        return deployment;
+    }
 
-   @Override
-   public void stop()
-   {
-      runtimePort = -1;
-      server.disposeNow();
-      if (deployment != null) {
-         deployment.stop();
-      }
-   }
+    @Override
+    public ReactorNettyJaxrsServer setDeployment(ResteasyDeployment deployment) {
+        this.deployment = deployment;
+        return this;
+    }
 
-   @Override
-   public ResteasyDeployment getDeployment() {
-      if (deployment == null)
-      {
-         deployment = new ResteasyDeploymentImpl();
-      }
-      return deployment;
-   }
+    @Override
+    public ReactorNettyJaxrsServer setPort(int port) {
+        this.configuredPort = port;
+        return this;
+    }
 
-   @Override
-   public ReactorNettyJaxrsServer setDeployment(ResteasyDeployment deployment)
-   {
-      this.deployment = deployment;
-      return this;
-   }
+    public int getPort() {
+        return runtimePort > 0 ? runtimePort : configuredPort;
+    }
 
-   @Override
-   public ReactorNettyJaxrsServer setPort(int port) {
-      this.configuredPort = port;
-      return this;
-   }
+    @Override
+    public ReactorNettyJaxrsServer setHostname(String hostname) {
+        this.hostname = hostname;
+        return this;
+    }
 
-   public int getPort() {
-      return runtimePort > 0 ? runtimePort : configuredPort;
-   }
+    public String getHostname() {
+        return hostname;
+    }
 
-   @Override
-   public ReactorNettyJaxrsServer setHostname(String hostname) {
-      this.hostname = hostname;
-      return this;
-   }
+    @Override
+    public ReactorNettyJaxrsServer setRootResourcePath(String rootResourcePath) {
+        root = Objects.requireNonNull(rootResourcePath);
+        if (root != null && root.equals("/")) {
+            root = "";
+        } else if (!root.startsWith("/")) {
+            root = "/" + root;
+        }
+        return this;
+    }
 
-   public String getHostname() {
-      return hostname;
-   }
+    @Override
+    public ReactorNettyJaxrsServer setSecurityDomain(SecurityDomain sc) {
+        this.domain = sc;
+        return this;
+    }
 
-   @Override
-   public ReactorNettyJaxrsServer setRootResourcePath(String rootResourcePath)
-   {
-      root = Objects.requireNonNull(rootResourcePath);
-      if (root != null && root.equals("/")) {
-         root = "";
-      } else if (!root.startsWith("/")) {
-         root = "/" + root;
-      }
-      return this;
-   }
+    public ReactorNettyJaxrsServer setIdleTimeout(final Duration idleTimeout) {
+        this.idleTimeout = idleTimeout;
+        return this;
+    }
 
-   @Override
-   public ReactorNettyJaxrsServer setSecurityDomain(SecurityDomain sc)
-   {
-      this.domain = sc;
-      return this;
-   }
+    public ReactorNettyJaxrsServer setSSLContext(final SSLContext sslContext) {
+        Objects.requireNonNull(sslContext);
+        this.sslContext = sslContext;
+        return this;
+    }
 
-   public ReactorNettyJaxrsServer setIdleTimeout(final Duration idleTimeout)
-   {
-      this.idleTimeout = idleTimeout;
-      return this;
-   }
+    public ReactorNettyJaxrsServer setClientAuth(final ClientAuth clientAuth) {
+        Objects.requireNonNull(clientAuth);
+        this.clientAuth = clientAuth;
+        return this;
+    }
 
-   public ReactorNettyJaxrsServer setSSLContext(final SSLContext sslContext)
-   {
-      Objects.requireNonNull(sslContext);
-      this.sslContext = sslContext;
-      return this;
-   }
+    /**
+     * Sets clean up tasks that are needed immediately after {@link org.jboss.resteasy.spi.Dispatcher#invoke} yet before
+     * any asynchronous asynchronous work is continued by the reactor-netty server.  Since these run on the Netty event
+     * loop threads, it is important that they run fast (not block).  It is expected that you take special care with
+     * exceptions.  This is useful in certain cases where servlet Filters have options that are hard to achieve with the
+     * pure JAX-RS API, such as:
+     * <code>
+     * doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
+     * establishThreadLocals();
+     * chain.doFilter(req, resp, chain);
+     * clearThreadLocals();
+     * }
+     * </code>
+     *
+     * @param cleanUpTasks List of clean up tasks
+     *
+     * @return ReactorNettyJaxrsServer
+     */
+    public ReactorNettyJaxrsServer setCleanUpTasks(final List<Runnable> cleanUpTasks) {
+        this.cleanUpTasks = cleanUpTasks;
+        return this;
+    }
 
-   public ReactorNettyJaxrsServer setClientAuth(final ClientAuth clientAuth)
-   {
-      Objects.requireNonNull(clientAuth);
-      this.clientAuth = clientAuth;
-      return this;
-   }
+    /**
+     * @param decoderSpecFn
+     *
+     * @see HttpServer#httpRequestDecoder(Function).
+     */
+    public void setDecoderSpecFn(UnaryOperator<HttpRequestDecoderSpec> decoderSpecFn) {
+        this.mkDecoderSpec = decoderSpecFn;
+    }
 
-   /**
-    * Sets clean up tasks that are needed immediately after {@link org.jboss.resteasy.spi.Dispatcher#invoke} yet before
-    * any asynchronous asynchronous work is continued by the reactor-netty server.  Since these run on the Netty event
-    * loop threads, it is important that they run fast (not block).  It is expected that you take special care with
-    * exceptions.  This is useful in certain cases where servlet Filters have options that are hard to achieve with the
-    * pure JAX-RS API, such as:
-    * <code>
-    *  doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
-    *     establishThreadLocals();
-    *     chain.doFilter(req, resp, chain);
-    *     clearThreadLocals();
-    *  }
-    * </code>
-    * @param cleanUpTasks List of clean up tasks
-    * @return ReactorNettyJaxrsServer
-    */
-   public ReactorNettyJaxrsServer setCleanUpTasks(final List<Runnable> cleanUpTasks) {
-      this.cleanUpTasks = cleanUpTasks;
-      return this;
-   }
+    private SslContext toNettySSLContext(final SSLContext sslContext) {
+        Objects.requireNonNull(sslContext);
+        return new JdkSslContext(
+                sslContext,
+                false,
+                null,
+                IdentityCipherSuiteFilter.INSTANCE,
+                null,
+                clientAuth,
+                null,
+                false
+        );
+    }
 
-   /**
-    * @see HttpServer#httpRequestDecoder(Function).
-    *
-    * @param decoderSpecFn
-    */
-   public void setDecoderSpecFn(UnaryOperator<HttpRequestDecoderSpec> decoderSpecFn) {
-      this.mkDecoderSpec = decoderSpecFn;
-   }
+    private ResteasyUriInfo extractUriInfo(final HttpServerRequest req, final String contextPath) {
+        final String uri = req.uri();
 
-   private SslContext toNettySSLContext(final SSLContext sslContext)
-   {
-      Objects.requireNonNull(sslContext);
-      return new JdkSslContext(
-          sslContext,
-          false,
-          null,
-          IdentityCipherSuiteFilter.INSTANCE,
-          null,
-          clientAuth,
-          null,
-          false
-      );
-   }
+        String uriString;
 
-   private ResteasyUriInfo extractUriInfo(final HttpServerRequest req, final String contextPath)
-   {
-      final String uri = req.uri();
+        // If we appear to have an absolute URL, don't try to recreate it from the host and request line.
+        if (uri.startsWith(req.scheme() + "://")) {
+            uriString = uri;
+        } else {
+            uriString = new StringBuilder(100)
+                    .append(req.scheme())
+                    .append("://")
+                    .append(req.hostAddress().getHostString())
+                    .append(":").append(req.hostAddress().getPort())
+                    .append(req.uri())
+                    .toString();
+        }
 
-      String uriString;
-
-      // If we appear to have an absolute URL, don't try to recreate it from the host and request line.
-      if (uri.startsWith(req.scheme() + "://")) {
-         uriString = uri;
-      } else {
-         uriString = new StringBuilder(100)
-             .append(req.scheme())
-             .append("://")
-             .append(req.hostAddress().getHostString())
-             .append(":").append(req.hostAddress().getPort())
-             .append(req.uri())
-             .toString();
-      }
-
-      return new ResteasyUriInfo(uriString, contextPath);
-   }
+        return new ResteasyUriInfo(uriString, contextPath);
+    }
 
 }

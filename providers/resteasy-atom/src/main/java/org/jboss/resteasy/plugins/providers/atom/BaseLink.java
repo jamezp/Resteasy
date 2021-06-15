@@ -20,31 +20,26 @@ import org.jboss.resteasy.plugins.providers.resteasy_atom.i18n.Messages;
  */
 @XmlRootElement(name = "link")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class BaseLink extends Link
-{
-   public BaseLink()
-   {
-   }
+public class BaseLink extends Link {
+    public BaseLink() {
+    }
 
-   public BaseLink(final String rel, final String relativeLink)
-   {
-      UriInfo uriInfo = ResteasyContext.getContextData(UriInfo.class);
-      if (uriInfo == null)
-         throw new IllegalStateException(Messages.MESSAGES.consructorMustBeCalled());
-      URI uri = uriInfo.getBaseUriBuilder().path(relativeLink).build();
-      setHref(uri);
-      setRel(rel);
-   }
+    public BaseLink(final String rel, final String relativeLink) {
+        UriInfo uriInfo = ResteasyContext.getContextData(UriInfo.class);
+        if (uriInfo == null)
+            throw new IllegalStateException(Messages.MESSAGES.consructorMustBeCalled());
+        URI uri = uriInfo.getBaseUriBuilder().path(relativeLink).build();
+        setHref(uri);
+        setRel(rel);
+    }
 
-   public BaseLink(final String rel, final String relativeLink, final MediaType mediaType)
-   {
-      this(rel, relativeLink);
-      this.setType(mediaType);
-   }
+    public BaseLink(final String rel, final String relativeLink, final MediaType mediaType) {
+        this(rel, relativeLink);
+        this.setType(mediaType);
+    }
 
-   public BaseLink(final String rel, final String relativeLink, final String mediaType)
-   {
-      this(rel, relativeLink);
-      this.setType(MediaType.valueOf(mediaType));
-   }
+    public BaseLink(final String rel, final String relativeLink, final String mediaType) {
+        this(rel, relativeLink);
+        this.setType(MediaType.valueOf(mediaType));
+    }
 }

@@ -9,20 +9,17 @@ import org.jboss.resteasy.tracing.RESTEasyTracingLogger;
 public abstract class FinalizedClientResponse extends ClientResponse {
 
     protected FinalizedClientResponse(final ClientConfiguration configuration,
-                                      final RESTEasyTracingLogger tracingLogger)
-    {
+                                      final RESTEasyTracingLogger tracingLogger) {
         super(configuration, tracingLogger);
     }
 
     @Override
     // This method is synchronized to protect against premature calling of finalize by the GC
-    protected synchronized void finalize() throws Throwable
-    {
+    protected synchronized void finalize() throws Throwable {
         if (isClosed()) return;
         try {
             close();
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
         }
     }
 

@@ -21,47 +21,46 @@ import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class RestClientProxyRedeployTest
-{
-   @Deployment(name="deployment1", order = 1)
-   public static Archive<?> deploy1() {
-      WebArchive war = TestUtil.prepareArchive(RestClientProxyRedeployTest.class.getSimpleName() + "1");
-      war.addClass(RestClientProxyRedeployRemoteService.class);
-      war.addAsManifestResource(new StringAsset("Dependencies: org.eclipse.microprofile.restclient"), "MANIFEST.MF");
-      war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-      return TestUtil.finishContainerPrepare(war, null, RestClientProxyRedeployResource.class);
-   }
+public class RestClientProxyRedeployTest {
+    @Deployment(name = "deployment1", order = 1)
+    public static Archive<?> deploy1() {
+        WebArchive war = TestUtil.prepareArchive(RestClientProxyRedeployTest.class.getSimpleName() + "1");
+        war.addClass(RestClientProxyRedeployRemoteService.class);
+        war.addAsManifestResource(new StringAsset("Dependencies: org.eclipse.microprofile.restclient"), "MANIFEST.MF");
+        war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        return TestUtil.finishContainerPrepare(war, null, RestClientProxyRedeployResource.class);
+    }
 
-   @Deployment(name="deployment2", order = 2)
-   public static Archive<?> deploy2() {
-      WebArchive war = TestUtil.prepareArchive(RestClientProxyRedeployTest.class.getSimpleName() + "2");
-      war.addClass(RestClientProxyRedeployRemoteService.class);
-      war.addAsManifestResource(new StringAsset("Dependencies: org.eclipse.microprofile.restclient"), "MANIFEST.MF");
-      war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-      return TestUtil.finishContainerPrepare(war, null, RestClientProxyRedeployResource.class);
-   }
+    @Deployment(name = "deployment2", order = 2)
+    public static Archive<?> deploy2() {
+        WebArchive war = TestUtil.prepareArchive(RestClientProxyRedeployTest.class.getSimpleName() + "2");
+        war.addClass(RestClientProxyRedeployRemoteService.class);
+        war.addAsManifestResource(new StringAsset("Dependencies: org.eclipse.microprofile.restclient"), "MANIFEST.MF");
+        war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        return TestUtil.finishContainerPrepare(war, null, RestClientProxyRedeployResource.class);
+    }
 
-   private String generateURL(String path, String suffix) {
-      return PortProviderUtil.generateURL(path, RestClientProxyRedeployTest.class.getSimpleName() + suffix);
-   }
+    private String generateURL(String path, String suffix) {
+        return PortProviderUtil.generateURL(path, RestClientProxyRedeployTest.class.getSimpleName() + suffix);
+    }
 
-   @Test
-   public void testGet1() throws Exception {
-      Client client = ClientBuilder.newClient();
-      Response response = client.target(generateURL("/test/1", "1")).request().get();
-      Assert.assertEquals(200, response.getStatus());
-      String entity = response.readEntity(String.class);
-      Assert.assertEquals("OK", entity);
-      client.close();
-   }
+    @Test
+    public void testGet1() throws Exception {
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(generateURL("/test/1", "1")).request().get();
+        Assert.assertEquals(200, response.getStatus());
+        String entity = response.readEntity(String.class);
+        Assert.assertEquals("OK", entity);
+        client.close();
+    }
 
-   @Test
-   public void testGet2() throws Exception {
-      Client client = ClientBuilder.newClient();
-      Response response = client.target(generateURL("/test/1", "2")).request().get();
-      Assert.assertEquals(200, response.getStatus());
-      String entity = response.readEntity(String.class);
-      Assert.assertEquals("OK", entity);
-      client.close();
-   }
+    @Test
+    public void testGet2() throws Exception {
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(generateURL("/test/1", "2")).request().get();
+        Assert.assertEquals(200, response.getStatus());
+        String entity = response.readEntity(String.class);
+        Assert.assertEquals("OK", entity);
+        client.close();
+    }
 }

@@ -13,29 +13,29 @@ import java.lang.reflect.Type;
 
 @Provider
 public class ProviderOneArgConstructorStringHandlerBodyWriter
-   implements MessageBodyWriter<ProviderOneArgConstructorStringHandler> {
+        implements MessageBodyWriter<ProviderOneArgConstructorStringHandler> {
 
-   @SuppressWarnings("unused")
-   public ProviderOneArgConstructorStringHandlerBodyWriter(@Context final Application application) {
-   }
+    @SuppressWarnings("unused")
+    public ProviderOneArgConstructorStringHandlerBodyWriter(@Context final Application application) {
+    }
 
-   @SuppressWarnings("unused")
-   private ProviderOneArgConstructorStringHandlerBodyWriter() {
-   }
+    @SuppressWarnings("unused")
+    private ProviderOneArgConstructorStringHandlerBodyWriter() {
+    }
 
-   public boolean isWriteable(Class<?> type, Type genericType,
-                              Annotation[] annotations,
-                              MediaType mediaType) {
-      return ProviderOneArgConstructorStringHandler.class.equals(type);
-   }
+    public boolean isWriteable(Class<?> type, Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
+        return ProviderOneArgConstructorStringHandler.class.equals(type);
+    }
 
-   @Override
-   public void writeTo(ProviderOneArgConstructorStringHandler t, Class<?> type,
-                       Type genericType, Annotation[] annotations,
-                       MediaType mediaType,
-                       MultivaluedMap<String, Object> httpHeaders,
-                       OutputStream entityStream) throws IOException {
-      entityStream.write(t.getC().getBytes());
-   }
+    @Override
+    public void writeTo(ProviderOneArgConstructorStringHandler t, Class<?> type,
+                        Type genericType, Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException {
+        entityStream.write(t.getC().getBytes());
+    }
 }
 

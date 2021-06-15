@@ -15,125 +15,125 @@ import java.util.List;
 @Path("/users")
 public interface SubResourceLocatorUserResource extends SubResourceLocatorBaseService {
 
-   @GET
-   @Path("/content/{id}")
-   @Produces(MediaType.APPLICATION_JSON)
-   SubResourceLocatorOhaUserModel getContent(
+    @GET
+    @Path("/content/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    SubResourceLocatorOhaUserModel getContent(
             @PathParam("id")
-            String id);
+                    String id);
 
-   @POST
-   @Path("/add")
-   @Produces(MediaType.APPLICATION_JSON)
-   @Consumes(MediaType.APPLICATION_JSON)
-   SubResourceLocatorOhaUserModel add(SubResourceLocatorOhaUserModel object);
+    @POST
+    @Path("/add")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    SubResourceLocatorOhaUserModel add(SubResourceLocatorOhaUserModel object);
 
-   @GET
-   @Path("/all")
-   @Produces(MediaType.APPLICATION_JSON)
-   List<SubResourceLocatorOhaUserModel> get();
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<SubResourceLocatorOhaUserModel> get();
 
-   @PUT
-   @Path("/update")
-   @Produces(MediaType.APPLICATION_JSON)
-   @Consumes(MediaType.APPLICATION_JSON)
-   SubResourceLocatorOhaUserModel update(SubResourceLocatorOhaUserModel object);
+    @PUT
+    @Path("/update")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    SubResourceLocatorOhaUserModel update(SubResourceLocatorOhaUserModel object);
 
-   @DELETE
-   @Path("/delete/{id}")
-   @Produces(MediaType.TEXT_PLAIN)
-   Boolean delete(
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    Boolean delete(
             @PathParam("id")
-            String id);
+                    String id);
 
 
-   @GET
-   @Path("/getbynamesurname/{name}/{surname}")
-   @Produces(MediaType.APPLICATION_JSON)
-   List<SubResourceLocatorOhaUserModel> getByNameSurname(
+    @GET
+    @Path("/getbynamesurname/{name}/{surname}")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<SubResourceLocatorOhaUserModel> getByNameSurname(
             @PathParam("name")
-            String name,
+                    String name,
             @PathParam("surname")
-            String surname
-   );
+                    String surname
+    );
 
-   @GET
-   @Path("/getuserbymail/{mail}")
-   @Produces(MediaType.APPLICATION_JSON)
-   SubResourceLocatorOhaUserModel getUserByMail(
+    @GET
+    @Path("/getuserbymail/{mail}")
+    @Produces(MediaType.APPLICATION_JSON)
+    SubResourceLocatorOhaUserModel getUserByMail(
             @PathParam("mail")
-            String mail
-   );
+                    String mail
+    );
 
 
-   @POST
-   @Path("/update/{id}")
-   @Produces(MediaType.TEXT_PLAIN)
-   Boolean update(
+    @POST
+    @Path("/update/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    Boolean update(
             @PathParam("id")
-            String id,
+                    String id,
             @QueryParam("adaId")
-            String adaId,
+                    String adaId,
             @QueryParam("name")
-            String name,
+                    String name,
             @QueryParam("surname")
-            String surname,
+                    String surname,
             @QueryParam("address")
-            String address,
+                    String address,
             @QueryParam("city")
-            String city,
+                    String city,
             @QueryParam("country")
-            String country,
+                    String country,
             @QueryParam("zipcode")
-            String zipcode,
+                    String zipcode,
             @QueryParam("email")
-            String email,
+                    String email,
             @QueryParam("phone")
-            String phone,
+                    String phone,
             @QueryParam("phone")
-            String timezone);
+                    String timezone);
 
-   @POST
-   @Path("/updatepassword/{username}")
-   @Produces(MediaType.TEXT_PLAIN)
-   @Consumes(MediaType.APPLICATION_JSON)
-   Boolean updatePassword(
+    @POST
+    @Path("/updatepassword/{username}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Boolean updatePassword(
             @PathParam("username")
-            String username,
+                    String username,
             List<String> passwords);
 
 
-   @POST
-   @Path("/createuser")
-   @Produces(MediaType.APPLICATION_JSON)
-   Boolean create(
+    @POST
+    @Path("/createuser")
+    @Produces(MediaType.APPLICATION_JSON)
+    Boolean create(
             @QueryParam("email")
-            String email,
+                    String email,
             @QueryParam("password")
-            String password,
+                    String password,
             @QueryParam("username")
-            String username);
+                    String username);
 
-   @GET
-   @Path("/show-help/{user}")
-   @Produces(MediaType.TEXT_PLAIN)
-   Boolean showHelp(
+    @GET
+    @Path("/show-help/{user}")
+    @Produces(MediaType.TEXT_PLAIN)
+    Boolean showHelp(
             @PathParam("user")
-            long userId);
+                    long userId);
 
-   @PUT
-   @Path("/show-help/{user}/{show}")
-   @Produces(MediaType.TEXT_PLAIN)
-   Boolean setShowHelp(
+    @PUT
+    @Path("/show-help/{user}/{show}")
+    @Produces(MediaType.TEXT_PLAIN)
+    Boolean setShowHelp(
             @PathParam("user")
-            long userId,
+                    long userId,
             @PathParam("show")
-            boolean showHelp);
+                    boolean showHelp);
 
 
-   @GET
-   @Path("/create-jabber")
-   @Produces(MediaType.TEXT_PLAIN)
-   void createJabberAccounts();
+    @GET
+    @Path("/create-jabber")
+    @Produces(MediaType.TEXT_PLAIN)
+    void createJabberAccounts();
 
 }

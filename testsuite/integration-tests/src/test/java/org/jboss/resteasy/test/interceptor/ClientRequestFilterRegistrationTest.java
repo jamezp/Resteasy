@@ -32,30 +32,30 @@ import javax.ws.rs.core.Response;
 @RunAsClient
 public class ClientRequestFilterRegistrationTest extends ClientTestBase {
 
-   static Client client;
+    static Client client;
 
-   @Deployment
-   public static Archive<?> deploy() {
-      WebArchive war = ShrinkWrap.create(WebArchive.class, ClientRequestFilterRegistrationTest.class.getSimpleName() + ".war");
-      war.addClasses(CustomTestApp.class, ClientRequestFilterImpl.class, ClientResource.class);
-      return war;
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = ShrinkWrap.create(WebArchive.class, ClientRequestFilterRegistrationTest.class.getSimpleName() + ".war");
+        war.addClasses(CustomTestApp.class, ClientRequestFilterImpl.class, ClientResource.class);
+        return war;
+    }
 
-   @Before
-   public void before() {
-      client = ClientBuilder.newClient();
-   }
+    @Before
+    public void before() {
+        client = ClientBuilder.newClient();
+    }
 
-   @After
-   public void close() {
-      client.close();
-   }
+    @After
+    public void close() {
+        client.close();
+    }
 
-   @Test
-   public void filterRegisteredTest() throws Exception {
-      WebTarget base = client.target(generateURL("/") + "testIt");
-      Response response = base.request().get();
-      Assert.assertEquals(456, response.getStatus());
-   }
+    @Test
+    public void filterRegisteredTest() throws Exception {
+        WebTarget base = client.target(generateURL("/") + "testIt");
+        Response response = base.request().get();
+        Assert.assertEquals(456, response.getStatus());
+    }
 
 }

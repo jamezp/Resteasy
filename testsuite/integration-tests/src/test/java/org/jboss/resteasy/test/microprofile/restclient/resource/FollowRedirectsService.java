@@ -25,9 +25,9 @@ public class FollowRedirectsService {
     @GET
     @Path("tmpRedirect/{p}/{testname}")
     public Response tmpRedirect(@PathParam("p") String p,
-                                @PathParam("testname") String testname){
+                                @PathParam("testname") String testname) {
         return Response.temporaryRedirect(
-                PortProviderUtil.createURI("/"+p+"/redirected", testname))
+                PortProviderUtil.createURI("/" + p + "/redirected", testname))
                 .build();
     }
 
@@ -35,7 +35,7 @@ public class FollowRedirectsService {
     @POST
     public Response postRedirect(String testname) {
         return Response.seeOther(
-                PortProviderUtil.createURI(prefix+"/redirected", testname))
+                PortProviderUtil.createURI(prefix + "/redirected", testname))
                 .build();
     }
 
@@ -44,7 +44,7 @@ public class FollowRedirectsService {
     public Response movedPermanently(@PathParam("p") String p,
                                      @PathParam("testname") String testname) {
         return Response.status(301).header("location",
-                PortProviderUtil.createURI("/"+p+"/redirectedDirectResponse", testname))
+                PortProviderUtil.createURI("/" + p + "/redirectedDirectResponse", testname))
                 .build();
     }
 
@@ -54,7 +54,7 @@ public class FollowRedirectsService {
     public Response found(@PathParam("p") String p,
                           @PathParam("testname") String testname) {
         return Response.status(302).header("location",
-                PortProviderUtil.createURI("/"+p+"/redirectedDirectResponse", testname))
+                PortProviderUtil.createURI("/" + p + "/redirectedDirectResponse", testname))
                 .build();
     }
 

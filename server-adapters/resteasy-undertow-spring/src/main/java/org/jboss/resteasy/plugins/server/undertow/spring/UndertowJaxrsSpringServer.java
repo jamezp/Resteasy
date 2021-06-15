@@ -10,30 +10,30 @@ import static io.undertow.servlet.Servlets.servlet;
 
 public class UndertowJaxrsSpringServer extends UndertowJaxrsServer {
 
-   public static final String SERVLET_NAME = "ResteasyServlet";
+    public static final String SERVLET_NAME = "ResteasyServlet";
 
-   public DeploymentInfo undertowDeployment(String contextConfigLocation, String mapping) {
-      if (mapping == null) mapping = "/";
-      if (!mapping.startsWith("/")) mapping = "/" + mapping;
-      if (!mapping.endsWith("/")) mapping += "/";
-      mapping = mapping + "*";
-      String prefix = null;
+    public DeploymentInfo undertowDeployment(String contextConfigLocation, String mapping) {
+        if (mapping == null) mapping = "/";
+        if (!mapping.startsWith("/")) mapping = "/" + mapping;
+        if (!mapping.endsWith("/")) mapping += "/";
+        mapping = mapping + "*";
+        String prefix = null;
 
-      if (!mapping.equals("/*"))
-         prefix = mapping.substring(0, mapping.length() - 2);
+        if (!mapping.equals("/*"))
+            prefix = mapping.substring(0, mapping.length() - 2);
 
-      ServletInfo servlet =
-            servlet(SERVLET_NAME, DispatcherServlet.class)
-                  .setLoadOnStartup(1)
-                  .addInitParam("contextConfigLocation", contextConfigLocation)
-                  .addMapping(mapping);
+        ServletInfo servlet =
+                servlet(SERVLET_NAME, DispatcherServlet.class)
+                        .setLoadOnStartup(1)
+                        .addInitParam("contextConfigLocation", contextConfigLocation)
+                        .addMapping(mapping);
 
-      DeploymentInfo deployment = new DeploymentInfo()
-            .addServlet(servlet);
-      if (prefix != null)
-         deployment.setContextPath(prefix);
-      return deployment;
+        DeploymentInfo deployment = new DeploymentInfo()
+                .addServlet(servlet);
+        if (prefix != null)
+            deployment.setContextPath(prefix);
+        return deployment;
 
-   }
+    }
 
 }

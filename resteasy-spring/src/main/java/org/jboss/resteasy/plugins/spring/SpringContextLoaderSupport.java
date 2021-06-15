@@ -34,19 +34,17 @@ import javax.servlet.ServletContext;
  * }
  * </pre>
  */
-public class SpringContextLoaderSupport
-{
-   public void customizeContext(ServletContext servletContext, ConfigurableWebApplicationContext configurableWebApplicationContext)
-   {
-      SpringBeanProcessor processor = null;
+public class SpringContextLoaderSupport {
+    public void customizeContext(ServletContext servletContext, ConfigurableWebApplicationContext configurableWebApplicationContext) {
+        SpringBeanProcessor processor = null;
 
-      ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
-      if (deployment == null) {
-         throw new RuntimeException(Messages.MESSAGES.deploymentIsNull());
-      }
+        ResteasyDeployment deployment = (ResteasyDeployment) servletContext.getAttribute(ResteasyDeployment.class.getName());
+        if (deployment == null) {
+            throw new RuntimeException(Messages.MESSAGES.deploymentIsNull());
+        }
 
-      processor = new SpringBeanProcessor(deployment);
-      configurableWebApplicationContext.addBeanFactoryPostProcessor(processor);
-      configurableWebApplicationContext.addApplicationListener(processor);
-   }
+        processor = new SpringBeanProcessor(deployment);
+        configurableWebApplicationContext.addBeanFactoryPostProcessor(processor);
+        configurableWebApplicationContext.addApplicationListener(processor);
+    }
 }

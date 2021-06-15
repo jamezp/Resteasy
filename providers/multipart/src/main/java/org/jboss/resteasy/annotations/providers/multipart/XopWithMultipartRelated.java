@@ -60,7 +60,7 @@ import java.lang.annotation.Target;
  * @author Attila Kiraly
  * @version $Revision: 1 $
  */
-@Target( { ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD })
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface XopWithMultipartRelated {
 

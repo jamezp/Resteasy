@@ -36,70 +36,69 @@ import java.util.PropertyPermission;
 @RunAsClient
 public class ConfigSourceDefaultOrdinalServletTest {
 
-   static ResteasyClient client;
+    static ResteasyClient client;
 
-   @Deployment
-   public static Archive<?> deploy() {
-      WebArchive war = TestUtil.prepareArchive(ConfigSourceDefaultOrdinalServletTest.class.getSimpleName())
-            .addClass(MicroProfileConfigFilter.class)
-            .setWebXML(ConfigSourceDefaultOrdinalServletTest.class.getPackage(), "web_default_ordinal_servlet.xml")
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-      war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
-              new PropertyPermission("system", "write")
-      ), "permissions.xml");
-      return TestUtil.finishContainerPrepare(war, null, MicroProfileConfigResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(ConfigSourceDefaultOrdinalServletTest.class.getSimpleName())
+                .addClass(MicroProfileConfigFilter.class)
+                .setWebXML(ConfigSourceDefaultOrdinalServletTest.class.getPackage(), "web_default_ordinal_servlet.xml")
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        war.addAsManifestResource(PermissionUtil.createPermissionsXmlAsset(
+                new PropertyPermission("system", "write")
+        ), "permissions.xml");
+        return TestUtil.finishContainerPrepare(war, null, MicroProfileConfigResource.class);
+    }
 
-   @BeforeClass
-   public static void before() throws Exception {
-      client = (ResteasyClient)ClientBuilder.newClient();
-   }
+    @BeforeClass
+    public static void before() throws Exception {
+        client = (ResteasyClient) ClientBuilder.newClient();
+    }
 
-   @AfterClass
-   public static void after() throws Exception {
-      client.close();
-   }
+    @AfterClass
+    public static void after() throws Exception {
+        client.close();
+    }
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, ConfigSourceDefaultOrdinalServletTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, ConfigSourceDefaultOrdinalServletTest.class.getSimpleName());
+    }
 
-   /**
-    * @tpTestDetails Verify all built in ConfigSources ordinal for Config retrieved programmatically.
-    * @tpSince RESTEasy 4.6.0
-    */
-   @Test
-   public void testBuiltInConfigSourcesOrdinalProgrammatically() throws Exception
-   {
-      Map<String, Integer> builtInConfigSourceOrdinals = client.target(generateURL("/configSources/ordinal"))
-            .request(MediaType.APPLICATION_JSON)
-            .get(new GenericType<Map<String, Integer>>() {});
+    /**
+     * @tpTestDetails Verify all built in ConfigSources ordinal for Config retrieved programmatically.
+     * @tpSince RESTEasy 4.6.0
+     */
+    @Test
+    public void testBuiltInConfigSourcesOrdinalProgrammatically() throws Exception {
+        Map<String, Integer> builtInConfigSourceOrdinals = client.target(generateURL("/configSources/ordinal"))
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<Map<String, Integer>>() {
+                });
 
-      checkBuiltInConfigSourcesOrdinal(builtInConfigSourceOrdinals);
-   }
+        checkBuiltInConfigSourcesOrdinal(builtInConfigSourceOrdinals);
+    }
 
-   /**
-    * @tpTestDetails Verify all built in ConfigSources ordinal for Config retrieved by injection.
-    * @tpSince RESTEasy 4.6.0
-    */
-   @Test
-   public void testBuiltInConfigSourcesOrdinalInjected() throws Exception
-   {
-      Map<String, Integer> builtInConfigSourceOrdinals = client.target(generateURL("/configSources/ordinal"))
-            .queryParam("inject", Boolean.TRUE)
-            .request(MediaType.APPLICATION_JSON)
-            .get(new GenericType<Map<String, Integer>>() {});
+    /**
+     * @tpTestDetails Verify all built in ConfigSources ordinal for Config retrieved by injection.
+     * @tpSince RESTEasy 4.6.0
+     */
+    @Test
+    public void testBuiltInConfigSourcesOrdinalInjected() throws Exception {
+        Map<String, Integer> builtInConfigSourceOrdinals = client.target(generateURL("/configSources/ordinal"))
+                .queryParam("inject", Boolean.TRUE)
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<Map<String, Integer>>() {
+                });
 
-      checkBuiltInConfigSourcesOrdinal(builtInConfigSourceOrdinals);
-   }
+        checkBuiltInConfigSourcesOrdinal(builtInConfigSourceOrdinals);
+    }
 
-   private void checkBuiltInConfigSourcesOrdinal(Map<String, Integer> builtInConfigSourcesOrdinal)
-   {
-      Integer servletConfigSourceDefaultOrdinal = (Integer) ServletConfigSource.BUILT_IN_DEFAULT_ORDINAL;
-      Integer servletContextConfigSourceDefaultOrdinal = (Integer) ServletContextConfigSource.BUILT_IN_DEFAULT_ORDINAL;
+    private void checkBuiltInConfigSourcesOrdinal(Map<String, Integer> builtInConfigSourcesOrdinal) {
+        Integer servletConfigSourceDefaultOrdinal = (Integer) ServletConfigSource.BUILT_IN_DEFAULT_ORDINAL;
+        Integer servletContextConfigSourceDefaultOrdinal = (Integer) ServletContextConfigSource.BUILT_IN_DEFAULT_ORDINAL;
 
-      Assert.assertEquals(servletConfigSourceDefaultOrdinal, builtInConfigSourcesOrdinal.get(ServletConfigSource.class.getName()));
-      Assert.assertEquals(servletContextConfigSourceDefaultOrdinal, builtInConfigSourcesOrdinal.get(ServletContextConfigSource.class.getName()));
-   }
+        Assert.assertEquals(servletConfigSourceDefaultOrdinal, builtInConfigSourcesOrdinal.get(ServletConfigSource.class.getName()));
+        Assert.assertEquals(servletContextConfigSourceDefaultOrdinal, builtInConfigSourcesOrdinal.get(ServletContextConfigSource.class.getName()));
+    }
 
 }

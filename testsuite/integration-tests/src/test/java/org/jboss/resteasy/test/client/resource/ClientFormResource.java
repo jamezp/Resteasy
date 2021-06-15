@@ -6,12 +6,12 @@ import javax.ws.rs.core.Form;
 
 public class ClientFormResource implements ClientFormParamTest.ClientFormResourceInterface {
 
-   public String put(String value) {
-      return value;
-   }
+    public String put(String value) {
+        return value;
+    }
 
-   @Override
-   public Form post(Form form) {
-      return form;
-   }
+    @Override
+    public Form post(Form form) {
+        return form;
+    }
 }

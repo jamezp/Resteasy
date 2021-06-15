@@ -9,11 +9,10 @@ import javax.ws.rs.Produces;
 @Path("/")
 public class CustomJackson2ProviderResource {
 
-   @GET
-   @Produces("text/plain")
-   @Path("/jackson2providerpath")
-   public String getProviderPath()
-   {
-      return ResteasyJackson2Provider.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-   }
+    @GET
+    @Produces("text/plain")
+    @Path("/jackson2providerpath")
+    public String getProviderPath() {
+        return ResteasyJackson2Provider.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    }
 }

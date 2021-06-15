@@ -30,7 +30,7 @@ public class FollowRedirectMPConfigPropertyTest {
     private static final String WAR_SERVICE = "followRedirects_service";
     private static final String MP_REST_FOLLOWREDIRECT = "/mp-rest/followRedirects";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(FollowRedirectsService.class,
@@ -44,7 +44,7 @@ public class FollowRedirectMPConfigPropertyTest {
 
     @Test
     public void fullyQualifiedName() {
-        String key = FollowRedirectsServiceIntf.class.getCanonicalName()+MP_REST_FOLLOWREDIRECT;
+        String key = FollowRedirectsServiceIntf.class.getCanonicalName() + MP_REST_FOLLOWREDIRECT;
         System.setProperty(key, "true");
 
         RestClientBuilderImpl builder = new RestClientBuilderImpl();
@@ -58,7 +58,7 @@ public class FollowRedirectMPConfigPropertyTest {
 
     @Test
     public void simpleName() {
-        String key = "ckName"+MP_REST_FOLLOWREDIRECT;
+        String key = "ckName" + MP_REST_FOLLOWREDIRECT;
         System.setProperty(key, "true");
 
         RestClientBuilderImpl builder = new RestClientBuilderImpl();
@@ -72,7 +72,7 @@ public class FollowRedirectMPConfigPropertyTest {
 
     @Test
     public void badValue() {
-        String key = "ckName"+MP_REST_FOLLOWREDIRECT;
+        String key = "ckName" + MP_REST_FOLLOWREDIRECT;
         System.setProperty(key, "maybe");
 
         RestClientBuilderImpl builder = new RestClientBuilderImpl();

@@ -31,6 +31,7 @@ public class ClientHeaderProviders {
      * Get {@link ClientHeaderProvider} for a given method, if exists
      *
      * @param method a method to get the provider for
+     *
      * @return the provider responsible for setting the headers
      */
     public static Optional<ClientHeaderProvider> getProvider(Method method) {
@@ -41,6 +42,7 @@ public class ClientHeaderProviders {
      * Get {@link ClientHeadersFactory} for a given class, if exists
      *
      * @param aClass a class to get the ClientHeadersFactory for
+     *
      * @return the factory used to adjust the headers
      */
     public static Optional<ClientHeadersFactory> getFactory(Class<?> aClass) {

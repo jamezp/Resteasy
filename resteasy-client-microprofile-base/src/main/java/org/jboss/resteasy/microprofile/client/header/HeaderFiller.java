@@ -10,7 +10,6 @@ import java.util.List;
  */
 public interface HeaderFiller {
     /**
-     *
      * @return list of header values
      */
     List<String> generateValues();

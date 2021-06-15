@@ -14,34 +14,28 @@ import java.util.List;
  */
 @XmlRootElement(name = "customer")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class Customer
-{
-   private String name;
-   private List<Link> links = new ArrayList<Link>();
+public class Customer {
+    private String name;
+    private List<Link> links = new ArrayList<Link>();
 
-   public Customer()
-   {
-   }
+    public Customer() {
+    }
 
-   public Customer(final String name)
-   {
-      this.name = name;
-   }
+    public Customer(final String name) {
+        this.name = name;
+    }
 
-   @XmlElement
-   public String getName()
-   {
-      return name;
-   }
+    @XmlElement
+    public String getName() {
+        return name;
+    }
 
-   public void setName(String name)
-   {
-      this.name = name;
-   }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-   @XmlElement(name = "link")
-   public List<Link> getLinks()
-   {
-      return links;
-   }
+    @XmlElement(name = "link")
+    public List<Link> getLinks() {
+        return links;
+    }
 }

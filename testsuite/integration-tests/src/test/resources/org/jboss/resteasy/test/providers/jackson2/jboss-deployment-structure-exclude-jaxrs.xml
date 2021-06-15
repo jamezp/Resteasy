@@ -2,7 +2,7 @@
 
     <deployment>
         <exclude-subsystems>
-            <subsystem name="jaxrs" />
+            <subsystem name="jaxrs"/>
         </exclude-subsystems>
     </deployment>
 

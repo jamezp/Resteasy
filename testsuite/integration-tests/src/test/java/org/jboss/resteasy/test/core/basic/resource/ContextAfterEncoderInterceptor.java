@@ -14,14 +14,13 @@ import java.io.IOException;
 @Priority(30)
 public class ContextAfterEncoderInterceptor implements WriterInterceptor {
 
-   @Override
-   public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException
-   {
-      final String HEADER_ERROR_MESSAGE = "MessageBodyWriterContext in ContextAfterEncoderInterceptor don't have correct headers";
-      Assert.assertTrue(HEADER_ERROR_MESSAGE, context.getHeaders().containsKey("before-encoder"));
-      Assert.assertTrue(HEADER_ERROR_MESSAGE, context.getHeaders().containsKey("encoder"));
-      Assert.assertFalse(HEADER_ERROR_MESSAGE, context.getHeaders().containsKey("end"));
-      context.getHeaders().add("after-encoder", "true");
-      context.proceed();
-   }
+    @Override
+    public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
+        final String HEADER_ERROR_MESSAGE = "MessageBodyWriterContext in ContextAfterEncoderInterceptor don't have correct headers";
+        Assert.assertTrue(HEADER_ERROR_MESSAGE, context.getHeaders().containsKey("before-encoder"));
+        Assert.assertTrue(HEADER_ERROR_MESSAGE, context.getHeaders().containsKey("encoder"));
+        Assert.assertFalse(HEADER_ERROR_MESSAGE, context.getHeaders().containsKey("end"));
+        context.getHeaders().add("after-encoder", "true");
+        context.proceed();
+    }
 }

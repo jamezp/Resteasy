@@ -13,23 +13,19 @@ import java.io.IOException;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public class BasicAuthentication implements ClientRequestFilter
-{
-   private final String authHeader;
+public class BasicAuthentication implements ClientRequestFilter {
+    private final String authHeader;
 
-   /**
-    *
-    * @param username user name
-    * @param password password
-    */
-   public BasicAuthentication(final String username, final String password)
-   {
-      authHeader = BasicAuthHelper.createHeader(username, password);
-   }
+    /**
+     * @param username user name
+     * @param password password
+     */
+    public BasicAuthentication(final String username, final String password) {
+        authHeader = BasicAuthHelper.createHeader(username, password);
+    }
 
-   @Override
-   public void filter(ClientRequestContext requestContext) throws IOException
-   {
-      requestContext.getHeaders().putSingle(HttpHeaders.AUTHORIZATION, authHeader);
-   }
+    @Override
+    public void filter(ClientRequestContext requestContext) throws IOException {
+        requestContext.getHeaders().putSingle(HttpHeaders.AUTHORIZATION, authHeader);
+    }
 }

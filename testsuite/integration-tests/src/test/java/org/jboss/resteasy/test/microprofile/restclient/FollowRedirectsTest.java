@@ -34,7 +34,7 @@ public class FollowRedirectsTest {
     private static final String WAR_CLIENT = "followRedirects_client";
     private static final String THE_PATRON = "thePatron";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(FollowRedirectsService.class,
@@ -42,7 +42,7 @@ public class FollowRedirectsTest {
         return TestUtil.finishContainerPrepare(war, null, null);
     }
 
-    @Deployment(name=WAR_CLIENT)
+    @Deployment(name = WAR_CLIENT)
     public static Archive<?> clientDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_CLIENT);
         war.addClasses(FollowRedirectsResource.class,
@@ -52,6 +52,7 @@ public class FollowRedirectsTest {
     }
 
     static FollowRedirectsServiceIntf followRedirectsServiceIntf;
+
     @BeforeClass
     public static void before() throws Exception {
         RestClientBuilderImpl builder = new RestClientBuilderImpl();

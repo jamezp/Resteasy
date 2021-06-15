@@ -13,19 +13,14 @@ import java.lang.annotation.Annotation;
  * @version $Revision: 1 $
  */
 @DecorateTypes({"text/*+xml", "application/*+xml"})
-public class PrettyProcessor implements DecoratorProcessor<Marshaller, Formatted>
-{
-   public Marshaller decorate(Marshaller target, Formatted annotation,
-                              Class type, Annotation[] annotations, MediaType mediaType)
-   {
-      try
-      {
-         target.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-         return target;
-      }
-      catch (Exception ex)
-      {
-         throw new RuntimeException(ex);
-      }
-   }
+public class PrettyProcessor implements DecoratorProcessor<Marshaller, Formatted> {
+    public Marshaller decorate(Marshaller target, Formatted annotation,
+                               Class type, Annotation[] annotations, MediaType mediaType) {
+        try {
+            target.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            return target;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

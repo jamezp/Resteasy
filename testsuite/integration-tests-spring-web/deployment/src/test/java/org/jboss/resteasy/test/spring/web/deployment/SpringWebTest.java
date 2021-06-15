@@ -113,7 +113,7 @@ public class SpringWebTest {
 
     @Test
     public void verifyPathWithCharacterWildCard() {
-        for (char c : new char[]{'t', 'r'}) {
+        for (char c : new char[] {'t', 'r'}) {
             WebTarget target = client.target(getBaseURL() + TestController.CONTROLLER_PATH + String.format("/ca%cs", c));
             Response response = target.request().get();
             Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
@@ -124,7 +124,7 @@ public class SpringWebTest {
 
     @Test
     public void verifyPathWithMultipleCharacterWildCards() {
-        for (String path : new String[]{"/cars/shop/info", "/cart/show/info"}) {
+        for (String path : new String[] {"/cars/shop/info", "/cart/show/info"}) {
             WebTarget target = client.target(getBaseURL() + TestController.CONTROLLER_PATH + path);
             Response response = target.request().get();
             Assert.assertEquals(HttpResponseCodes.SC_OK, response.getStatus());

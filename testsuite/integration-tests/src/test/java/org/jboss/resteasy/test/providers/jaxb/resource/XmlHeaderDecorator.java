@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 
 @DecorateTypes("application/json")
 public class XmlHeaderDecorator implements DecoratorProcessor<Marshaller, XmlHeaderJunkIntf> {
-   public Marshaller decorate(Marshaller target, XmlHeaderJunkIntf annotation, Class type, Annotation[] annotations, MediaType mediaType) {
-      throw new RuntimeException("FAILURE!!!!");
-   }
+    public Marshaller decorate(Marshaller target, XmlHeaderJunkIntf annotation, Class type, Annotation[] annotations, MediaType mediaType) {
+        throw new RuntimeException("FAILURE!!!!");
+    }
 }

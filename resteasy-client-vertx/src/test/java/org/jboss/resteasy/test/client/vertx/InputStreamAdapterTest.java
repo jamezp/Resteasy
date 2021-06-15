@@ -36,13 +36,13 @@ public class InputStreamAdapterTest {
         InputStreamAdapter adapter = new InputStreamAdapter(stream);
         Thread th = Thread.currentThread();
         vertx.setTimer(10, id -> {
-           while (th.getState() != Thread.State.WAITING) {
-               try {
-                   Thread.sleep(1);
-               } catch (InterruptedException ignore) {
-               }
-           }
-           stream.emit(Buffer.buffer().appendByte((byte)5));
+            while (th.getState() != Thread.State.WAITING) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException ignore) {
+                }
+            }
+            stream.emit(Buffer.buffer().appendByte((byte) 5));
         });
         int val = adapter.read();
         assertEquals(5, val);

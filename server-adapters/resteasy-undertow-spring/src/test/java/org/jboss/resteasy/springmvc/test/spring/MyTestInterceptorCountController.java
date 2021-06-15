@@ -11,22 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class MyTestInterceptorCountController
-{
-   @Autowired
-   MyTestInterceptor interceptor;
+public class MyTestInterceptorCountController {
+    @Autowired
+    MyTestInterceptor interceptor;
 
-   @RequestMapping(method = RequestMethod.GET, value = "/basic/interceptor-test")
-   public void getInterceptorCount(@RequestParam("type")String type,
-                                   HttpServletResponse response, ModelMap model) throws IOException
-   {
-      Integer i = interceptor.getCount(type);
-      if (i == null)
-         i = -1;
-      model.addAttribute("value", i);
+    @RequestMapping(method = RequestMethod.GET, value = "/basic/interceptor-test")
+    public void getInterceptorCount(@RequestParam("type") String type,
+                                    HttpServletResponse response, ModelMap model) throws IOException {
+        Integer i = interceptor.getCount(type);
+        if (i == null)
+            i = -1;
+        model.addAttribute("value", i);
 
-      response.setContentType("text/plain");
-      response.getOutputStream().print(String.valueOf(model.get("value")));
-   }
+        response.setContentType("text/plain");
+        response.getOutputStream().print(String.valueOf(model.get("value")));
+    }
 
 }

@@ -11,20 +11,20 @@ import java.util.Collection;
 
 public class JsonLinkDecorator implements DecoratorProcessor<DecoratedEntityContainer, AddLinks> {
 
-   @Override
-   public DecoratedEntityContainer decorate(DecoratedEntityContainer target, AddLinks annotation, Class type, Annotation[] annotations, MediaType mediaType) {
-      LinksInjector injector = new LinksInjector();
-      LinksProvider<Object> provider = LinksProvider.getObjectLinksProvider();
-      // find all rest service classes and scan them
-      if (Collection.class.isAssignableFrom(target.getEntity().getClass())) {
-         Collection coll = (Collection) target.getEntity();
-         for (Object entity : coll) {
-            injector.inject(entity, provider.getLinks(entity));
-         }
-      } else {
-         injector.inject(target.getEntity(), provider.getLinks(target.getEntity()));
-      }
+    @Override
+    public DecoratedEntityContainer decorate(DecoratedEntityContainer target, AddLinks annotation, Class type, Annotation[] annotations, MediaType mediaType) {
+        LinksInjector injector = new LinksInjector();
+        LinksProvider<Object> provider = LinksProvider.getObjectLinksProvider();
+        // find all rest service classes and scan them
+        if (Collection.class.isAssignableFrom(target.getEntity().getClass())) {
+            Collection coll = (Collection) target.getEntity();
+            for (Object entity : coll) {
+                injector.inject(entity, provider.getLinks(entity));
+            }
+        } else {
+            injector.inject(target.getEntity(), provider.getLinks(target.getEntity()));
+        }
 
-      return target;
-   }
+        return target;
+    }
 }

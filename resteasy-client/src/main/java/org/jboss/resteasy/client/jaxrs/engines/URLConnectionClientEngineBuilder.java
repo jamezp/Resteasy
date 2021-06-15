@@ -19,12 +19,10 @@ public class URLConnectionClientEngineBuilder implements ClientHttpEngineBuilder
     @Override
     public ClientHttpEngine build() {
         URLConnectionEngine clientEngine = new URLConnectionEngine();
-        if (resteasyClientBuilder.getReadTimeout(TimeUnit.MILLISECONDS) > -1)
-        {
+        if (resteasyClientBuilder.getReadTimeout(TimeUnit.MILLISECONDS) > -1) {
             clientEngine.setReadTimeout((int) resteasyClientBuilder.getReadTimeout(TimeUnit.MILLISECONDS));
         }
-        if (resteasyClientBuilder.getConnectionTimeout(TimeUnit.MILLISECONDS) > -1)
-        {
+        if (resteasyClientBuilder.getConnectionTimeout(TimeUnit.MILLISECONDS) > -1) {
             clientEngine.setConnectTimeout((int) resteasyClientBuilder.getConnectionTimeout(TimeUnit.MILLISECONDS));
         }
 

@@ -8,11 +8,13 @@
           class="org.jboss.resteasy.test.spring.deployment.resource.RequestScopedBeanQualifierInjectorFactoryImpl">
     </bean>
 
-    <bean id="testBean" class="org.jboss.resteasy.test.spring.deployment.resource.RequestScopedBeanTestBean" scope="request">
+    <bean id="testBean" class="org.jboss.resteasy.test.spring.deployment.resource.RequestScopedBeanTestBean"
+          scope="request">
         <property name="configured" value="configuredValue"/>
     </bean>
 
-    <bean id="testResource" class="org.jboss.resteasy.test.spring.deployment.resource.RequestScopedBeanTestBeanResource"/>
+    <bean id="testResource"
+          class="org.jboss.resteasy.test.spring.deployment.resource.RequestScopedBeanTestBeanResource"/>
 
     <!-- https://github.com/resteasy/Resteasy/issues/585 -->
     <bean id="myBean" class="org.jboss.resteasy.test.spring.deployment.resource.RequestScopedBeanBeanFactoryBean"/>

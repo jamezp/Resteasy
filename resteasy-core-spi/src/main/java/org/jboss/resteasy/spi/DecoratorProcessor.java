@@ -11,15 +11,15 @@ import java.lang.annotation.Annotation;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
-public interface DecoratorProcessor<T, A extends Annotation>
-{
-   /**
-    * @param target      i.e. a Marshaller instance
-    * @param annotation  the annotation that triggered the decorator
-    * @param type type
-    * @param annotations array of annotations
-    * @param mediaType media type
-    * @return should never return null
-    */
-   T decorate(T target, A annotation, Class type, Annotation[] annotations, MediaType mediaType);
+public interface DecoratorProcessor<T, A extends Annotation> {
+    /**
+     * @param target      i.e. a Marshaller instance
+     * @param annotation  the annotation that triggered the decorator
+     * @param type        type
+     * @param annotations array of annotations
+     * @param mediaType   media type
+     *
+     * @return should never return null
+     */
+    T decorate(T target, A annotation, Class type, Annotation[] annotations, MediaType mediaType);
 }

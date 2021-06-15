@@ -9,7 +9,7 @@ public class MultipleGenericEntitiesResource implements MultipleGenericEntities<
 
     @Override
     public HashMap<String, EntityExtendingBaseEntity> findHashMap() {
-        HashMap<String, EntityExtendingBaseEntity> res =  new HashMap<>();
+        HashMap<String, EntityExtendingBaseEntity> res = new HashMap<>();
         res.put(FIRST_NAME, new EntityExtendingBaseEntity(FIRST_NAME, LAST_NAME));
         return res;
     }

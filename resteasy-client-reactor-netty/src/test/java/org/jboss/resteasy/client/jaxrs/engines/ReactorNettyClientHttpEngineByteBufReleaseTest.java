@@ -105,7 +105,7 @@ public class ReactorNettyClientHttpEngineByteBufReleaseTest {
                 client.target("/hello")
                         .register(exceptionThrowerFilter, Integer.MAX_VALUE);
 
-        for(int i=0; i < CALL_COUNT; i++) {
+        for (int i = 0; i < CALL_COUNT; i++) {
             try {
                 webTarget.request()
                         .rx()
@@ -139,8 +139,8 @@ public class ReactorNettyClientHttpEngineByteBufReleaseTest {
 
         Flux.range(1, CALL_COUNT)
                 .flatMap(i ->
-                        Mono.fromCompletionStage(webTarget.request().rx().get())
-                                .onErrorReturn(t -> t instanceof TimeoutException, FALL_BACK_RESPONSE)
+                                Mono.fromCompletionStage(webTarget.request().rx().get())
+                                        .onErrorReturn(t -> t instanceof TimeoutException, FALL_BACK_RESPONSE)
                         , CONNECTION_POOL_SIZE)
                 .map(r -> {
                     r.close();
@@ -163,14 +163,14 @@ public class ReactorNettyClientHttpEngineByteBufReleaseTest {
     @Test
     public void testLeakDetectionOnMissingClientResponseClose() throws Exception {
         final Client client = setupClient(Duration.ofSeconds(10), false);
-        for(int i=0; i < CALL_COUNT; i++) {
+        for (int i = 0; i < CALL_COUNT; i++) {
             final Response response = client
-                .target("/hello")
-                .request()
-                .rx()
-                .get()
-                .toCompletableFuture()
-                .get(10, TimeUnit.SECONDS);
+                    .target("/hello")
+                    .request()
+                    .rx()
+                    .get()
+                    .toCompletableFuture()
+                    .get(10, TimeUnit.SECONDS);
         }
         // It's a ByteBuf leak that is actually asserted here on missing close on response.
         assertThat(errContent.toString(), containsString("LEAK"));
@@ -210,8 +210,7 @@ public class ReactorNettyClientHttpEngineByteBufReleaseTest {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             out.write(("-> " + i).getBytes(Charset.defaultCharset()));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return ByteBufAllocator.DEFAULT
@@ -229,13 +228,13 @@ public class ReactorNettyClientHttpEngineByteBufReleaseTest {
                                         .addHeader("did-it-hit-the-hello-endpoint", "yes")
                                         .sendString(Mono.just(HELLO_WORLD)))
                         .get("/slowstream", (request, response) -> {
-                            numOfTimeStreamingEndpointCalled.incrementAndGet();
-                            return response.addHeader("did-it-hit-the-streaming-endpoint", "yes")
-                                    .sse()
-                                    .send(Flux.range(1, SERVER_ELEMENT_COUNT)
-                                            .delayElements(SERVER_DELAY_BETWEEN_ELEMENTS_WHILE_STREAMING)
-                                            .map(i -> toByteBuf(i))
-                                            .doOnDiscard(ByteBuf.class, b -> ReferenceCountUtil.safeRelease(b)));
+                                    numOfTimeStreamingEndpointCalled.incrementAndGet();
+                                    return response.addHeader("did-it-hit-the-streaming-endpoint", "yes")
+                                            .sse()
+                                            .send(Flux.range(1, SERVER_ELEMENT_COUNT)
+                                                    .delayElements(SERVER_DELAY_BETWEEN_ELEMENTS_WHILE_STREAMING)
+                                                    .map(i -> toByteBuf(i))
+                                                    .doOnDiscard(ByteBuf.class, b -> ReferenceCountUtil.safeRelease(b)));
                                 }
                         )
                 )
@@ -268,7 +267,7 @@ public class ReactorNettyClientHttpEngineByteBufReleaseTest {
                         finalizedResponse);
 
         final ClientBuilder builder = ClientBuilder.newBuilder();
-        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder)builder;
+        final ResteasyClientBuilder clientBuilder = (ResteasyClientBuilder) builder;
         clientBuilder.httpEngine(engine);
         return builder.build();
     }

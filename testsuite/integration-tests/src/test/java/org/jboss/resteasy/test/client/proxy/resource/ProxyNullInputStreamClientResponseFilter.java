@@ -14,10 +14,9 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 public class ProxyNullInputStreamClientResponseFilter implements ClientResponseFilter {
-   public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext)
-   {
-      MultivaluedMap<String,String> headers = responseContext.getHeaders();
-      // required header to mimic and force required failure behavior
-      headers.add(HttpHeaderNames.CONTENT_TYPE, "text/plain");
-   }
+    public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) {
+        MultivaluedMap<String, String> headers = responseContext.getHeaders();
+        // required header to mimic and force required failure behavior
+        headers.add(HttpHeaderNames.CONTENT_TYPE, "text/plain");
+    }
 }

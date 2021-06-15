@@ -18,24 +18,23 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-public @interface ImageWriterParams
-{
+public @interface ImageWriterParams {
 
-   /**
-    * Specifies the compression quality of the image being written. By
-    * default, the highest compression level is used. A float value
-    * between 0.0f and 1.0f are acceptable. The default value is 1.0f;
-    *
-    * @return compression quality
-    */
-   float compressionQuality() default 1.0f;
+    /**
+     * Specifies the compression quality of the image being written. By
+     * default, the highest compression level is used. A float value
+     * between 0.0f and 1.0f are acceptable. The default value is 1.0f;
+     *
+     * @return compression quality
+     */
+    float compressionQuality() default 1.0f;
 
-   /**
-    * Specifies the compression mode for the output image. By default,
-    * it uses {@link javax.imageio.ImageWriteParam#MODE_COPY_FROM_METADATA}.
-    *
-    * @return compression mode
-    */
-   int compressionMode() default ImageWriteParam.MODE_COPY_FROM_METADATA;
+    /**
+     * Specifies the compression mode for the output image. By default,
+     * it uses {@link javax.imageio.ImageWriteParam#MODE_COPY_FROM_METADATA}.
+     *
+     * @return compression mode
+     */
+    int compressionMode() default ImageWriteParam.MODE_COPY_FROM_METADATA;
 
 }

@@ -21,7 +21,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Decorator(processor = XmlHeaderProcessor.class, target = Marshaller.class)
-public @interface XmlHeader
-{
-   String value();
+public @interface XmlHeader {
+    String value();
 }

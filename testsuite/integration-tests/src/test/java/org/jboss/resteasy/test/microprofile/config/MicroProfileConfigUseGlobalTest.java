@@ -31,43 +31,43 @@ import org.junit.runner.RunWith;
 @RunAsClient
 public class MicroProfileConfigUseGlobalTest {
 
-   static ResteasyClient client;
+    static ResteasyClient client;
 
-   @Deployment
-   public static Archive<?> deploy() {
-      WebArchive war = TestUtil.prepareArchive(MicroProfileConfigUseGlobalTest.class.getSimpleName())
-            .addClass(MicroProfileConfigUseGlobalApplication1.class)
-            .addClass(MicroProfileConfigUseGlobalApplication2.class)
-            .setWebXML(MicroProfileConfigUseGlobalTest.class.getPackage(), "web_use_global.xml")
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-      return TestUtil.finishContainerPrepare(war, null, MicroProfileConfigUseGlobalResource.class);
-   }
+    @Deployment
+    public static Archive<?> deploy() {
+        WebArchive war = TestUtil.prepareArchive(MicroProfileConfigUseGlobalTest.class.getSimpleName())
+                .addClass(MicroProfileConfigUseGlobalApplication1.class)
+                .addClass(MicroProfileConfigUseGlobalApplication2.class)
+                .setWebXML(MicroProfileConfigUseGlobalTest.class.getPackage(), "web_use_global.xml")
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        return TestUtil.finishContainerPrepare(war, null, MicroProfileConfigUseGlobalResource.class);
+    }
 
-   @BeforeClass
-   public static void before() throws Exception {
-      client = (ResteasyClient)ClientBuilder.newClient();
-   }
+    @BeforeClass
+    public static void before() throws Exception {
+        client = (ResteasyClient) ClientBuilder.newClient();
+    }
 
-   @AfterClass
-   public static void after() throws Exception {
-      client.close();
-   }
+    @AfterClass
+    public static void after() throws Exception {
+        client.close();
+    }
 
-   private String generateURL(String path) {
-      return PortProviderUtil.generateURL(path, MicroProfileConfigUseGlobalTest.class.getSimpleName());
-   }
+    private String generateURL(String path) {
+        return PortProviderUtil.generateURL(path, MicroProfileConfigUseGlobalTest.class.getSimpleName());
+    }
 
-   /**
-    * @tpTestDetails
-    * @tpSince RESTEasy 4.1.0
-    */
-   @Test
-   public void testMultipleAppsUseGlobal() throws Exception {
-      Response response = client.target(generateURL("/app1/prefix")).request().get();
-      Assert.assertEquals(200, response.getStatus());
-      Assert.assertEquals("/app1", response.readEntity(String.class));
-      response = client.target(generateURL("/app2/prefix")).request().get();
-      Assert.assertEquals(200, response.getStatus());
-      Assert.assertEquals("/app2", response.readEntity(String.class));
-   }
+    /**
+     * @tpTestDetails
+     * @tpSince RESTEasy 4.1.0
+     */
+    @Test
+    public void testMultipleAppsUseGlobal() throws Exception {
+        Response response = client.target(generateURL("/app1/prefix")).request().get();
+        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals("/app1", response.readEntity(String.class));
+        response = client.target(generateURL("/app2/prefix")).request().get();
+        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals("/app2", response.readEntity(String.class));
+    }
 }

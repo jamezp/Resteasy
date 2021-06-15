@@ -50,10 +50,10 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
     /**
      * Constructor for ReactorNettyClientHttpEngine
      *
-     * @param httpClient         The {@link HttpClient} instance to be used by this {@link AsyncClientHttpEngine}
-     * @param channelGroup       The {@link ChannelGroup} instance used by the provided {@link HttpClient}
-     * @param connectionProvider The {@link ConnectionProvider} instance used to create the provided {@link HttpClient}
-     * @param requestTimeout     The {@link Optional<Duration>} instance used to configure requestTimeout on response
+     * @param httpClient           The {@link HttpClient} instance to be used by this {@link AsyncClientHttpEngine}
+     * @param channelGroup         The {@link ChannelGroup} instance used by the provided {@link HttpClient}
+     * @param connectionProvider   The {@link ConnectionProvider} instance used to create the provided {@link HttpClient}
+     * @param requestTimeout       The {@link Optional<Duration>} instance used to configure requestTimeout on response
      * @param useFinalizedResponse Used to configure for using {@link RestEasyClientResponse} with `finalize` method
      */
     private ReactorNettyClientHttpEngine(final HttpClient httpClient,
@@ -67,10 +67,10 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
         this.requestTimeout = requireNonNull(requestTimeout);
 
         requestTimeout
-                .ifPresent( duration -> {
-                    if(duration.isNegative())
+                .ifPresent(duration -> {
+                    if (duration.isNegative())
                         throw new IllegalArgumentException("Required positive value for requestTimeout");
-                    if(duration.isZero())
+                    if (duration.isZero())
                         throw new IllegalArgumentException("Required non zero value for requestTimeout");
                 });
 
@@ -115,7 +115,7 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
 
         return submit(request, buffered, extractor, null)
                 .whenComplete((response, throwable) -> {
-                    if(callback != null) {
+                    if (callback != null) {
                         if (throwable != null) callback.failed(throwable);
                         else callback.completed(response);
                     }
@@ -129,7 +129,7 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
                                            final ExecutorService executorService) {
 
         final Optional<byte[]> payload =
-            Optional.ofNullable(request.getEntity()).map(entity -> requestContent(request));
+                Optional.ofNullable(request.getEntity()).map(entity -> requestContent(request));
 
         final HttpClient.RequestSender requestSender =
                 httpClient
@@ -146,7 +146,7 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
                                 headerBuilder.set(CONTENT_LENGTH, bytes.length);
 
                                 if (log.isDebugEnabled() &&
-                                    isContentLengthInvalid(resteasyHeaders.getHeader(CONTENT_LENGTH), bytes)) {
+                                        isContentLengthInvalid(resteasyHeaders.getHeader(CONTENT_LENGTH), bytes)) {
                                     log.debug("The request's Content-Length header is replaced " +
                                             " by the size of the byte array computed from the request entity.");
                                 }
@@ -158,10 +158,10 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
         // Please see https://github.com/reactor/reactor-netty/issues/585 to see why
         // we do not use outbound.sendObject(object) API.
         final HttpClient.ResponseReceiver<?> responseReceiver =
-            payload.<HttpClient.ResponseReceiver<?>>map(bytes -> requestSender.send(
-                (httpClientRequest, outbound) ->
-                        outbound.sendByteArray(Mono.just(bytes)))
-            ).orElse(requestSender);
+                payload.<HttpClient.ResponseReceiver<?>>map(bytes -> requestSender.send(
+                        (httpClientRequest, outbound) ->
+                                outbound.sendByteArray(Mono.just(bytes)))
+                ).orElse(requestSender);
 
         final Mono<ClientResponse> responseMono = responseReceiver
                 .responseSingle((response, bytes) -> bytes
@@ -278,8 +278,7 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
         return ret;
     }
 
-    private static byte[] requestContent(ClientInvocation request)
-    {
+    private static byte[] requestContent(ClientInvocation request) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         request.getDelegatingOutputStream().setDelegate(baos);
         try {
@@ -298,7 +297,7 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
         final ClientResponse restEasyClientResponse = fnClientResponse.apply(clientConfiguration, inputStream);
         restEasyClientResponse.setStatus(reactorNettyResponse.status().code());
 
-        final MultivaluedMap<String, Object> resteasyHeaders =  restEasyClientResponse.getHeaders();
+        final MultivaluedMap<String, Object> resteasyHeaders = restEasyClientResponse.getHeaders();
         reactorNettyResponse.responseHeaders()
                 .forEach(header -> resteasyHeaders.add(header.getKey(), header.getValue()));
 
@@ -340,8 +339,7 @@ public class ReactorNettyClientHttpEngine implements AsyncClientHttpEngine {
                     }
                     is.close();
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 // Swallowing because other ClientHttpEngine implementations are swallowing as well.
                 // What is better?  causing a potential leak with inputstream slowly or cause an unexpected
                 // and unhandled io error and potentially cause the service go down?

@@ -13,7 +13,6 @@ public interface RestClientProxy {
     void close();
 
     /**
-     *
      * @return the underlying {@link Client} instance
      */
     Client getClient();

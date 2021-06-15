@@ -31,7 +31,7 @@ public class MPCollectionTest {
     protected static final Logger LOG = Logger.getLogger(MPCollectionTest.class.getName());
     private static final String WAR_SERVICE = "MPCollectionTest";
 
-    @Deployment(name=WAR_SERVICE)
+    @Deployment(name = WAR_SERVICE)
     public static Archive<?> serviceDeploy() {
         WebArchive war = TestUtil.prepareArchive(WAR_SERVICE);
         war.addClasses(MPCollectionService.class,
@@ -48,7 +48,7 @@ public class MPCollectionTest {
         RestClientBuilder builder = RestClientBuilder.newBuilder();
         // uri is http://localhost:port/{context-root}
         MPCollectionServiceIntf mpc = builder.baseUri(URI.create(generateURL("")))
-        .build(MPCollectionServiceIntf.class);
+                .build(MPCollectionServiceIntf.class);
         List<String> l = mpc.getList();
         Assert.assertEquals(3, l.size());
     }

@@ -21,27 +21,24 @@ import java.util.concurrent.ScheduledExecutorService;
 //       to serve static content. The path "/RESTEASY_HttpServlet30Dispatcher" will be installed
 //       and it will lead to HttpServlet30Dispatcher, but no resources will be there and status
 //       404 will be returned.
-@WebServlet(asyncSupported = true, value="/RESTEASY_HttpServlet30Dispatcher")
-public class HttpServlet30Dispatcher extends HttpServletDispatcher
-{
-   ScheduledExecutorService asyncCancelScheduler = Executors.newScheduledThreadPool(0);  // this is to get around TCK tests that call setTimeout in a separate thread which is illegal.
-   @Override
-   protected HttpRequest createHttpRequest(String httpMethod, HttpServletRequest httpServletRequest, ResteasyHttpHeaders httpHeaders, ResteasyUriInfo uriInfo, HttpResponse httpResponse, HttpServletResponse httpServletResponse)
-   {
-      Servlet3AsyncHttpRequest request = new Servlet3AsyncHttpRequest(httpServletRequest, httpServletResponse, getServletContext(), httpResponse, httpHeaders, uriInfo, httpMethod.toUpperCase(), (SynchronousDispatcher) getDispatcher());
-      request.asyncScheduler = asyncCancelScheduler;
-      return request;
-   }
+@WebServlet(asyncSupported = true, value = "/RESTEASY_HttpServlet30Dispatcher")
+public class HttpServlet30Dispatcher extends HttpServletDispatcher {
+    ScheduledExecutorService asyncCancelScheduler = Executors.newScheduledThreadPool(0);  // this is to get around TCK tests that call setTimeout in a separate thread which is illegal.
 
-   @Override
-   protected HttpResponse createServletResponse(HttpServletResponse response, HttpServletRequest request)
-   {
-      return new HttpServletResponseWrapper(response, request, getDispatcher().getProviderFactory()) {
-         @Override
-         public void addNewCookie(NewCookie cookie)
-         {
-            outputHeaders.add(javax.ws.rs.core.HttpHeaders.SET_COOKIE, cookie);
-         }
-      };
-   }
+    @Override
+    protected HttpRequest createHttpRequest(String httpMethod, HttpServletRequest httpServletRequest, ResteasyHttpHeaders httpHeaders, ResteasyUriInfo uriInfo, HttpResponse httpResponse, HttpServletResponse httpServletResponse) {
+        Servlet3AsyncHttpRequest request = new Servlet3AsyncHttpRequest(httpServletRequest, httpServletResponse, getServletContext(), httpResponse, httpHeaders, uriInfo, httpMethod.toUpperCase(), (SynchronousDispatcher) getDispatcher());
+        request.asyncScheduler = asyncCancelScheduler;
+        return request;
+    }
+
+    @Override
+    protected HttpResponse createServletResponse(HttpServletResponse response, HttpServletRequest request) {
+        return new HttpServletResponseWrapper(response, request, getDispatcher().getProviderFactory()) {
+            @Override
+            public void addNewCookie(NewCookie cookie) {
+                outputHeaders.add(javax.ws.rs.core.HttpHeaders.SET_COOKIE, cookie);
+            }
+        };
+    }
 }

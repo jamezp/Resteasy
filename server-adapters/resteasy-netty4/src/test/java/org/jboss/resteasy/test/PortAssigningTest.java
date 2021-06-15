@@ -9,25 +9,24 @@ import org.junit.Test;
  * first available port and return it in {@link NettyJaxrsServer#getPort()}.
  *
  * @author Sebastian Łaskawiec
- * @since 4.0
  * @see https://issues.jboss.org/browse/RESTEASY-1429
+ * @since 4.0
  */
-public class PortAssigningTest
-{
-   @Test
-   public void testZeroPort() throws Exception {
-      //given
-      NettyJaxrsServer server = new NettyJaxrsServer();
-      server.setPort(0);
-      server.getDeployment();
+public class PortAssigningTest {
+    @Test
+    public void testZeroPort() throws Exception {
+        //given
+        NettyJaxrsServer server = new NettyJaxrsServer();
+        server.setPort(0);
+        server.getDeployment();
 
-      //when
-      server.start();
-      int ip = server.getPort();
-      server.stop();
+        //when
+        server.start();
+        int ip = server.getPort();
+        server.stop();
 
-      //then
-      Assert.assertTrue(ip != 0);
-   }
+        //then
+        Assert.assertTrue(ip != 0);
+    }
 
 }

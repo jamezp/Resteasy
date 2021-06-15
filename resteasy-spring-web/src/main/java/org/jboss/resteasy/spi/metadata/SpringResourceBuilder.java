@@ -52,19 +52,16 @@ public class SpringResourceBuilder extends ResourceBuilder {
 
     @Override
     protected void processMethod(boolean isLocator, ResourceClassBuilder resourceClassBuilder, Class<?> root,
-                                 Method implementation)
-    {
+                                 Method implementation) {
         Method method = getAnnotatedMethod(root, implementation);
         if (method == null) {
             return;
         }
         Set<String> httpMethods = getHttpMethods(method);
-        if (httpMethods != null)
-        {
+        if (httpMethods != null) {
             ResourceMethodBuilder resourceMethodBuilder = resourceClassBuilder.method(implementation, method);
 
-            for (String httpMethod : httpMethods)
-            {
+            for (String httpMethod : httpMethods) {
                 if (httpMethod.equalsIgnoreCase(RequestMethod.GET.name()))
                     resourceMethodBuilder.get();
                 else if (httpMethod.equalsIgnoreCase(RequestMethod.PUT.name()))
@@ -90,8 +87,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
                 }
             }
 
-            for (int i = 0; i < resourceMethodBuilder.getLocator().getParams().length; i++)
-            {
+            for (int i = 0; i < resourceMethodBuilder.getLocator().getParams().length; i++) {
                 resourceMethodBuilder.param(i).fromAnnotations();
             }
             resourceMethodBuilder.buildMethod();
@@ -161,64 +157,52 @@ public class SpringResourceBuilder extends ResourceBuilder {
     }
 
     @Override
-    public Method getAnnotatedMethod(final Class<?> root, final Method implementation)
-    {
-        if (implementation.isSynthetic())
-        {
+    public Method getAnnotatedMethod(final Class<?> root, final Method implementation) {
+        if (implementation.isSynthetic()) {
             return null;
         }
 
-        if (getHttpMethods(implementation) != null)
-        {
+        if (getHttpMethods(implementation) != null) {
             return implementation;
         }
 
         // Check super-classes for inherited annotations
         for (Class<?> clazz = implementation.getDeclaringClass().getSuperclass(); clazz != null; clazz = clazz
-                .getSuperclass())
-        {
+                .getSuperclass()) {
             final Method overriddenMethod = Types.findOverriddenMethod(implementation.getDeclaringClass(), clazz,
                     implementation);
-            if (overriddenMethod == null)
-            {
+            if (overriddenMethod == null) {
                 continue;
             }
 
-            if (getHttpMethods(overriddenMethod) != null)
-            {
+            if (getHttpMethods(overriddenMethod) != null) {
                 return overriddenMethod;
             }
         }
 
         // Check implemented interfaces for inherited annotations
-        for (Class<?> clazz = root; clazz != null; clazz = clazz.getSuperclass())
-        {
+        for (Class<?> clazz = root; clazz != null; clazz = clazz.getSuperclass()) {
             Method overriddenMethod = null;
 
-            for (Class<?> classInterface : clazz.getInterfaces())
-            {
+            for (Class<?> classInterface : clazz.getInterfaces()) {
                 final Method overriddenInterfaceMethod = Types.getImplementedInterfaceMethod(root, classInterface,
                         implementation);
-                if (overriddenInterfaceMethod == null)
-                {
+                if (overriddenInterfaceMethod == null) {
                     continue;
                 }
-                if (getHttpMethods(overriddenInterfaceMethod) == null)
-                {
+                if (getHttpMethods(overriddenInterfaceMethod) == null) {
                     continue;
                 }
                 // Ensure no redefinition by peer interfaces (ambiguous) to preserve logic found in
                 // original implementation
-                if (overriddenMethod != null && !overriddenInterfaceMethod.equals(overriddenMethod))
-                {
+                if (overriddenMethod != null && !overriddenInterfaceMethod.equals(overriddenMethod)) {
                     throw new RuntimeException(Messages.MESSAGES.ambiguousInheritedAnnotations(implementation));
                 }
 
                 overriddenMethod = overriddenInterfaceMethod;
             }
 
-            if (overriddenMethod != null)
-            {
+            if (overriddenMethod != null) {
                 return overriddenMethod;
             }
         }
@@ -226,8 +210,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
         return null;
     }
 
-    private static Set<String> getHttpMethods(Method method)
-    {
+    private static Set<String> getHttpMethods(Method method) {
 
         final RequestMappingData requestMapping = getRequestMapping(method);
         if (requestMapping == null) {
@@ -250,8 +233,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
         if (requestMapping != null) {
             return RequestMappingData.fromRequestMapping(requestMapping);
         }
-        for (Annotation annotation : method.getAnnotations())
-        {
+        for (Annotation annotation : method.getAnnotations()) {
             // use the first declared annotation meta-annotated with RequestMapping since a single Java method
             // should only one meta-annotated RequestMapping annotation
             requestMapping = annotation.annotationType().getAnnotation(RequestMapping.class);
@@ -267,8 +249,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
         if (requestMapping != null) {
             return RequestMappingData.fromRequestMapping(requestMapping);
         }
-        for (Annotation annotation : clazz.getAnnotations())
-        {
+        for (Annotation annotation : clazz.getAnnotations()) {
             // use the first declared annotation meta-annotated with RequestMapping since a single Java method
             // should only one meta-annotated RequestMapping annotation
             requestMapping = annotation.annotationType().getAnnotation(RequestMapping.class);
@@ -356,31 +337,31 @@ public class SpringResourceBuilder extends ResourceBuilder {
             if (GetMapping.class.equals(annotationType)) {
                 GetMapping mapping = (GetMapping) annotation;
                 return new RequestMappingData(
-                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[]{RequestMethod.GET}, mapping.params(), mapping.headers(),
+                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[] {RequestMethod.GET}, mapping.params(), mapping.headers(),
                         mapping.consumes(), mapping.produces());
             }
             if (PostMapping.class.equals(annotationType)) {
                 PostMapping mapping = (PostMapping) annotation;
                 return new RequestMappingData(
-                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[]{RequestMethod.POST}, mapping.params(), mapping.headers(),
+                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[] {RequestMethod.POST}, mapping.params(), mapping.headers(),
                         mapping.consumes(), mapping.produces());
             }
             if (PutMapping.class.equals(annotationType)) {
                 PutMapping mapping = (PutMapping) annotation;
                 return new RequestMappingData(
-                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[]{RequestMethod.PUT}, mapping.params(), mapping.headers(),
+                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[] {RequestMethod.PUT}, mapping.params(), mapping.headers(),
                         mapping.consumes(), mapping.produces());
             }
             if (DeleteMapping.class.equals(annotationType)) {
                 DeleteMapping mapping = (DeleteMapping) annotation;
                 return new RequestMappingData(
-                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[]{RequestMethod.DELETE}, mapping.params(), mapping.headers(),
+                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[] {RequestMethod.DELETE}, mapping.params(), mapping.headers(),
                         mapping.consumes(), mapping.produces());
             }
             if (PatchMapping.class.equals(annotationType)) {
                 PatchMapping mapping = (PatchMapping) annotation;
                 return new RequestMappingData(
-                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[]{RequestMethod.PATCH}, mapping.params(), mapping.headers(),
+                        SpringResourceBuilder.getPath(mapping.path(), mapping.value()), new RequestMethod[] {RequestMethod.PATCH}, mapping.params(), mapping.headers(),
                         mapping.consumes(), mapping.produces());
             }
             return null;
@@ -438,8 +419,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
             Form form;
             Suspended suspended;
 
-            if ((requestParam = findAnnotation(annotations, RequestParam.class)) != null)
-            {
+            if ((requestParam = findAnnotation(annotations, RequestParam.class)) != null) {
                 // TODO Spring Web RequestParam for both query params and form params so this needs to be improved
                 parameter.setParamType(Parameter.ParamType.QUERY_PARAM);
                 parameter.setParamName(requestParam.name());
@@ -449,9 +429,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
                 if (!requestParam.defaultValue().equals(ValueConstants.DEFAULT_NONE)) {
                     parameter.setDefaultValue(requestParam.defaultValue());
                 }
-            }
-            else if ((header = findAnnotation(annotations, RequestHeader.class)) != null)
-            {
+            } else if ((header = findAnnotation(annotations, RequestHeader.class)) != null) {
                 parameter.setParamType(Parameter.ParamType.HEADER_PARAM);
                 parameter.setParamName(header.name());
                 if (parameter.getParamName().isEmpty() && !header.value().isEmpty()) {
@@ -460,9 +438,7 @@ public class SpringResourceBuilder extends ResourceBuilder {
                 if (!header.defaultValue().equals(ValueConstants.DEFAULT_NONE)) {
                     parameter.setDefaultValue(header.defaultValue());
                 }
-            }
-            else if ((cookie = findAnnotation(annotations, CookieValue.class)) != null)
-            {
+            } else if ((cookie = findAnnotation(annotations, CookieValue.class)) != null) {
                 parameter.setParamType(Parameter.ParamType.COOKIE_PARAM);
                 parameter.setParamName(cookie.name());
                 if (parameter.getParamName().isEmpty() && !cookie.value().isEmpty()) {
@@ -471,17 +447,13 @@ public class SpringResourceBuilder extends ResourceBuilder {
                 if (!cookie.defaultValue().equals(ValueConstants.DEFAULT_NONE)) {
                     parameter.setDefaultValue(cookie.defaultValue());
                 }
-            }
-            else if ((uriParam = findAnnotation(annotations, PathVariable.class)) != null)
-            {
+            } else if ((uriParam = findAnnotation(annotations, PathVariable.class)) != null) {
                 parameter.setParamType(Parameter.ParamType.PATH_PARAM);
                 parameter.setParamName(uriParam.name());
                 if (parameter.getParamName().isEmpty() && !uriParam.value().isEmpty()) {
                     parameter.setParamName(uriParam.value());
                 }
-            }
-            else if ((matrix = findAnnotation(annotations, MatrixVariable.class)) != null)
-            {
+            } else if ((matrix = findAnnotation(annotations, MatrixVariable.class)) != null) {
                 parameter.setParamType(Parameter.ParamType.MATRIX_PARAM);
                 parameter.setParamName(matrix.name());
                 if (parameter.getParamName().isEmpty() && !matrix.value().isEmpty()) {
@@ -490,16 +462,14 @@ public class SpringResourceBuilder extends ResourceBuilder {
                 if (!matrix.defaultValue().equals(ValueConstants.DEFAULT_NONE)) {
                     parameter.setDefaultValue(matrix.defaultValue());
                 }
-            }
-            else if (findAnnotation(annotations, RequestBody.class) != null)
-            {
+            } else if (findAnnotation(annotations, RequestBody.class) != null) {
                 parameter.setParamType(Parameter.ParamType.MESSAGE_BODY);
             } else if (parameter.getType().getName().startsWith("javax.servlet.http")) {  // is this perhaps too aggressive?
                 parameter.setParamType(Parameter.ParamType.CONTEXT);
             } else {
                 parameter.setParamType(Parameter.ParamType.UNKNOWN);
             }
-            if (parameter.getParamName().isEmpty() && (defaultName != null)){
+            if (parameter.getParamName().isEmpty() && (defaultName != null)) {
                 parameter.setParamName(defaultName);
             }
         }

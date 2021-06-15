@@ -1,9 +1,9 @@
 <chapter id="ContentRange">
-   <title>Content-Range Support</title>
-   <para>
-      RESTEasy supports <literal>Range</literal> requests for <literal>java.io.File</literal> response entities.
-   </para>
-      <programlisting><![CDATA[
+    <title>Content-Range Support</title>
+    <para>
+        RESTEasy supports <literal>Range</literal> requests for <literal>java.io.File</literal> response entities.
+    </para>
+    <programlisting><![CDATA[
    @Path("/")
    public class Resource {
       @GET
@@ -22,5 +22,5 @@
       System.out.println("Content-Range: " + response.getHeaderString("Content-Range"));
 
 ]]>
-      </programlisting>
+    </programlisting>
 </chapter>

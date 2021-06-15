@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Acts as a HashMap until lockSnapshots is called.  After that, it is a copy on write strategy.
  */
-public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
+public class SnapshotMap<K, V> implements ConcurrentMap<K, V> {
 
     private volatile Map<K, V> delegate;
     private volatile boolean lockSnapshots;
@@ -41,7 +41,7 @@ public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
 
     public SnapshotMap(final Map<K, V> existing, final boolean shallow, final boolean lockSnapshots, final boolean snapFirst) {
         if (existing.getClass() == SnapshotMap.class) {
-            this.delegate = ((SnapshotMap<K, V>)existing).delegate;
+            this.delegate = ((SnapshotMap<K, V>) existing).delegate;
         } else if (shallow) {
             this.delegate = existing;
         } else {
@@ -65,7 +65,7 @@ public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
         if (delegateUpdate()) return this.delegate.putIfAbsent(key, value);
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing != null) {
+        if (existing != null) {
             return existing;
         }
         putInternal(key, value);
@@ -77,7 +77,7 @@ public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
         if (delegateUpdate()) return this.delegate.remove(key, value);
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing.equals(value)) {
+        if (existing.equals(value)) {
             removeInternal(key);
             return true;
         }
@@ -89,7 +89,7 @@ public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
         if (delegateUpdate()) return this.delegate.replace(key, oldValue, newValue);
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing.equals(oldValue)) {
+        if (existing.equals(oldValue)) {
             putInternal(key, newValue);
             return true;
         }
@@ -101,7 +101,7 @@ public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
         if (delegateUpdate()) return this.delegate.replace(key, value);
         final Map<K, V> delegate = this.delegate;
         V existing = delegate.get(key);
-        if(existing != null) {
+        if (existing != null) {
             putInternal(key, value);
             return existing;
         }
@@ -150,7 +150,7 @@ public class SnapshotMap<K,V> implements ConcurrentMap<K, V> {
             return;
         }
         final Map<K, V> delegate = copy();
-        for(Entry<? extends K, ? extends V> e : m.entrySet()) {
+        for (Entry<? extends K, ? extends V> e : m.entrySet()) {
             delegate.put(e.getKey(), e.getValue());
         }
         this.delegate = delegate;

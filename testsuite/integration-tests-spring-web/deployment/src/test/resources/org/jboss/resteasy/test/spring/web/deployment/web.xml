@@ -10,9 +10,11 @@
     <!-- Needs to contain all the Spring Controllers that will be used -->
     <context-param>
         <param-name>resteasy.scanned.resource.classes.with.builder</param-name>
-        <param-value>org.jboss.resteasy.spi.metadata.SpringResourceBuilder:org.jboss.resteasy.test.spring.web.deployment.resource.TestController,
+        <param-value>
+            org.jboss.resteasy.spi.metadata.SpringResourceBuilder:org.jboss.resteasy.test.spring.web.deployment.resource.TestController,
             org.jboss.resteasy.test.spring.web.deployment.resource.ResponseEntityController,org.jboss.resteasy.test.spring.web.deployment.resource.ResponseStatusController,
-            org.jboss.resteasy.test.spring.web.deployment.resource.GreetingControllerWithNoRequestMapping</param-value>
+            org.jboss.resteasy.test.spring.web.deployment.resource.GreetingControllerWithNoRequestMapping
+        </param-value>
     </context-param>
 
     <context-param>
@@ -36,7 +38,8 @@
             org.jboss.resteasy.plugins.providers.InputStreamProvider,
             org.jboss.resteasy.plugins.providers.jsonp.JsonValueProvider,
             org.jboss.resteasy.spring.web.ResponseEntityFeature,
-            org.jboss.resteasy.spring.web.ResponseStatusFeature</param-value>
+            org.jboss.resteasy.spring.web.ResponseStatusFeature
+        </param-value>
     </context-param>
 
     <context-param>

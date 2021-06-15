@@ -42,13 +42,13 @@ public class ProxyParameterAnotationsResource {
 
     @Path("FormParam")
     @POST
-    public String  getFormParam(@FormParam("formParam") String formParam) {
+    public String getFormParam(@FormParam("formParam") String formParam) {
         return "FormParam = " + formParam;
     }
 
     @Path("MatrixParam")
     @GET
-    public String  getMatrixParam(@MatrixParam("matrixParam") String matrixParam) {
+    public String getMatrixParam(@MatrixParam("matrixParam") String matrixParam) {
         return "MatrixParam = " + matrixParam;
     }
 
@@ -60,6 +60,6 @@ public class ProxyParameterAnotationsResource {
                                @PathParam String pathParam,
                                @FormParam String formParam,
                                @MatrixParam String matrixParam) {
-        return queryParam+" "+headerParam+" "+cookieParam+" "+pathParam+" "+formParam+" "+matrixParam;
+        return queryParam + " " + headerParam + " " + cookieParam + " " + pathParam + " " + formParam + " " + matrixParam;
     }
 }

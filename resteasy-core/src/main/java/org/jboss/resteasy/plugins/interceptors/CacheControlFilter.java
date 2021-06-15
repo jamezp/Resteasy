@@ -14,21 +14,17 @@ import java.io.IOException;
  * @version $Revision: 1 $
  */
 @Priority(Priorities.HEADER_DECORATOR)
-public class CacheControlFilter implements ContainerResponseFilter
-{
-   protected CacheControl cacheControl;
+public class CacheControlFilter implements ContainerResponseFilter {
+    protected CacheControl cacheControl;
 
-   public CacheControlFilter(final CacheControl cacheControl)
-   {
-      this.cacheControl = cacheControl;
-   }
+    public CacheControlFilter(final CacheControl cacheControl) {
+        this.cacheControl = cacheControl;
+    }
 
-   @Override
-   public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException
-   {
-      if (responseContext.getStatus() == 200)
-      {
-         responseContext.getHeaders().putSingle(HttpHeaders.CACHE_CONTROL, cacheControl);
-      }
-   }
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+        if (responseContext.getStatus() == 200) {
+            responseContext.getHeaders().putSingle(HttpHeaders.CACHE_CONTROL, cacheControl);
+        }
+    }
 }

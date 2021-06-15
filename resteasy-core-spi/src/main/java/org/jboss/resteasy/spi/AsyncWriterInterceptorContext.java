@@ -34,10 +34,10 @@ public interface AsyncWriterInterceptorContext extends InterceptorContext {
      * the wrapped {@link AsyncMessageBodyWriter#asyncWriteTo} method.
      *
      * @return a {@link CompletionStage} indicating completion.
-     * @throws java.io.IOException if an IO error arises or is thrown by the wrapped
-     *                             {@code AsyncMessageBodyWriter.asyncWriteTo} method, in the returned {@link CompletionStage}.
-     * @throws javax.ws.rs.WebApplicationException
-     *                             thrown by the wrapped {@code AsyncMessageBodyWriter.asyncWriteTo} method, in the returned {@link CompletionStage}.
+     *
+     * @throws java.io.IOException                 if an IO error arises or is thrown by the wrapped
+     *                                             {@code AsyncMessageBodyWriter.asyncWriteTo} method, in the returned {@link CompletionStage}.
+     * @throws javax.ws.rs.WebApplicationException thrown by the wrapped {@code AsyncMessageBodyWriter.asyncWriteTo} method, in the returned {@link CompletionStage}.
      */
     CompletionStage<Void> asyncProceed();
 

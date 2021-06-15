@@ -21,27 +21,23 @@ import java.util.concurrent.CompletionStage;
  */
 @Provider
 @Produces("multipart/form-data")
-public class MultipartFormDataWriter extends AbstractMultipartFormDataWriter implements AsyncMessageBodyWriter<MultipartFormDataOutput>
-{
-   public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return MultipartFormDataOutput.class.isAssignableFrom(type);
-   }
+public class MultipartFormDataWriter extends AbstractMultipartFormDataWriter implements AsyncMessageBodyWriter<MultipartFormDataOutput> {
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return MultipartFormDataOutput.class.isAssignableFrom(type);
+    }
 
-   public long getSize(MultipartFormDataOutput multipartFormDataOutput, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return -1;
-   }
+    public long getSize(MultipartFormDataOutput multipartFormDataOutput, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1;
+    }
 
-   public void writeTo(MultipartFormDataOutput multipartFormDataOutput, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException
-   {
-      write(multipartFormDataOutput, mediaType, httpHeaders, entityStream);
-   }
+    public void writeTo(MultipartFormDataOutput multipartFormDataOutput, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
+        write(multipartFormDataOutput, mediaType, httpHeaders, entityStream);
+    }
 
-   @Override
-   public CompletionStage<Void> asyncWriteTo(MultipartFormDataOutput multipartFormDataOutput, Class<?> type, Type genericType, Annotation[] annotations,
-                                             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-                                             AsyncOutputStream entityStream) {
-       return asyncWrite(multipartFormDataOutput, mediaType, httpHeaders, entityStream);
-   }
+    @Override
+    public CompletionStage<Void> asyncWriteTo(MultipartFormDataOutput multipartFormDataOutput, Class<?> type, Type genericType, Annotation[] annotations,
+                                              MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+                                              AsyncOutputStream entityStream) {
+        return asyncWrite(multipartFormDataOutput, mediaType, httpHeaders, entityStream);
+    }
 }

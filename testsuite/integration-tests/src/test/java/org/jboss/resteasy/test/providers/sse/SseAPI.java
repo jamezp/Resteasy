@@ -10,7 +10,7 @@ import javax.ws.rs.sse.SseEventSink;
 public interface SseAPI {
     @Path("/events")
     @GET
-    @Produces({ "text/event-stream" })
+    @Produces({"text/event-stream"})
     void events(@Context SseEventSink sseEvents) throws Exception;
 
     @Path("send")

@@ -14,7 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@RegisterRestClient(baseUri ="http://localhost:8080/jsonP_service")
+@RegisterRestClient(baseUri = "http://localhost:8080/jsonP_service")
 @Path("/jsonpService")
 @Singleton
 public interface JsonpMPServiceIntf {

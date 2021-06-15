@@ -11,21 +11,21 @@ import java.lang.reflect.Type;
 
 @Provider
 public final class ProviderFinalClassStringHandlerBodyWriter
-   implements MessageBodyWriter<ProviderFinalClassStringHandler> {
+        implements MessageBodyWriter<ProviderFinalClassStringHandler> {
 
-   public boolean isWriteable(Class<?> type, Type genericType,
-                              Annotation[] annotations,
-                              MediaType mediaType) {
-      return ProviderFinalClassStringHandler.class.equals(type);
-   }
+    public boolean isWriteable(Class<?> type, Type genericType,
+                               Annotation[] annotations,
+                               MediaType mediaType) {
+        return ProviderFinalClassStringHandler.class.equals(type);
+    }
 
-   @Override
-   public void writeTo(ProviderFinalClassStringHandler t, Class<?> type,
-                       Type genericType, Annotation[] annotations,
-                       MediaType mediaType,
-                       MultivaluedMap<String, Object> httpHeaders,
-                       OutputStream entityStream) throws IOException {
-      entityStream.write(t.getA().getBytes());
-   }
+    @Override
+    public void writeTo(ProviderFinalClassStringHandler t, Class<?> type,
+                        Type genericType, Annotation[] annotations,
+                        MediaType mediaType,
+                        MultivaluedMap<String, Object> httpHeaders,
+                        OutputStream entityStream) throws IOException {
+        entityStream.write(t.getA().getBytes());
+    }
 }
 

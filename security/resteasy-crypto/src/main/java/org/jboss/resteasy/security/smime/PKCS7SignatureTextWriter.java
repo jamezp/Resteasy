@@ -27,54 +27,43 @@ import java.util.concurrent.CompletionStage;
  */
 @Provider
 @Produces("text/plain")
-public class PKCS7SignatureTextWriter implements AsyncMessageBodyWriter<SignedOutput>
-{
-   static
-   {
-      BouncyIntegration.init();
-   }
+public class PKCS7SignatureTextWriter implements AsyncMessageBodyWriter<SignedOutput> {
+    static {
+        BouncyIntegration.init();
+    }
 
-   @Context
-   protected Providers providers;
+    @Context
+    protected Providers providers;
 
-   @Override
-   public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return SignedOutput.class.isAssignableFrom(type);
-   }
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return SignedOutput.class.isAssignableFrom(type);
+    }
 
-   @Override
-   public long getSize(SignedOutput smimeOutput, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType)
-   {
-      return -1;
-   }
+    @Override
+    public long getSize(SignedOutput smimeOutput, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return -1;
+    }
 
-   @Override
-   public void writeTo(SignedOutput out, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> headers, OutputStream os) throws IOException, WebApplicationException
-   {
-      try
-      {
-         byte[] encoded = PKCS7SignatureWriter.sign(providers, out);
-         os.write(Base64.getEncoder().encodeToString(encoded).getBytes(StandardCharsets.UTF_8));
-      }
-      catch (Exception e)
-      {
-         throw new WriterException(e);
-      }
-   }
+    @Override
+    public void writeTo(SignedOutput out, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> headers, OutputStream os) throws IOException, WebApplicationException {
+        try {
+            byte[] encoded = PKCS7SignatureWriter.sign(providers, out);
+            os.write(Base64.getEncoder().encodeToString(encoded).getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            throw new WriterException(e);
+        }
+    }
 
-   @Override
-   public CompletionStage<Void> asyncWriteTo(SignedOutput out, Class<?> type, Type genericType, Annotation[] annotations,
-                                             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
-                                             AsyncOutputStream entityStream) {
-       try
-       {
-          byte[] encoded = PKCS7SignatureWriter.sign(providers, out);
-          return entityStream.asyncWrite(Base64.getEncoder().encodeToString(encoded).getBytes(StandardCharsets.UTF_8));
-       }
-       catch (Exception e)
-       {
-          return ProviderHelper.completedException(new WriterException(e));
-       }
-   }
+    @Override
+    public CompletionStage<Void> asyncWriteTo(SignedOutput out, Class<?> type, Type genericType, Annotation[] annotations,
+                                              MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+                                              AsyncOutputStream entityStream) {
+        try {
+            byte[] encoded = PKCS7SignatureWriter.sign(providers, out);
+            return entityStream.asyncWrite(Base64.getEncoder().encodeToString(encoded).getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            return ProviderHelper.completedException(new WriterException(e));
+        }
+    }
 }

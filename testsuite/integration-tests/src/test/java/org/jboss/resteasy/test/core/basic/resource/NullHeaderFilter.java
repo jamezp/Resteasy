@@ -13,12 +13,12 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class NullHeaderFilter implements ClientRequestFilter {
 
-   private static final Logger LOG = LogManager.getLogger(NullHeaderFilter.class);
+    private static final Logger LOG = LogManager.getLogger(NullHeaderFilter.class);
 
-   @Override
-   public void filter(ClientRequestContext requestContext) throws IOException {
-      MultivaluedMap<String, Object> headers = requestContext.getHeaders();
-      headers.add("X-Client-Header", null);
-      LOG.info("added X-Client-Header");
-   }
+    @Override
+    public void filter(ClientRequestContext requestContext) throws IOException {
+        MultivaluedMap<String, Object> headers = requestContext.getHeaders();
+        headers.add("X-Client-Header", null);
+        LOG.info("added X-Client-Header");
+    }
 }

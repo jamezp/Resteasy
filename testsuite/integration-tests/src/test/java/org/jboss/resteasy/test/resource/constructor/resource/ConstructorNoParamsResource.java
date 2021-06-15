@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 @Path("/noparams")
 public class ConstructorNoParamsResource {
 
-    public ConstructorNoParamsResource () {
+    public ConstructorNoParamsResource() {
         throw new RuntimeException("force an constructor exception");
     }
 

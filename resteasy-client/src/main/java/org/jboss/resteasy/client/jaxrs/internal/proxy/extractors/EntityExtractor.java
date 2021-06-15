@@ -10,7 +10,6 @@ package org.jboss.resteasy.client.jaxrs.internal.proxy.extractors;
  * @version $Revision: 1 $
  * @see org.jboss.resteasy.client.jaxrs.internal.proxy.extractors.EntityExtractorFactory
  */
-public interface EntityExtractor<T>
-{
-   T extractEntity(ClientContext context, Object... args);
+public interface EntityExtractor<T> {
+    T extractEntity(ClientContext context, Object... args);
 }
