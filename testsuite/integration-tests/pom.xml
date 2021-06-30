@@ -78,7 +78,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-dist</artifactId>
+                                    <artifactId>wildfly-preview-dist</artifactId>
                                     <version>${server.version}</version>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>
@@ -310,8 +310,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
             <scope>provided</scope>
         </dependency>
 

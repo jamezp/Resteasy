@@ -48,7 +48,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-dist</artifactId>
+                                    <artifactId>wildfly-preview-dist</artifactId>
                                     <version>${server.version}</version>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>
@@ -153,42 +153,42 @@
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-aop</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-beans</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-context</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-context-support</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-core</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-expression</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-web</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
                                     <artifactId>spring-webmvc</artifactId>
-                                    <version>${version.org.springframework}</version>
+                                    <version>${version.org.springframework-escaped}</version>
                                 </artifactItem>
 
                                 <artifactItem>
@@ -297,6 +297,66 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- The following are current required for transformation -->
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${version.org.springframework}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>${version.aopalliance}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${version.org.aspectj}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${version.org.aspectj}</version>
         </dependency>
     </dependencies>
 

@@ -60,9 +60,9 @@
         </module-def>
 
         <module-def name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider">
-            <maven-resource group="com.fasterxml.jackson.jaxrs" artifact="jackson-jaxrs-json-provider"/>
-            <maven-resource group="com.fasterxml.jackson.jaxrs" artifact="jackson-jaxrs-base"/>
-            <maven-resource group="com.fasterxml.jackson.module" artifact="jackson-module-jaxb-annotations" />
+            <maven-resource-with-classifier group="com.fasterxml.jackson.jaxrs" artifact="jackson-jaxrs-json-provider" classifier="jakarta"/>
+            <maven-resource-with-classifier group="com.fasterxml.jackson.jaxrs" artifact="jackson-jaxrs-base" classifier="jakarta"/>
+            <maven-resource-with-classifier group="com.fasterxml.jackson.module" artifact="jackson-module-jaxb-annotations" classifier="jakarta"/>
         </module-def>
 
         <module-def name="com.google.guava.failureaccess">
@@ -83,7 +83,7 @@
 
         <!-- already present in wildfly -->
         <module-def name="javax.ws.rs.api">
-            <maven-resource group="org.jboss.spec.javax.ws.rs" artifact="jboss-jaxrs-api_2.1_spec"/>
+            <maven-resource group="org.jboss.spec.javax.ws.rs" artifact="jboss-jaxrs-api_3.0_spec"/>
         </module-def>
 
         <module-def name="org.jboss.resteasy.resteasy-atom-provider">

@@ -12,9 +12,9 @@ import org.jboss.resteasy.plugins.providers.atom.Text;
 import org.jboss.resteasy.test.providers.resource.AtomProviderModelCustomerAtom;
 import org.junit.Test;
 
-import javax.ws.rs.core.MediaType;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
