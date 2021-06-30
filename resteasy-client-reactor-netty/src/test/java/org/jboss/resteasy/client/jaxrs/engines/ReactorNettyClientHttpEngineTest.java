@@ -8,6 +8,8 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.util.concurrent.DefaultEventExecutor;
 import static org.hamcrest.CoreMatchers.containsString;
 
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import org.hamcrest.MatcherAssert;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.internal.ClientResponse;
@@ -35,6 +37,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.List;
@@ -595,8 +598,12 @@ public class ReactorNettyClientHttpEngineTest {
     }
 
     private static String incrementAge(final String json) {
-        final int length = json.length();
-        final String age = json.substring(length - 2, length - 1);
-        return json.replaceFirst(age, Integer.toString(Integer.valueOf(age) + 1));
+        try (Jsonb jsonb = JsonbBuilder.create()) {
+            final Person person = jsonb.fromJson(json, Person.class);
+            person.setAge(person.getAge() + 1);
+            return jsonb.toJson(person);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
