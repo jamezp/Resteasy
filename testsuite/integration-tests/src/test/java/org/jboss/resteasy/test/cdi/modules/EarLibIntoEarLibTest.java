@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.resteasy.test.cdi.modules.resource.CDIModulesInjectable;
 import org.jboss.resteasy.test.cdi.modules.resource.CDIModulesInjectableBinder;
 import org.jboss.resteasy.test.cdi.modules.resource.CDIModulesInjectableIntf;
@@ -26,6 +27,8 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
+
+import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 
@@ -59,6 +62,9 @@ public class EarLibIntoEarLibTest {
       return ear;
    }
 
+   @ArquillianResource
+   private URL url;
+
    /**
     * @tpTestDetails Test bean injection from lib to lib in ear.
     * @tpSince RESTEasy 3.0.16
@@ -68,11 +74,21 @@ public class EarLibIntoEarLibTest {
       log.info("starting testModules()");
 
       Client client = ClientBuilder.newClient();
-      WebTarget base = client.target(PortProviderUtil.generateURL("/modules/test/", "test"));
+      WebTarget base = client.target(generateUrl("/modules/test/"));
       Response response = base.request().get();
       log.info("Status: " + response.getStatus());
       assertEquals(HttpResponseCodes.SC_OK, response.getStatus());
       response.close();
       client.close();
+   }
+
+   private String generateUrl(final String path) {
+      final String url = this.url.toString();
+      if (url.endsWith("/") && path.charAt(0) != '/') {
+         return url + path;
+      } else if (path.charAt(0) == '/') {
+         return url + path;
+      }
+      return url + "/" + path;
    }
 }

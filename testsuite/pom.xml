@@ -176,7 +176,7 @@
               </property>
             </activation>
             <properties>
-                <server.version>23.0.2.Final</server.version>
+                <server.version>24.0.0.Final</server.version>
             </properties>
         </profile>
         <profile>

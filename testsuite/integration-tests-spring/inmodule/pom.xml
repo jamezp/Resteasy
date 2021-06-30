@@ -72,10 +72,10 @@
                                 <!-- Explicitly remove resteasy-spring contents as the module.xml does not reference resource jars in this case
                                      so adding jars without removing old ones basically messes up the classloader -->
                                 <delete>
-                                    <fileset dir="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base/org/jboss/resteasy/resteasy-spring/main" includes="**/*.jar"/>
+                                    <fileset dir="${project.build.directory}/test-server/wildfly-preview-${server.version}/modules/system/layers/base/org/jboss/resteasy/resteasy-spring/main" includes="**/*.jar"/>
                                 </delete>
                                 <unzip src="../../../jboss-modules/target/resteasy-jboss-modules-${project.version}.zip"
-                                       dest="${project.build.directory}/test-server/wildfly-${server.version}/modules/system/layers/base"
+                                       dest="${project.build.directory}/test-server/wildfly-preview-${server.version}/modules/system/layers/base"
                                        overwrite="true"/>
                                 <delete dir="target/dependency-maven-plugin-markers"/>
                             </target>
@@ -89,7 +89,7 @@
             </plugins>
           </build>
           <properties>
-            <jboss.home>${project.build.directory}/test-server/wildfly-${server.version}</jboss.home>
+            <jboss.home>${project.build.directory}/test-server/wildfly-preview-${server.version}</jboss.home>
           </properties>
         </profile>
     </profiles>
