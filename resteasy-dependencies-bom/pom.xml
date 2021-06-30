@@ -209,6 +209,12 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <!-- JAXB Implementation -->
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${version.jakarta.xml.bind.bind-api}</version>
+            </dependency>
 
             <dependency>
                 <groupId>jakarta.transaction</groupId>
