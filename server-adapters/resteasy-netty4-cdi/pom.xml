@@ -13,7 +13,7 @@
     <name>RESTEasy Netty 4 Integration w/ CDI Support</name>
     <description/>
     <properties>
-        <dep.arq.weld.se>2.0.0.Final</dep.arq.weld.se>
+        <dep.arq.weld.se>3.0.0.Alpha1</dep.arq.weld.se>
     </properties>
     <dependencies>
         <dependency>
@@ -77,6 +77,12 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JAXB Implementation -->
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
