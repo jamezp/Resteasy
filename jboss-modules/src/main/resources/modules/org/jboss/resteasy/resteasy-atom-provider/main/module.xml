@@ -35,5 +35,7 @@
         <module name="org.jboss.resteasy.resteasy-jaxb-provider"/>
         <module name="org.jboss.logging"/>
         <module name="java.xml"/>
+        <!-- Remove this once we can resolve RESTEASY-2959 -->
+        <module name="org.javassist" export="true"/>
     </dependencies>
 </module>
