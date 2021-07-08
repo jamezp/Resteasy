@@ -2,6 +2,7 @@ package org.jboss.resteasy.test.cdi.injection;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.as.arquillian.api.ServerSetup;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.test.cdi.injection.resource.CDIInjectionBook;
 import org.jboss.resteasy.test.cdi.injection.resource.CDIInjectionBookBag;
@@ -46,6 +47,7 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -93,7 +95,8 @@ import static org.junit.Assert.assertTrue;
  * @tpSince RESTEasy 3.0.16
  */
 @RunWith(Arquillian.class)
-public class ReverseInjectionTest extends AbstractInjectionTestBase {
+@ServerSetup(JmsTestQueueSetupTask.class)
+public class ReverseInjectionTest {
    private static Logger log = Logger.getLogger(ReverseInjectionTest.class);
 
    Client client;
@@ -128,9 +131,8 @@ public class ReverseInjectionTest extends AbstractInjectionTestBase {
 
    @Deployment
    public static Archive<?> createTestArchive() throws Exception {
-      initQueue();
       WebArchive war = TestUtil.prepareArchive("resteasy-reverse-injection-test")
-            .addClasses(AbstractInjectionTestBase.class, ReverseInjectionTest.class, PortProviderUtil.class)
+            .addClasses(ReverseInjectionTest.class, PortProviderUtil.class)
             .addClasses(Constants.class, PersistenceUnitProducer.class, UtilityProducer.class, Utilities.class)
             .addClasses(CDIInjectionBook.class, CDIInjectionBookResource.class)
             .addClasses(CDIInjectionResourceBinding.class, CDIInjectionResourceProducer.class)
@@ -281,6 +283,7 @@ public class ReverseInjectionTest extends AbstractInjectionTestBase {
     * @tpSince RESTEasy 3.0.16
     */
    @Test
+   @Ignore("RESTEASY-2962")
    public void testMDB() throws Exception {
       String destinationName = "queue/test";
       Context ic;

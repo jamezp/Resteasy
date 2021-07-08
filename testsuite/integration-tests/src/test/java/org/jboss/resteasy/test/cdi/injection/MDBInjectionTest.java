@@ -16,6 +16,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.as.arquillian.api.ServerSetup;
 import org.jboss.resteasy.test.cdi.injection.resource.CDIInjectionBook;
 import org.jboss.resteasy.test.cdi.injection.resource.CDIInjectionBookBag;
 import org.jboss.resteasy.test.cdi.injection.resource.CDIInjectionBookBagLocal;
@@ -60,7 +61,8 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class MDBInjectionTest extends AbstractInjectionTestBase {
+@ServerSetup(JmsTestQueueSetupTask.class)
+public class MDBInjectionTest {
    protected static final Logger log = LogManager.getLogger(MDBInjectionTest.class.getName());
 
    static Client client;
@@ -68,10 +70,8 @@ public class MDBInjectionTest extends AbstractInjectionTestBase {
    @SuppressWarnings(value = "unchecked")
    @Deployment
    public static Archive<?> createTestArchive() throws Exception {
-      initQueue();
       WebArchive war = TestUtil.prepareArchive(MDBInjectionTest.class.getSimpleName());
-      war.addClass(AbstractInjectionTestBase.class)
-            .addClasses(CDIInjectionBook.class, CDIInjectionBookResource.class, Constants.class, UtilityProducer.class)
+      war.addClasses(CDIInjectionBook.class, CDIInjectionBookResource.class, Constants.class, UtilityProducer.class)
             .addClasses(Counter.class, CDIInjectionBookCollection.class, CDIInjectionBookReader.class, CDIInjectionBookWriter.class)
             .addClasses(CDIInjectionDependentScoped.class, CDIInjectionStatefulEJB.class, CDIInjectionUnscopedResource.class)
             .addClasses(CDIInjectionBookBagLocal.class, CDIInjectionBookBag.class)
