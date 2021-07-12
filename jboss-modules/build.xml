@@ -86,6 +86,14 @@
             <maven-resource group="org.jboss.spec.javax.ws.rs" artifact="jboss-jaxrs-api_3.0_spec"/>
         </module-def>
 
+        <module-def name="org.bouncycastle.bcmail">
+            <maven-resource group="org.bouncycastle" artifact="bcjmail-jdk15on"/>
+        </module-def>
+
+        <module-def name="org.bouncycastle.bcutil">
+            <maven-resource group="org.bouncycastle" artifact="bcutil-jdk15on"/>
+        </module-def>
+
         <module-def name="org.jboss.resteasy.resteasy-atom-provider">
             <maven-resource group="org.jboss.resteasy" artifact="resteasy-atom-provider"/>
         </module-def>
