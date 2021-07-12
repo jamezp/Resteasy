@@ -21,7 +21,7 @@ public class TestUtilSpring {
     * @return Spring version.
     */
    private static String getSpringVersion() {
-      return System.getProperty("version.org.springframework", defaultSpringVersion);
+      return System.getProperty("version.org.springframework-escaped", defaultSpringVersion);
    }
 
    /**
