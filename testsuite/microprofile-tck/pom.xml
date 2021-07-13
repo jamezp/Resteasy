@@ -16,7 +16,7 @@
 
   <properties>
     <skip.mp.tck>false</skip.mp.tck>
-    <jetty9.version>9.2.30.v20200428</jetty9.version>
+    <jetty9.version>9.4.43.v20210629-$$jakarta9$$</jetty9.version>
     <jetty.version>${jetty9.version}</jetty.version>
     <tck.timeout.offset>90</tck.timeout.offset>
   </properties>
@@ -45,6 +45,11 @@
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
       <version>6.14.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -113,12 +118,6 @@
     </dependency>
 
     <dependency>
-      <groupId>javax.json.bind</groupId>
-      <artifactId>javax.json.bind-api</artifactId>
-      <version>1.0</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
     </dependency>
@@ -134,6 +133,16 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlets</artifactId>
       <version>${jetty.version}</version>
     </dependency>
     <dependency>
@@ -184,7 +193,7 @@
       <plugin>
         <groupId>uk.co.automatictester</groupId>
         <artifactId>wiremock-maven-plugin</artifactId>
-        <version>6.0.0</version>
+        <version>7.0.0</version>
         <executions>
           <execution>
             <phase>generate-test-sources</phase>
@@ -201,7 +210,7 @@
         <dependency>
           <groupId>com.github.tomakehurst</groupId>
           <artifactId>wiremock</artifactId>
-          <version>2.26.3</version>
+          <version>2.27.2-$$jakarta9$$</version>
         </dependency>
       </dependencies>
       </plugin>
