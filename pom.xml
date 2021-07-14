@@ -241,9 +241,9 @@
     <build>
         <extensions>
             <extension>
-                <groupId>io.quarkus</groupId>
-                <artifactId>optimus</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <groupId>org.wildfly.extras.batavia</groupId>
+                <artifactId>eclipse-transformer-maven-extension</artifactId>
+                <version>1.0.10.Final-SNAPSHOT</version>
             </extension>
         </extensions>
         <pluginManagement>
